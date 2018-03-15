@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/myProfile"
+            android:icon="@drawable/my_profile"
+            android:title="My Profile" />
+
+        <item
+            android:id="@+id/partners"
+            android:title="My Partners"
+            android:icon="@drawable/partners"/>
+
+        <item
+            android:id="@+id/notifications"
+            android:icon="@drawable/notification"
+            android:title="Notifications" />
+        <item
+            android:id="@+id/message"
+            android:icon="@drawable/messages"
+            android:title="Messages" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Edit Profile" />
+
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/settings"
+            android:title="Settings" />
+
+    </group>
+
+
+</menu>

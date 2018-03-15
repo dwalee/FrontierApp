@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "372512869567",
+    "firebase_url": "https://frontierapp-65ac1.firebaseio.com",
+    "project_id": "frontierapp-65ac1",
+    "storage_bucket": "frontierapp-65ac1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372512869567:android:2668c8a5a597270e",
+        "android_client_info": {
+          "package_name": "com.frontierapp.frontierapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "372512869567-enqbjr2ish1as0r6po0uo0pfvm541s04.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.frontierapp.frontierapp",
+            "certificate_hash": "57dadca29008a30f8d9d9b74d65e0f79b36da3e3"
+          }
+        },
+        {
+          "client_id": "372512869567-p55eucbfomhkv9r1h9bq8693d1fjutgv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVGjeRb9CbHq-o7Y-rJ6BEaWHKU7nLAd0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "372512869567-p55eucbfomhkv9r1h9bq8693d1fjutgv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
