@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class Home extends AppCompatActivity {
     Toolbar toolbar;
-    ViewPager viewpager;
+    ViewPager viewPager;
 
 
     @Override
@@ -30,7 +30,7 @@ public class Home extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        ListView feedListView = (ListView) findViewById(R.id.feedListView);
+        //ListView feedListView = (ListView) findViewById(R.id.feedListView);
 
         List<Map<String, String>> postData = new ArrayList<Map<String, String>>();
 
@@ -43,9 +43,17 @@ public class Home extends AppCompatActivity {
         //SET METHOD TO SHOW back arrow in Action Bar
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        viewpager = (ViewPager) findViewById(R.id.viewPager_id);
+        viewPager = (ViewPager) findViewById(R.id.viewPager_id);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        ListView feedListView;
+
+        feedListView = (ListView) findViewById(R.id.feedListView);
+
+        adapter.addFragment(new homePage(),"Home");
+        adapter.addFragment(new Hub(),"Hub");
+        adapter.addFragment(new Partners(),"Partners");
 
         for(int i =1; i <=5; i++){
             Map<String, String> postInfo = new HashMap<String, String>();
@@ -76,4 +84,6 @@ public class Home extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
