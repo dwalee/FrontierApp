@@ -1,5 +1,6 @@
 package com.frontierapp.frontierapp;
 
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class Home extends AppCompatActivity {
     Toolbar toolbar;
     ViewPager viewPager;
+    TabLayout tabLayout;
 
 
     @Override
@@ -29,6 +31,8 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout_id);
 
         //ListView feedListView = (ListView) findViewById(R.id.feedListView);
 
@@ -45,15 +49,17 @@ public class Home extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.viewPager_id);
 
+
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        ListView feedListView;
-
-        feedListView = (ListView) findViewById(R.id.feedListView);
 
         adapter.addFragment(new homePage(),"Home");
         adapter.addFragment(new Hub(),"Hub");
         adapter.addFragment(new Partners(),"Partners");
+
+        tabLayout.setupWithViewPager(viewPager);
+
+        viewPager.setAdapter(adapter);
 
         for(int i =1; i <=5; i++){
             Map<String, String> postInfo = new HashMap<String, String>();
@@ -64,7 +70,7 @@ public class Home extends AppCompatActivity {
 
         SimpleAdapter simpleAdapter = new SimpleAdapter(this,postData, android.R.layout.simple_list_item_1, new String[] {"content", "username"}, new int [] {android.R.id.text1, android.R.id.text2});
 
-        feedListView.setAdapter(simpleAdapter);
+        //feedListView.setAdapter(simpleAdapter);
     }
 
     @Override
