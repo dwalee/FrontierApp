@@ -44,7 +44,6 @@ public class homePage extends Fragment {
                 builder =  new AlertDialog.Builder(getActivity());
                 builder.setTitle("Create Post");
 
-
                 final EditText postContent= new EditText(getActivity());
 
                 builder.setView(postContent);
