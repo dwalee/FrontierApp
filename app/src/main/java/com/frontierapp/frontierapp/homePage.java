@@ -7,11 +7,18 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class homePage extends Fragment {
@@ -20,6 +27,9 @@ public class homePage extends Fragment {
     View view;
     FloatingActionButton post;
     AlertDialog.Builder builder;
+    private StorageReference mstorage;
+    String username;
+    Integer userPic;
 
 
     public homePage() {
@@ -33,6 +43,8 @@ public class homePage extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home_page2, container, false);
 
+        mstorage = FirebaseStorage.getInstance().getReference();
+
         feedListView = (ListView) view.findViewById(R.id.feedListView);
 
         post = (FloatingActionButton) view.findViewById(R.id.post);
@@ -41,10 +53,10 @@ public class homePage extends Fragment {
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                builder =  new AlertDialog.Builder(getActivity());
+                builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Create Post");
 
-                final EditText postContent= new EditText(getActivity());
+                EditText postContent = new EditText(getActivity());
 
                 builder.setView(postContent);
 
@@ -52,6 +64,7 @@ public class homePage extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+                        //startPosting();
                     }
                 });
 
@@ -69,6 +82,29 @@ public class homePage extends Fragment {
         });
         return view;
     }
-
-
 }
+
+            /*private void startPosting(String username, Integer userPic) {
+
+                String postInfo = builder.toString().trim();
+                String name = username.toString().trim();
+
+                if (!TextUtils.isEmpty((postInfo))){
+
+                    String key = mstorage.child("posts").push().getKey();
+                    Post post = new Post(Uid, username, body);
+                    Map<String, Object> postValues = post.toMap();
+
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put("/posts/" + key, postValues);
+                    childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
+
+                    mstorage.updateChildren(childUpdates);
+                }
+
+
+                }
+            }
+        });
+        return view;
+    }*/

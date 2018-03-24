@@ -5,7 +5,7 @@ import com.google.firebase.database.Exclude;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Updates {
+public class Post {
 
     public String Uid;
     public String author;
@@ -15,11 +15,11 @@ public class Updates {
     public Map<String, Boolean> stars = new HashMap<>();
 
 
-    public Updates() {
+    public Post() {
 
     }
 
-    public Updates(String Uid, String author, String title, String body) {
+    public Post(String Uid, String author, String title, String body) {
             this.Uid = Uid;
             this.author = author;
             this.title = title;
