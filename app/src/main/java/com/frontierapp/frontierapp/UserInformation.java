@@ -8,17 +8,20 @@ public class UserInformation {
     private String nameText, emailText, birthDate, passwordText, Uid, photoUrl,
             Interest1,Interest2,Interest3,Interest4,Interest5,Interest6,Interest7;
 
+    private int profile_pic;
+
     public UserInformation(){
 
     }
 
 
-    public UserInformation(String birthDate, String passwordText,String emailText, String nameText, String Uid) {
-        this. Uid = Uid;
+    public UserInformation(String birthDate, String passwordText,String emailText, String nameText, String Uid, int profile_pic) {
+        this.Uid = Uid;
         this.emailText = emailText;
         this.nameText = nameText;
         this.birthDate = birthDate;
         this.passwordText = passwordText;
+        this.profile_pic = profile_pic;
 
     }
 
