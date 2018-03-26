@@ -26,38 +26,31 @@
             android:layout_marginTop="24dp"/>
 
         <!-- Timestamp goes here -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/timestampPostLinearLayout"
-            android:orientation="horizontal">
+            android:id="@+id/timestampTextView"
+            android:text="10 mins"
+            android:textSize="12sp"
+            android:layout_marginTop="1dp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/timestampTextView"
-                android:text="10 mins"
-                android:textSize="12sp"
-                android:layout_marginTop="1dp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!--User's Post-->
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp">
+            android:id="@+id/usersPostTextView"
+            android:textStyle="bold"
+            android:text="This is a post text text view. Let me type this to the next line. "
+            android:layout_marginTop="3dp"
+            android:gravity="center_vertical"/>
 
-            <!--User's Post-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/usersPostTextView"
-                android:textStyle="bold"
-                android:text="This is a post text text view. Let me type this to the next line. "
-                android:layout_marginTop="3dp"
-                android:gravity="center_vertical"/>
-        </LinearLayout>
+        <!--Image Post goes here -->
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:id="@+id/usersImagePostImageButton"
+            android:layout_marginTop="2dp"
+            android:layout_margin="5dp"/>
 
         <!-- Like, comment, share icons go here -->
         <LinearLayout
@@ -71,23 +64,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Like"
-                android:layout_margin="5dp"
-                android:padding="5dp"
+                android:layout_margin="45dp"
                 android:gravity="center"
                 android:layout_gravity="center_horizontal"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:text="Comment" />
+                android:text="Comment"
+                android:layout_margin="45dp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Share"
-                android:layout_marginLeft="50dp"
-                android:gravity="center_vertical"/>
+                android:layout_margin="45dp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
 
