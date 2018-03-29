@@ -22,12 +22,5 @@ public class PartnerViewHolder extends RecyclerView.ViewHolder {
         partnerAvatarImageView = (ImageView) itemView.findViewById(R.id.partnerAvatarImageView);
         partnerNameTextView = (TextView) itemView.findViewById(R.id.partnerNameTextView);
         partnershipRequest = (AppCompatButton) itemView.findViewById(R.id.partnershipRequestButton);
-
-        partnershipRequest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(itemView.getContext(), "This button was clicked", Toast.LENGTH_LONG);
-            }
-        });
     }
 }
