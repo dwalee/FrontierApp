@@ -19,7 +19,6 @@ public class PartnerItemRecyclerAdapter extends RecyclerView.Adapter<PartnerView
     }
 
     @Override
-
     public PartnerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.partner_item_layout,
                 parent, false
