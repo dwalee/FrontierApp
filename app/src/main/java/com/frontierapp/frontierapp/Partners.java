@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,16 +23,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import static com.google.android.gms.plus.PlusOneDummyView.TAG;
 
-public class Partners extends Fragment {
+public class Partners extends Fragment{
     View view;
     FloatingActionButton post;
     AlertDialog.Builder builder;
     RecyclerView partnerRecyclerView;
     DatabaseReference databaseReferenceUser;
-    List<UserInformation> userInformationList = new ArrayList<>();
+    List<UserInformation> userInformationList;
+    SwipeRefreshLayout partnerSwipeRefreshLayout;
 
     public Partners() {
         // Required empty public constructor
@@ -70,42 +75,38 @@ public class Partners extends Fragment {
                 });
             }
         });
-                return view;
+
+        partnerSwipeRefreshLayout = (SwipeRefreshLayout)  view.findViewById(
+                                                            R.id.partnerSwipeRefreshLayout);
+        partnerSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getUserDataFromDatabase();
+                partnerSwipeRefreshLayout.setRefreshing(false);
             }
+        });
 
-    @Override
-    public void onStart() {
-        super.onStart();
+        databaseReferenceUser = FirebaseDatabase.getInstance().
+                getReference("UserInformation/user");
 
-        getDatabaseReferenceUsers();
-    }
+
+                return view;
+        }
+
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         partnerRecyclerView = (RecyclerView) view.findViewById(R.id.partnerRecyclerView);
-        databaseReferenceUser = FirebaseDatabase.getInstance().
-                getReference("UserInformation/user");
-
-        List<PartnershipViewData> partnershipViewDataList = new ArrayList<>();
-        for(int i=0;i<userInformationList.size();i++){
-            PartnershipViewData partnershipViewData = new PartnershipViewData();
-            Log.i("onActivityCreated: ", userInformationList.get(i).getName());
-            partnershipViewData.setPartnerName(userInformationList.get(i).getName());
-
-            partnershipViewDataList.add(partnershipViewData);
-        }
+        userInformationList = new ArrayList<>();
+        getUserDataFromDatabase();
 
 
-        partnerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        partnerRecyclerView.setHasFixedSize(true);
-        PartnerItemRecyclerAdapter partnerItemRecyclerAdapter = new
-                PartnerItemRecyclerAdapter(partnershipViewDataList);
-        partnerRecyclerView.setAdapter(partnerItemRecyclerAdapter);
     }
 
-    public void getDatabaseReferenceUsers(){
+    public void getUserDataFromDatabase(){
         databaseReferenceUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -115,7 +116,30 @@ public class Partners extends Fragment {
                             getValue(UserInformation.class);
                     Log.i("onDataChange: ",userInformation.getName());
                     userInformationList.add(userInformation);
+                    //Log.i("onDataChange: ",userInformationList.get(i).getName());
                 }
+
+                List<PartnershipViewData> partnershipViewDataList = new ArrayList<>();
+                Log.i("onActivityCreated: ", Integer.toString(userInformationList.size()));
+                for(int i=0;i<userInformationList.size();i++){
+                    PartnershipViewData partnershipViewData = new PartnershipViewData();
+                    Log.i("onActivityCreated: ", userInformationList.get(i).getName());
+                    partnershipViewData.setPartnerName(userInformationList.get(i).getName());
+
+                    partnershipViewDataList.add(partnershipViewData);
+                    Collections.sort(partnershipViewDataList, new Comparator<PartnershipViewData>() {
+                        @Override
+                        public int compare(PartnershipViewData o1, PartnershipViewData o2) {
+                            return o1.getPartnerName().compareToIgnoreCase(o2.getPartnerName());
+                        }
+                    });
+                }
+                Log.i(TAG, "onActivityCreated: After");
+                partnerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                partnerRecyclerView.setHasFixedSize(true);
+                PartnerItemRecyclerAdapter partnerItemRecyclerAdapter = new
+                        PartnerItemRecyclerAdapter(partnershipViewDataList);
+                partnerRecyclerView.setAdapter(partnerItemRecyclerAdapter);
             }
 
             @Override
@@ -125,15 +149,5 @@ public class Partners extends Fragment {
         });
     }
 
-
-    String[] username = {
-            "Dwaine Lee Jr",
-            "Yoshua Isreal",
-            "Denzel Something",
-            "Levonte Something Else",
-            "Other People",
-            "Life in the D",
-            "Fuck I ain't got no limits"
-    };
 }
 

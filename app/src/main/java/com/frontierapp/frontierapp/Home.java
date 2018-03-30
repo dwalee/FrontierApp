@@ -58,9 +58,9 @@ public class Home extends AppCompatActivity {
         adapter.addFragment(new Hub(),"Hub");
         adapter.addFragment(new Partners(),"Partners");
 
-        tabLayout.setupWithViewPager(viewPager);
 
         viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
 
         for(int i =1; i <=5; i++){
             Map<String, String> postInfo = new HashMap<String, String>();
