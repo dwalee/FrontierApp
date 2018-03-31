@@ -14,10 +14,13 @@ import java.util.List;
 public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemViewHolder> {
     private List<PostItemData> postItemDataList;
 
+    //Create constructor to get the list
     public PostItemRecyclerViewAdapter(List<PostItemData> postItemDataList) {
         this.postItemDataList = postItemDataList;
     }
 
+
+    //Create your view and tie it to the viewholder
     @Override
     public PostItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_item_layout,
@@ -25,6 +28,9 @@ public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemVi
         return new PostItemViewHolder(view);
     }
 
+
+    //Get each Post Item data from the post item data list and apply the data
+    //to each respective view
     @Override
     public void onBindViewHolder(PostItemViewHolder holder, int position) {
         PostItemData postItemData = postItemDataList.get(position);
