@@ -85,21 +85,29 @@ public class Register extends AppCompatActivity {
     }
 
     // Provides user data such as name email, and birthday
-    private void addUser(){
+    private void addUser() {
 
         String emailText = userEmail.getText().toString();
         String passwordText = userPassword.getText().toString();
         String conPasswordText = conPassword.getText().toString();
         String nameText = name.getText().toString();
         String birthDate = dateOfBirth.getText().toString();
+        String gender;
+
+        if (woman.isChecked()) {
+            gender = "woman";
+        } else {
+            gender = "man";
+        };
+
 
         //Checks to see if editText boxes are empty
 
         if (!TextUtils.isEmpty(emailText) && !TextUtils.isEmpty(passwordText) && !TextUtils.isEmpty(conPasswordText) &&
-                !TextUtils.isEmpty(nameText) && !TextUtils.isEmpty(birthDate)) {
+                !TextUtils.isEmpty(nameText) && !TextUtils.isEmpty(birthDate) && (woman.isChecked()|| man.isChecked())){
             String id = databaseUser.push().getKey();
 
-            UserInformation userInformation = new UserInformation(birthDate, passwordText, emailText, nameText, id);
+            UserInformation userInformation = new UserInformation(birthDate, passwordText, emailText, nameText, id, gender);
 
             databaseUser.child("user").child(userID).setValue(userInformation);
 
@@ -145,7 +153,7 @@ public class Register extends AppCompatActivity {
                             Toast.makeText(Register.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         }else{
-                            Intent welcome = new Intent(Register.this, Home.class);
+                            Intent welcome = new Intent(Register.this, Skills.class);
                             startActivity(welcome);
                         }
                         progressDialog.dismiss();
@@ -168,7 +176,7 @@ public class Register extends AppCompatActivity {
     public void onStop(){
         super.onStop();
         if(mAuthListener != null) {
-                mAuth.removeAuthStateListener(mAuthListener);
+            mAuth.removeAuthStateListener(mAuthListener);
         }
     }
 }
