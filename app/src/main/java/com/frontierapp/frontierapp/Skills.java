@@ -30,7 +30,7 @@ public class Skills extends AppCompatActivity {
     private EditText skillSix;
     private EditText skillSeven;
     private String TAG;
-    Button addSkill;
+    private Button addSkill;
     Button next;
 
     @Override
