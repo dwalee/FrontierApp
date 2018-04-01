@@ -5,7 +5,7 @@ package com.frontierapp.frontierapp;
  */
 
 public class UserInformation {
-    private String nameText, emailText, birthDate, passwordText, uid, photoUrl,
+    private String nameText, emailText, birthDate, passwordText, Uid, photoUrl,
             Interest1,Interest2,Interest3,Interest4,Interest5,Interest6,Interest7;
 
     public UserInformation(){
@@ -14,7 +14,7 @@ public class UserInformation {
 
 
     public UserInformation(String birthDate, String passwordText,String emailText, String nameText, String Uid) {
-        this.uid = Uid;
+        this. Uid = Uid;
         this.emailText = emailText;
         this.nameText = nameText;
         this.birthDate = birthDate;
@@ -36,7 +36,7 @@ public class UserInformation {
 
 
     public String getUid(){
-        return uid;
+        return Uid;
     }
 
     public String getName(){
@@ -96,7 +96,7 @@ public class UserInformation {
         this.passwordText = passwordText;
     }
 
-    public void setUid(String Uid) { this.uid = Uid;}
+    public void setUid(String Uid) { this.Uid = Uid;}
 
     public void setPhotoUrl(String photoUrl){
         this.photoUrl = photoUrl;

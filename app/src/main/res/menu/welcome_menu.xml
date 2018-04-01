@@ -5,4 +5,8 @@
         android:title="@string/settings"
         android:id="@+id/settings" />
 
+    <item
+        android:title="@string/Logout"
+        android:id="@+id/logout" />
+
 </menu>

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ import java.util.Map;
 
 
 public class homePage extends Fragment {
-    ListView feedListView;
+    RecyclerView feedListView;
     ViewPager viewPager;
     View view;
     FloatingActionButton post;
@@ -45,7 +46,7 @@ public class homePage extends Fragment {
 
         mstorage = FirebaseStorage.getInstance().getReference();
 
-        feedListView = (ListView) view.findViewById(R.id.feedListView);
+        feedListView = (RecyclerView) view.findViewById(R.id.feedListView);
 
         post = (FloatingActionButton) view.findViewById(R.id.post);
 

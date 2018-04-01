@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,24 +24,28 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseUser user;
 
     private EditText userPassword, userEmail;
     private TextView registerText;
     private Button btnLogIn, btnReset;
     private String TAG;
     private ProgressDialog progressDialog;
+    private CheckBox remember;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         btnLogIn = (Button) findViewById(R.id.btnLogIn);
         registerText = (TextView) findViewById(R.id.registerText);
         btnReset = (Button) findViewById(R.id.btnReset);
         userEmail = (EditText) findViewById(R.id.userEmail);
         userPassword = (EditText) findViewById(R.id.userPassword);
         progressDialog = new ProgressDialog(this);
+        remember = (CheckBox) findViewById(R.id.remember);
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -59,6 +64,13 @@ public class MainActivity extends AppCompatActivity {
         };
 
 //OnClick Listeners
+        if (remember.isChecked()) {
+            if (user != null) {
+                //User is signed in
+
+
+            }
+        }
 
         // registerText leads to RegisterActivity
 
