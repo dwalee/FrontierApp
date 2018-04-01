@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseUser user;
 
     private EditText userPassword, userEmail;
     private TextView registerText;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         btnLogIn = (Button) findViewById(R.id.btnLogIn);
         registerText = (TextView) findViewById(R.id.registerText);
         btnReset = (Button) findViewById(R.id.btnReset);
@@ -62,8 +64,12 @@ public class MainActivity extends AppCompatActivity {
         };
 
 //OnClick Listeners
-        if (remember.isChecked()){
+        if (remember.isChecked()) {
+            if (user != null) {
+                //User is signed in
 
+
+            }
         }
 
         // registerText leads to RegisterActivity

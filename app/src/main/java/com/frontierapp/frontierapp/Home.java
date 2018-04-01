@@ -1,5 +1,6 @@
 package com.frontierapp.frontierapp;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,9 +92,9 @@ public class Home extends AppCompatActivity {
             Log.i("Information", "Options menu clicked");
         }
         else if (id == R.id.logout){
-            Toast.makeText(getApplicationContext(), "Selected settings menu", Toast.LENGTH_LONG).show();
-            Log.i("Information", "Logout menu clicked");
-
+            FirebaseAuth.getInstance().signOut();
+            Intent signout = new Intent(Home.this, MainActivity.class);
+            startActivity(signout);
         }
 
         return super.onOptionsItemSelected(item);
