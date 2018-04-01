@@ -32,8 +32,8 @@
         android:id="@+id/btnLogIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/btnReset"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/userPassword"
         android:text="Log In" />
 
     <TextView
@@ -50,8 +50,8 @@
         android:id="@+id/btnReset"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnLogIn"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
         android:text="Forgot Password" />
 
     <TextView
@@ -63,5 +63,13 @@
         android:layout_marginBottom="50dp"
         android:text="Frontier"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+
+    <CheckBox
+        android:id="@+id/remember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/userPassword"
+        android:layout_centerHorizontal="true"
+        android:text="Remember Me" />
 
 </RelativeLayout>

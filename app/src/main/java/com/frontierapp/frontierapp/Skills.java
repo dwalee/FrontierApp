@@ -31,7 +31,7 @@ public class Skills extends AppCompatActivity {
     private EditText skillSeven;
     private String TAG;
     private Button addSkill;
-    Button next;
+    private Button next;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

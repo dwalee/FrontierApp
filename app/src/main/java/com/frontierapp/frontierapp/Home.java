@@ -85,8 +85,13 @@ public class Home extends AppCompatActivity {
 
         int id = item.getItemId();
         if(id == R.id.settings) {
-            Toast.makeText(getApplicationContext(), "Selected Settings menu",Toast.LENGTH_LONG).show();
-            Log.i("Information","Options menu clicked");
+            Toast.makeText(getApplicationContext(), "Selected settings menu", Toast.LENGTH_LONG).show();
+            Log.i("Information", "Options menu clicked");
+        }
+        else if (id == R.id.logout){
+            Toast.makeText(getApplicationContext(), "Selected settings menu", Toast.LENGTH_LONG).show();
+            Log.i("Information", "Logout menu clicked");
+
         }
 
         return super.onOptionsItemSelected(item);

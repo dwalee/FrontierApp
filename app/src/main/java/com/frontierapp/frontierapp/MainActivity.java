@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogIn, btnReset;
     private String TAG;
     private ProgressDialog progressDialog;
+    private CheckBox remember;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         userEmail = (EditText) findViewById(R.id.userEmail);
         userPassword = (EditText) findViewById(R.id.userPassword);
         progressDialog = new ProgressDialog(this);
+        remember = (CheckBox) findViewById(R.id.remember);
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -59,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
         };
 
 //OnClick Listeners
+        if (remember.isChecked()){
+
+        }
 
         // registerText leads to RegisterActivity
 

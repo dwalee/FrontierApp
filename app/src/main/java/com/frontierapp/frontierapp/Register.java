@@ -107,7 +107,7 @@ public class Register extends AppCompatActivity {
                 !TextUtils.isEmpty(nameText) && !TextUtils.isEmpty(birthDate) && (woman.isChecked()|| man.isChecked())){
             String id = databaseUser.push().getKey();
 
-            UserInformation userInformation = new UserInformation(birthDate, passwordText, emailText, nameText, id, gender);
+            UserInformation userInformation = new UserInformation(nameText, emailText,passwordText,birthDate,gender);
 
             databaseUser.child("user").child(userID).setValue(userInformation);
 
