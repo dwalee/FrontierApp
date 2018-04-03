@@ -4,33 +4,43 @@ package com.frontierapp.frontierapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 public class HomePage extends Fragment {
-    RecyclerView feedListView;
+    RecyclerView feedRecyclerView;
     ViewPager viewPager;
     View view;
     FloatingActionButton post;
     AlertDialog.Builder builder;
     private StorageReference mstorage;
     List<PostItemData> postItemDataList;
+    private DocumentReference userDocRef = FirebaseFirestore.getInstance().document(
+            "UserInformation/Users/User"
+    );
+    private DocumentReference postDocRef = FirebaseFirestore.getInstance().document(
+        "UserInformation/Users/Users/ibTb31OODgEbTa8M8Bha/Posts"
+    );
     String username;
     Integer userPic;
 
@@ -38,17 +48,60 @@ public class HomePage extends Fragment {
     public HomePage() {
         // Required empty public constructor
     }
+    private PostItemData postItemData;
+    public void getFeed(){
+        postItemDataList = new ArrayList<>();
+        userDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                postItemDataList.clear();
+                if(documentSnapshot.exists()){
+                    postItemData = new PostItemData();
+                    String firstName = documentSnapshot.getString("first_name");
+                    String lastName = documentSnapshot.getString("last_name");
+                    String full_name = firstName + " " + lastName;
+                    postItemData.setUserName(full_name);
+                    postDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if(documentSnapshot.exists()){
+                                postItemData.setPostString(documentSnapshot.getString("post_text"));
+                                postItemData.setPostTimeStamp(documentSnapshot.getString("post_timestamp"));
+                            }else{
+                                Toast.makeText(getContext(), "This doesn't exist", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                    postItemDataList.add(postItemData);
+                }else{
+                    Toast.makeText(getContext(), "This doesn't exist", Toast.LENGTH_LONG).show();
+                }
 
+                feedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                feedRecyclerView.setHasFixedSize(true);
+                PostItemRecyclerViewAdapter postItemRecyclerViewAdapter = new
+                        PostItemRecyclerViewAdapter(postItemDataList);
+                feedRecyclerView.setAdapter(postItemRecyclerViewAdapter);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        getFeed();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_home_page2, container, false);
+        view = inflater.inflate(R.layout.fragment_home_page, container, false);
 
         mstorage = FirebaseStorage.getInstance().getReference();
 
-        feedListView = (RecyclerView) view.findViewById(R.id.feedListView);
+        feedRecyclerView = (RecyclerView) view.findViewById(R.id.feedListView);
 
         post = (FloatingActionButton) view.findViewById(R.id.post);
 
