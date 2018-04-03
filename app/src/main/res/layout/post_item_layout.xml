@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="165dp">
 
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="16dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_margin="12dp"
         android:scaleType="centerInside"
         android:id="@+id/userAvatarImageView"
         />
@@ -16,22 +16,24 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
         <!--User's Post-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/usersPostTextView"
-            android:textStyle="bold"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-condensed"
             android:text="@string/post_string"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:layout_marginRight="10dp"
             android:gravity="center_vertical"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginRight="25dp"
+            android:gravity="right">
 
             <!-- User's Name -->
             <TextView
@@ -39,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/usernameTextView"
                 android:text="Yoshua Isreal"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginTop="7dp"/>
 
@@ -47,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="    *    "
-                android:textSize="12sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginTop="7dp"/>
 
@@ -57,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/timestampTextView"
                 android:text="10 mins"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 android:layout_marginTop="7dp"/>
         </LinearLayout>
 
@@ -73,38 +75,38 @@
         <!-- Like, comment, share icons go here -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:id="@+id/interactableIconsLinearLayout"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            >
+            android:layout_margin="10dp"
+            android:gravity="center">
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/likeIconImageView"
                 android:text="Like"
-                android:layout_marginTop="45dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_weight="1"
+                android:gravity="center"
+                android:src="@drawable/thumb_up_outline"/>
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/commentIconImageView"
                 android:text="Comment"
-                android:layout_marginTop="45dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_weight="1"
+                android:gravity="center"
+                android:src="@drawable/comment_outline"/>
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/shareIconImageView"
                 android:text="Share"
-                android:layout_marginTop="45dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="10dp"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_weight="1"
+                android:gravity="center"
+                android:src="@drawable/share"/>
 
         </LinearLayout>
 
