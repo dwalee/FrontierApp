@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -18,15 +19,17 @@
 
         <!--User's Post-->
         <TextView
+            android:id="@+id/postTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/postTextView"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-condensed"
-            android:text="@string/post_string"
+            android:layout_marginRight="25dp"
             android:layout_marginTop="16dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center_vertical"/>
+            android:fontFamily="@font/roboto_condensed_regular"
+            android:gravity="center_vertical"
+            android:text="@string/post_string"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            tools:fontFamily="@font/roboto_condensed_regular" />
 
         <!--Image Post goes here -->
         <ImageButton
@@ -49,16 +52,20 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/usernameTextView"
                 android:text="Yoshua Isreal"
+                android:fontFamily="@font/roboto_medium"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:textColor="@color/colorBlack"
                 android:layout_marginTop="7dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="    *    "
+                android:fontFamily="@font/roboto_medium"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:textColor="@color/colorBlack"
                 android:layout_marginTop="7dp"/>
 
             <!-- Timestamp goes here -->
@@ -67,6 +74,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/postTimestampTextView"
                 android:text="10 mins"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/colorBlack"
                 android:textSize="16sp"
                 android:layout_marginTop="7dp"/>
         </LinearLayout>

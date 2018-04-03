@@ -2,6 +2,7 @@ package com.frontierapp.frontierapp;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,7 @@ public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemVi
         holder.userNameTextView.setText(postItemData.getUserName());
         //holder.userAvatarImageView.setImageResource(postItemData.getUserAvatar());
         holder.postTextView.setText(postItemData.getPostString());
-        holder.postTimestampTextView.setText(postItemData.getPostTimeStamp());
+        holder.postTimestampTextView.setText(java.text.DateFormat.getInstance().format(postItemData.getPostTimeStamp()));
         //holder.postImageButton.setImageBitmap();
         //holder.userAvatarImageView.setImageBitmap();
         holder.likeIconImageView.setOnClickListener(new View.OnClickListener() {

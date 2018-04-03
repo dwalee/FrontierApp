@@ -1,5 +1,10 @@
 package com.frontierapp.frontierapp;
 
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.util.Date;
+
 /**
  * Created by Yoshtown on 3/24/2018.
  */
@@ -9,7 +14,7 @@ public class PostItemData {
     private String userName;
     private String postString;
     private String postPhotoUrl;
-    private String postTimeStamp;
+    private Date postTimeStamp;
     private String userAvatarUrl;
     private Boolean liked;
     private int likeCount, commentCount, shareCount;
@@ -20,7 +25,7 @@ public class PostItemData {
     }
 
     public PostItemData(String userName, String postString, String postPhotoUrl,
-                        String postTimeStamp, String userAvatarUrl, Boolean liked,
+                        Date postTimeStamp, String userAvatarUrl, Boolean liked,
                         int likeCount, int commentCount, int shareCount, int userAvatar) {
         this.userName = userName;
         this.postString = postString;
@@ -72,11 +77,11 @@ public class PostItemData {
         this.postPhotoUrl = postPhotoUrl;
     }
 
-    public String getPostTimeStamp() {
+    public Date getPostTimeStamp() {
         return postTimeStamp;
     }
 
-    public void setPostTimeStamp(String postTimeStamp) {
+    public void setPostTimeStamp(Date postTimeStamp) {
         this.postTimeStamp = postTimeStamp;
     }
 

@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,12 +36,10 @@ public class HomePage extends Fragment {
     AlertDialog.Builder builder;
     private StorageReference mstorage;
     List<PostItemData> postItemDataList;
-    private DocumentReference userDocRef = FirebaseFirestore.getInstance().document(
+    private DocumentReference userDocRef = FirebaseFirestore.getInstance().collection(
             "UserInformation/Users/User"
-    );
-    private DocumentReference postDocRef = FirebaseFirestore.getInstance().document(
-        "UserInformation/Users/Users/ibTb31OODgEbTa8M8Bha/Posts"
-    );
+    ).document("ibTb31OODgEbTa8M8Bha");
+    private DocumentReference postDocRef;
     String username;
     Integer userPic;
 
@@ -55,41 +54,51 @@ public class HomePage extends Fragment {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 postItemDataList.clear();
+                postItemData = new PostItemData();
                 if(documentSnapshot.exists()){
-                    postItemData = new PostItemData();
-                    String firstName = documentSnapshot.getString("first_name");
-                    String lastName = documentSnapshot.getString("last_name");
+                    String firstName = documentSnapshot.getString("User.first_name");
+                    String lastName = documentSnapshot.getString("User.last_name");
                     String full_name = firstName + " " + lastName;
                     postItemData.setUserName(full_name);
+                    postDocRef = userDocRef.collection("Posts").document("OJ0EnoZ4g9d5Q2BQ98yO");
+
                     postDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if(documentSnapshot.exists()){
-                                postItemData.setPostString(documentSnapshot.getString("post_text"));
-                                postItemData.setPostTimeStamp(documentSnapshot.getString("post_timestamp"));
-                            }else{
-                                Toast.makeText(getContext(), "This doesn't exist", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                    postItemDataList.add(postItemData);
-                }else{
-                    Toast.makeText(getContext(), "This doesn't exist", Toast.LENGTH_LONG).show();
-                }
+                        public void onSuccess(DocumentSnapshot documentSnapshotPost) {
+                            if(documentSnapshotPost.exists()){
+                                postItemData.setPostString(documentSnapshotPost.getString("Post.post_text"));
+                                postItemDataList.add(postItemData);
 
-                feedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                feedRecyclerView.setHasFixedSize(true);
-                PostItemRecyclerViewAdapter postItemRecyclerViewAdapter = new
-                        PostItemRecyclerViewAdapter(postItemDataList);
-                feedRecyclerView.setAdapter(postItemRecyclerViewAdapter);
+                                feedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                                feedRecyclerView.setHasFixedSize(true);
+                                PostItemRecyclerViewAdapter postItemRecyclerViewAdapter = new
+                                        PostItemRecyclerViewAdapter(postItemDataList);
+                                feedRecyclerView.setAdapter(postItemRecyclerViewAdapter);
+
+                                postItemData.setPostTimeStamp(documentSnapshotPost.getDate("Post.post_timestamp"));
+                            }else{
+                                Toast.makeText(getContext(), "This doesn't exist: Post", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+
+                    });
+
+
+
+                }else{
+                    Toast.makeText(getContext(), "This doesn't exist: User", Toast.LENGTH_LONG).show();
+                }
             }
         });
+
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        feedRecyclerView = (RecyclerView) view.findViewById(R.id.feedRecyclerView);
         getFeed();
     }
 
