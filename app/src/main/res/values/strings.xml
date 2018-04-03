@@ -25,5 +25,6 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="settings">Settings</string>
     <string name="Logout">Logout</string>
+    <string name="post_string">This is a post text text view. Let me type this to the next line. I will type more to make it go to the next line</string>
 
 </resources>
