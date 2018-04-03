@@ -9,9 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -57,7 +54,7 @@ public class Home extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
 
-        adapter.addFragment(new homePage(),"Home");
+        adapter.addFragment(new HomePage(),"Home");
         adapter.addFragment(new Hub(),"Hub");
         adapter.addFragment(new Partners(),"Partners");
 

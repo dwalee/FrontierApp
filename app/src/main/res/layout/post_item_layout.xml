@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="165dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:layout_width="55dp"
@@ -20,13 +20,21 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/usersPostTextView"
+            android:id="@+id/postTextView"
             android:textSize="18sp"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/post_string"
             android:layout_marginTop="16dp"
             android:layout_marginRight="10dp"
             android:gravity="center_vertical"/>
+
+        <!--Image Post goes here -->
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/postImageButton"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="25dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,20 +65,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/timestampTextView"
+                android:id="@+id/postTimestampTextView"
                 android:text="10 mins"
                 android:textSize="16sp"
                 android:layout_marginTop="7dp"/>
         </LinearLayout>
-
-        <!--Image Post goes here -->
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:id="@+id/usersImagePostImageButton"
-            android:layout_marginTop="2dp"
-            android:layout_margin="5dp"
-            android:visibility="gone"/>
 
         <!-- Like, comment, share icons go here -->
         <LinearLayout
@@ -78,7 +77,8 @@
             android:layout_height="30dp"
             android:id="@+id/interactableIconsLinearLayout"
             android:orientation="horizontal"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center">
 
             <ImageView

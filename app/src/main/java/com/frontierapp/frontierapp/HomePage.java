@@ -19,21 +19,23 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
-public class homePage extends Fragment {
+public class HomePage extends Fragment {
     RecyclerView feedListView;
     ViewPager viewPager;
     View view;
     FloatingActionButton post;
     AlertDialog.Builder builder;
     private StorageReference mstorage;
+    List<PostItemData> postItemDataList;
     String username;
     Integer userPic;
 
 
-    public homePage() {
+    public HomePage() {
         // Required empty public constructor
     }
 
@@ -49,7 +51,6 @@ public class homePage extends Fragment {
         feedListView = (RecyclerView) view.findViewById(R.id.feedListView);
 
         post = (FloatingActionButton) view.findViewById(R.id.post);
-
 
         post.setOnClickListener(new View.OnClickListener() {
             @Override

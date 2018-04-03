@@ -1,9 +1,11 @@
 package com.frontierapp.frontierapp;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -19,8 +21,7 @@ public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemVi
         this.postItemDataList = postItemDataList;
     }
 
-
-    //Create your view and tie it to the viewholder
+    //Create your parent view and tie it to the viewholder
     @Override
     public PostItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_item_layout,
@@ -30,12 +31,41 @@ public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemVi
 
 
     //Get each Post Item data from the post item data list and apply the data
-    //to each respective view
+    //to each respective child view
     @Override
     public void onBindViewHolder(PostItemViewHolder holder, int position) {
-        PostItemData postItemData = postItemDataList.get(position);
+        final PostItemData postItemData = postItemDataList.get(position);
         holder.userNameTextView.setText(postItemData.getUserName());
-        holder.userAvatarImageView.setImageResource(postItemData.getUserAvatar());
+        //holder.userAvatarImageView.setImageResource(postItemData.getUserAvatar());
+        holder.postTextView.setText(postItemData.getPostString());
+        holder.postTimestampTextView.setText(postItemData.getPostTimeStamp());
+        //holder.postImageButton.setImageBitmap();
+        //holder.userAvatarImageView.setImageBitmap();
+        holder.likeIconImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Change the like button to green when liked
+                //Change it back to transparent when unliked
+                if(!postItemData.getLiked())
+                    v.setBackgroundColor(Color.GREEN);
+                else
+                    v.setBackgroundColor(Color.TRANSPARENT);
+            }
+        });
+
+        holder.commentIconImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Open up new UI to view comments
+            }
+        });
+
+        holder.shareIconImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //open new UI to choose options to share post
+            }
+        });
     }
 
     @Override
