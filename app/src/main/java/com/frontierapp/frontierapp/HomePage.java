@@ -85,7 +85,7 @@ public class HomePage extends Fragment {
                             feedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                             feedRecyclerView.setHasFixedSize(true);
                             PostItemRecyclerViewAdapter postItemRecyclerViewAdapter = new
-                                    PostItemRecyclerViewAdapter(postItemDataList);
+                                    PostItemRecyclerViewAdapter(getContext(), postItemDataList);
                             feedRecyclerView.setAdapter(postItemRecyclerViewAdapter);
                         }
                     });

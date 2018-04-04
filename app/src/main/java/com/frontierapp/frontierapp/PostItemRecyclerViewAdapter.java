@@ -1,5 +1,6 @@
 package com.frontierapp.frontierapp;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -7,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -16,10 +19,12 @@ import java.util.List;
 
 public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemViewHolder> {
     private List<PostItemData> postItemDataList;
+    private Context context;
 
     //Create constructor to get the list
-    public PostItemRecyclerViewAdapter(List<PostItemData> postItemDataList) {
+    public PostItemRecyclerViewAdapter(Context context, List<PostItemData> postItemDataList) {
         this.postItemDataList = postItemDataList;
+        this.context = context;
     }
 
     //Create your parent view and tie it to the viewholder
@@ -41,9 +46,11 @@ public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemVi
         holder.postTextView.setText(postItemData.getPostString());
         holder.postTimestampTextView.setText(java.text.DateFormat.getInstance().format(postItemData.getPostTimeStamp()));
         postItemData.convertPostUrlToBitmap();
-        holder.postImageButton.setImageBitmap(postItemData.getPostPhoto());
+        Glide.with(context).load(postItemData.getPostPhoto()).into(holder.postImageButton);
+        //holder.postImageButton.setImageBitmap(postItemData.getPostPhoto());
         postItemData.convertUserAvatarUrlToBitmap();
-        holder.userAvatarImageView.setImageBitmap(postItemData.getUserAvatarPhoto());
+        Glide.with(context).load(postItemData.getUserAvatarPhoto()).into(holder.userAvatarImageView);
+        //holder.userAvatarImageView.setImageBitmap(postItemData.getUserAvatarPhoto());
         holder.likeIconImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
