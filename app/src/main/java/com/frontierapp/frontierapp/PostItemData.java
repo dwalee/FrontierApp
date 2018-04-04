@@ -1,9 +1,12 @@
 package com.frontierapp.frontierapp;
 
+import android.graphics.Bitmap;
+
 import java.text.DateFormat;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Yoshtown on 3/24/2018.
@@ -14,6 +17,26 @@ public class PostItemData {
     private String userName;
     private String postString;
     private String postPhotoUrl;
+    private Bitmap postPhoto;
+    private Bitmap userAvatarPhoto;
+    private ImageDownloader imageDownloader;
+
+    public Bitmap getPostPhoto() {
+        return postPhoto;
+    }
+
+    public void setPostPhoto(Bitmap postPhoto) {
+        this.postPhoto = postPhoto;
+    }
+
+    public Bitmap getUserAvatarPhoto() {
+        return userAvatarPhoto;
+    }
+
+    public void setUserAvatarPhoto(Bitmap userAvatarPhoto) {
+        this.userAvatarPhoto = userAvatarPhoto;
+    }
+
     private Date postTimeStamp;
     private String userAvatarUrl;
     private Boolean liked;
@@ -125,4 +148,32 @@ public class PostItemData {
         this.shareCount = shareCount;
     }
 
+    //Download the bitmap image from the given url
+    public void convertUserAvatarUrlToBitmap(){
+        imageDownloader = new ImageDownloader();
+        if(userAvatarUrl != "") {
+            try {
+                setUserAvatarPhoto(imageDownloader.execute(getUserAvatarUrl()).get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //Download the bitmap image from the given url
+    public void convertPostUrlToBitmap() {
+        imageDownloader = new ImageDownloader();
+
+        if (postPhotoUrl != "") {
+            try {
+                setPostPhoto(imageDownloader.execute(getPostPhotoUrl()).get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

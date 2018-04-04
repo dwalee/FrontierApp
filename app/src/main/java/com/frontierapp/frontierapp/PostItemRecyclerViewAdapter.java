@@ -40,8 +40,10 @@ public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemVi
         //holder.userAvatarImageView.setImageResource(postItemData.getUserAvatar());
         holder.postTextView.setText(postItemData.getPostString());
         holder.postTimestampTextView.setText(java.text.DateFormat.getInstance().format(postItemData.getPostTimeStamp()));
-        //holder.postImageButton.setImageBitmap();
-        //holder.userAvatarImageView.setImageBitmap();
+        postItemData.convertPostUrlToBitmap();
+        holder.postImageButton.setImageBitmap(postItemData.getPostPhoto());
+        postItemData.convertUserAvatarUrlToBitmap();
+        holder.userAvatarImageView.setImageBitmap(postItemData.getUserAvatarPhoto());
         holder.likeIconImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -49,25 +49,36 @@ public class HomePage extends Fragment {
         // Required empty public constructor
     }
     private PostItemData postItemData;
+    String profilePicUrl, full_name;
     public void getFeed(){
         postItemDataList = new ArrayList<>();
         userDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 postItemDataList.clear();
-                postItemData = new PostItemData();
+                //if this user exist, get their first name, last name, and profile pic
                 if(documentSnapshot.exists()){
                     String firstName = documentSnapshot.getString("User.first_name");
                     String lastName = documentSnapshot.getString("User.last_name");
-                    String full_name = firstName + " " + lastName;
-                    postItemData.setUserName(full_name);
-                    postCollectionRef = userDocRef.collection("Posts");//.document("OJ0EnoZ4g9d5Q2BQ98yO");
+                    profilePicUrl = documentSnapshot.getString("userAvatarUrl");
+                    full_name = firstName + " " + lastName;
+                    postCollectionRef = userDocRef.collection("Posts");
+                    //get the image, text, and timestamp of each post from this user
                     postCollectionRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for(int i=0; i<queryDocumentSnapshots.getDocuments().size();i++) {
-                                postItemData.setPostString(queryDocumentSnapshots.getDocuments().get(i).getString("Post.post_text"));
-                                postItemData.setPostTimeStamp(queryDocumentSnapshots.getDocuments().get(i).getDate("Post.post_timestamp"));
+
+                            List<DocumentSnapshot> postDocRefList = queryDocumentSnapshots.getDocuments();
+                            DocumentSnapshot postSnapShot;
+                            for(int i=0; i<postDocRefList.size();i++) {
+                                postItemData = new PostItemData();
+                                postItemData.setUserName(full_name);
+                                postItemData.setUserAvatarUrl(profilePicUrl);
+
+                                postSnapShot = postDocRefList.get(i);
+                                postItemData.setPostString(postSnapShot.getString("Post.post_text"));
+                                postItemData.setPostTimeStamp(postSnapShot.getDate("Post.post_timestamp"));
+                                postItemData.setPostPhotoUrl(postSnapShot.getString("Post.post_image_url"));
                                 postItemDataList.add(postItemData);
                             }
 
@@ -78,31 +89,6 @@ public class HomePage extends Fragment {
                             feedRecyclerView.setAdapter(postItemRecyclerViewAdapter);
                         }
                     });
-
-                    /*postDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshotPost) {
-                            if(documentSnapshotPost.exists()){
-                                postItemData.setPostString(documentSnapshotPost.getString("Post.post_text"));
-                                postItemData.setPostTimeStamp(documentSnapshotPost.getDate("Post.post_timestamp"));
-                                postItemDataList.add(postItemData);
-
-                                feedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                                feedRecyclerView.setHasFixedSize(true);
-                                PostItemRecyclerViewAdapter postItemRecyclerViewAdapter = new
-                                        PostItemRecyclerViewAdapter(postItemDataList);
-                                feedRecyclerView.setAdapter(postItemRecyclerViewAdapter);
-
-
-                            }else{
-                                Toast.makeText(getContext(), "This doesn't exist: Post", Toast.LENGTH_LONG).show();
-                            }
-
-                        }
-
-                    });*/
-
-
 
                 }else{
                     Toast.makeText(getContext(), "This doesn't exist: User", Toast.LENGTH_LONG).show();
@@ -126,7 +112,7 @@ public class HomePage extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home_page, container, false);
 
-        //mstorage = FirebaseStorage.getInstance().getReference();
+        mstorage = FirebaseStorage.getInstance().getReference();
 
         feedRecyclerView = (RecyclerView) view.findViewById(R.id.feedListView);
 
@@ -164,6 +150,7 @@ public class HomePage extends Fragment {
         });
         return view;
     }
+
 }
 
             /*private void startPosting(String username, Integer userPic) {
