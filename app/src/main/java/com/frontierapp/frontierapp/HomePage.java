@@ -21,6 +21,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -39,7 +40,7 @@ public class HomePage extends Fragment {
     private DocumentReference userDocRef = FirebaseFirestore.getInstance().collection(
             "UserInformation/Users/User"
     ).document("ibTb31OODgEbTa8M8Bha");
-    private DocumentReference postDocRef;
+    private CollectionReference postCollectionRef;
     String username;
     Integer userPic;
 
@@ -60,13 +61,30 @@ public class HomePage extends Fragment {
                     String lastName = documentSnapshot.getString("User.last_name");
                     String full_name = firstName + " " + lastName;
                     postItemData.setUserName(full_name);
-                    postDocRef = userDocRef.collection("Posts").document("OJ0EnoZ4g9d5Q2BQ98yO");
+                    postCollectionRef = userDocRef.collection("Posts");//.document("OJ0EnoZ4g9d5Q2BQ98yO");
+                    postCollectionRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(int i=0; i<queryDocumentSnapshots.getDocuments().size();i++) {
+                                postItemData.setPostString(queryDocumentSnapshots.getDocuments().get(i).getString("Post.post_text"));
+                                postItemData.setPostTimeStamp(queryDocumentSnapshots.getDocuments().get(i).getDate("Post.post_timestamp"));
+                                postItemDataList.add(postItemData);
+                            }
 
-                    postDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            feedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                            feedRecyclerView.setHasFixedSize(true);
+                            PostItemRecyclerViewAdapter postItemRecyclerViewAdapter = new
+                                    PostItemRecyclerViewAdapter(postItemDataList);
+                            feedRecyclerView.setAdapter(postItemRecyclerViewAdapter);
+                        }
+                    });
+
+                    /*postDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshotPost) {
                             if(documentSnapshotPost.exists()){
                                 postItemData.setPostString(documentSnapshotPost.getString("Post.post_text"));
+                                postItemData.setPostTimeStamp(documentSnapshotPost.getDate("Post.post_timestamp"));
                                 postItemDataList.add(postItemData);
 
                                 feedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -75,14 +93,14 @@ public class HomePage extends Fragment {
                                         PostItemRecyclerViewAdapter(postItemDataList);
                                 feedRecyclerView.setAdapter(postItemRecyclerViewAdapter);
 
-                                postItemData.setPostTimeStamp(documentSnapshotPost.getDate("Post.post_timestamp"));
+
                             }else{
                                 Toast.makeText(getContext(), "This doesn't exist: Post", Toast.LENGTH_LONG).show();
                             }
 
                         }
 
-                    });
+                    });*/
 
 
 
