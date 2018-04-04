@@ -46,6 +46,7 @@ public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemVi
         holder.postTextView.setText(postItemData.getPostString());
         holder.postTimestampTextView.setText(java.text.DateFormat.getInstance().format(postItemData.getPostTimeStamp()));
         postItemData.convertPostUrlToBitmap();
+        //
         Glide.with(context).load(postItemData.getPostPhoto()).into(holder.postImageButton);
         //holder.postImageButton.setImageBitmap(postItemData.getPostPhoto());
         postItemData.convertUserAvatarUrlToBitmap();
