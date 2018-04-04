@@ -24,12 +24,11 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="25dp"
             android:layout_marginTop="16dp"
-            android:fontFamily="@font/roboto_condensed_regular"
+            android:fontFamily="@font/roboto_condensed_bold"
             android:gravity="center_vertical"
             android:text="@string/post_string"
             android:textColor="@color/colorBlack"
-            android:textSize="16sp"
-            tools:fontFamily="@font/roboto_condensed_regular" />
+            android:textSize="16sp" />
 
         <!--Image Post goes here -->
         <ImageButton
@@ -52,7 +51,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/usernameTextView"
                 android:text="Yoshua Isreal"
-                android:fontFamily="@font/roboto_medium"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/colorBlack"
@@ -62,7 +60,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="    *    "
-                android:fontFamily="@font/roboto_medium"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/colorBlack"
@@ -74,7 +71,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/postTimestampTextView"
                 android:text="10 mins"
-                android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/colorBlack"
                 android:textSize="16sp"
                 android:layout_marginTop="7dp"/>
