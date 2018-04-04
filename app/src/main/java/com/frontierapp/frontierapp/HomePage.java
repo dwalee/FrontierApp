@@ -108,7 +108,7 @@ public class HomePage extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home_page, container, false);
 
-        mstorage = FirebaseStorage.getInstance().getReference();
+        //mstorage = FirebaseStorage.getInstance().getReference();
 
         feedRecyclerView = (RecyclerView) view.findViewById(R.id.feedListView);
 
