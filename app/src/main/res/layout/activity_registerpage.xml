@@ -83,7 +83,7 @@
         android:layout_centerHorizontal="true"
         android:ems="10"
         android:hint="D.O.B. (MM/DD/YYYY)"
-        android:inputType="date" />
+        android:inputType="datetime|date|time" />
 
     <Button
         android:id="@+id/nextButton"

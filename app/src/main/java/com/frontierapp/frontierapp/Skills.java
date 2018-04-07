@@ -1,126 +1,83 @@
 package com.frontierapp.frontierapp;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+public class Skills {
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+    private String skill1, skill2, skill3, skill4, skill5, skill6, skill7;
 
-public class Skills extends AppCompatActivity {
+    public  Skills(){
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser user;
-    private String userID;
-    private DatabaseReference databaseUser;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private EditText skillOne;
-    private EditText skillTwo;
-    private EditText skillThree;
-    private EditText skillFour;
-    private EditText skillFive;
-    private EditText skillSix;
-    private EditText skillSeven;
-    private String TAG;
-    private Button addSkill;
-    private Button next;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_skills);
-
-        addSkill = (Button) findViewById(R.id.addSkill);
-        next = (Button) findViewById(R.id.next);
-        skillOne = (EditText) findViewById(R.id.skillOne);
-        skillTwo = (EditText) findViewById(R.id.skillTwo);
-        skillThree = (EditText) findViewById(R.id.skillThree);
-        skillFour = (EditText) findViewById(R.id.skillFour);
-        skillFive = (EditText) findViewById(R.id.skillFive);
-        skillSix = (EditText) findViewById(R.id.skillSix);
-        skillSeven = (EditText) findViewById(R.id.skillSix);
-
-        skillTwo.setVisibility(View.GONE);
-        skillThree.setVisibility(View.GONE);
-        skillFour.setVisibility(View.GONE);
-        skillFive.setVisibility(View.GONE);
-        skillSix.setVisibility(View.GONE);
-        skillSeven.setVisibility(View.GONE);
-
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-        userID = user.getUid();
-        databaseUser = FirebaseDatabase.getInstance().getReference("UserInformation");
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    //User is signed instance of
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Toast.makeText(Skills.this, "Successfullly Registered", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(Skills.this, "Successfullly sign out", Toast.LENGTH_LONG).show();
-                }
-            }
-        };
-
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent profilePic = new Intent(Skills.this, ProfilePic.class);
-                setIntent(profilePic);
-            }
-        });
-
-        addSkill.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int count = 0;
-                if (count == 0) {
-                    skillTwo.setVisibility(View.VISIBLE);
-                    count += 1;
-                } else if (count == 1) {
-                    skillThree.setVisibility(View.VISIBLE);
-                    count += 1;
-                } else if (count == 2) {
-                    skillFour.setVisibility(View.VISIBLE);
-                    count += 1;
-                } else if (count == 1) {
-                    skillFive.setVisibility(View.VISIBLE);
-                    count += 1;
-                } else if (count == 3) {
-                    skillSix.setVisibility(View.VISIBLE);
-                    count += 1;
-                } else if (count == 4) {
-                    skillSeven.setVisibility(View.VISIBLE);
-                }
-
-            }
-        });
     }
 
+    public Skills(String skill1, String skill2, String skill3,String skill4, String skill5, String skill6,String skill7) {
+        this.skill1 = skill1;
+        this.skill2 = skill2;
+        this.skill3 = skill3;
+        this.skill4 = skill4;
+        this.skill5 = skill5;
+        this.skill6 = skill6;
+        this.skill7 = skill7;
 
-    public void addInterest() {
+    }
 
-        String s1 = skillOne.getText().toString().toLowerCase();
-        String s2 = skillTwo.getText().toString().toLowerCase();
-        String s3 = skillThree.getText().toString().toLowerCase();
-        String s4 = skillFour.getText().toString().toLowerCase();
-        String s5 = skillFive.getText().toString().toLowerCase();
-        String s6 = skillSix.getText().toString().toLowerCase();
-        String s7 = skillSeven.getText().toString().toLowerCase();
-        UserInformation userInformation = new UserInformation(s1, s2, s3, s4, s5, s6, s7);
+    public String getSkill1() {
+        return skill1;
+    }
 
+    public void setSkill1(String skill1) {
+        this.skill1 = skill1;
+    }
+
+    public String getSkill2() {
+        return skill2;
+    }
+
+    public void setSkill2(String skill2) {
+        this.skill2 = skill2;
+    }
+
+    public String getSkill3() {
+        return skill3;
+    }
+
+    public void setSkill3(String skill3) {
+        this.skill3 = skill3;
+    }
+
+    public String getSkill4() {
+        return skill4;
+    }
+
+    public void setSkill4(String skill4) {
+        this.skill4 = skill4;
+    }
+
+    public String getSkill5() {
+        return skill5;
+    }
+
+    public void setSkill5(String skill5) {
+        this.skill5 = skill5;
+    }
+
+    public String getSkill6() {
+        return skill6;
+    }
+
+    public void setSkill6(String skill6) {
+        this.skill6 = skill6;
+    }
+
+    public String getSkill7() {
+        return skill7;
+    }
+
+    public void setSkill7(String skill7) {
+        this.skill7 = skill7;
     }
 
 }
+
+
+
+
+

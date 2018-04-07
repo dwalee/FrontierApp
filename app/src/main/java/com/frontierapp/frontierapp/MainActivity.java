@@ -63,14 +63,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-//OnClick Listeners
-        if (remember.isChecked()) {
-            if (user != null) {
-                //User is signed in
-
-
-            }
-        }
 
         // registerText leads to RegisterActivity
 
@@ -116,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(MainActivity.this,R.string.auth_failed,Toast.LENGTH_SHORT).show();
                                 }
                                 else {
-                                    Toast.makeText(MainActivity.this, "Sign in Successful", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "Sign successful", Toast.LENGTH_SHORT).show();
                                     Intent welcome = new Intent(MainActivity.this, Home.class);
                                     startActivity(welcome);
                                     progressDialog.dismiss();
