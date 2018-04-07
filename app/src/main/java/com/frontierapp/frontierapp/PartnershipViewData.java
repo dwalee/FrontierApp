@@ -1,16 +1,30 @@
 package com.frontierapp.frontierapp;
 
+import android.graphics.Bitmap;
+
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by Yoshtown on 3/29/2018.
  */
 
 public class PartnershipViewData {
     String partnerName;
-    int partnerAvatar;
+    String partnerAvatarUrl;
+    Bitmap partnerAvatarBitmap;
+    ImageDownloader imageDownloader;
 
-    public PartnershipViewData(String partnerName, int partnerAvatar) {
+    public Bitmap getPartnerAvatarBitmap() {
+        return partnerAvatarBitmap;
+    }
+
+    public void setPartnerAvatarBitmap(Bitmap partnerAvatarBitmap) {
+        this.partnerAvatarBitmap = partnerAvatarBitmap;
+    }
+
+    public PartnershipViewData(String partnerName, String partnerAvatarUrl) {
         this.partnerName = partnerName;
-        this.partnerAvatar = partnerAvatar;
+        this.partnerAvatarUrl = partnerAvatarUrl;
     }
 
     public PartnershipViewData() {
@@ -24,11 +38,25 @@ public class PartnershipViewData {
         this.partnerName = partnerName;
     }
 
-    public int getPartnerAvatar() {
-        return partnerAvatar;
+    public String getPartnerAvatarUrl() {
+        return partnerAvatarUrl;
     }
 
-    public void setPartnerAvatar(int partnerAvatar) {
-        this.partnerAvatar = partnerAvatar;
+    public void setPartnerAvatarUrl(String partnerAvatarUrl) {
+        this.partnerAvatarUrl = partnerAvatarUrl;
+    }
+
+    //Download the bitmap image from the given url
+    public void convertUserAvatarUrlToBitmap(){
+        imageDownloader = new ImageDownloader();
+        if(getPartnerAvatarUrl() != "") {
+            try {
+                setPartnerAvatarBitmap(imageDownloader.execute(getPartnerAvatarUrl()).get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

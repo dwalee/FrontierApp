@@ -24,11 +24,11 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="25dp"
             android:layout_marginTop="16dp"
-            android:fontFamily="@font/roboto_condensed_bold"
             android:gravity="center_vertical"
             android:text="@string/post_string"
             android:textColor="@color/colorBlack"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            />
 
         <!--Image Post goes here -->
         <ImageButton

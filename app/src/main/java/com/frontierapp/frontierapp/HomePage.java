@@ -40,11 +40,9 @@ public class HomePage extends Fragment {
     FloatingActionButton post;
     AlertDialog.Builder builder;
     private StorageReference mstorage;
-    List<PostItemData> postItemDataList;
-    private DocumentReference userDocRef = FirebaseFirestore.getInstance().collection(
-            "UserInformation/Users/User"
-    ).document("ibTb31OODgEbTa8M8Bha");
-    private CollectionReference postCollectionRef;
+    private final List<PostItemData> postItemDataList = new ArrayList<>();
+    private PostItemRecyclerViewAdapter postItemRecyclerViewAdapter;
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     String username;
     Integer userPic;
 
@@ -54,73 +52,18 @@ public class HomePage extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        getFeed();
-    }
-
-    private String full_name, profilePicUrl;
-
-    //Get current user feed
-    public void getFeed(){
-        postItemDataList = new ArrayList<>();
-
-        userDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                postItemDataList.clear();
-                //if the task is successful, get their first name, last name, and profile pic url
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    String firstName = documentSnapshot.getString("User.first_name");
-                    String lastName = documentSnapshot.getString("User.last_name");
-                    profilePicUrl = documentSnapshot.getString("userAvatarUrl");
-                    full_name = firstName + " " + lastName;
-                    //Point to the Post collection for this user
-                    postCollectionRef = userDocRef.collection("Posts");
-                    Task<QuerySnapshot> postTask = postCollectionRef.get();
-                    postTask.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                //Get all the data needed for each post
-                                for (QueryDocumentSnapshot postSnapShot : task.getResult()) {
-                                    PostItemData postItemData = new PostItemData();
-                                    postItemData.setUserName(full_name);
-                                    postItemData.setUserAvatarUrl(profilePicUrl);
-
-                                    postItemData.setPostString(postSnapShot.getString("Post.post_text"));
-                                    postItemData.setPostTimeStamp(postSnapShot.getDate("Post.post_timestamp"));
-                                    postItemData.setPostPhotoUrl(postSnapShot.getString("Post.post_image_url"));
-                                    postItemDataList.add(postItemData);
-                                }
-                                feedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                                feedRecyclerView.setHasFixedSize(true);
-                                PostItemRecyclerViewAdapter postItemRecyclerViewAdapter = new
-                                        PostItemRecyclerViewAdapter(getContext(), postItemDataList);
-                                feedRecyclerView.setAdapter(postItemRecyclerViewAdapter);
-                            }
-                        }
-                    });
-
-                }else{
-                    Toast.makeText(getContext(), "This doesn't exist: User", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        feedRecyclerView = (RecyclerView) view.findViewById(R.id.feedRecyclerView);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home_page, container, false);
+
+        //Create the recyclerview
+        feedRecyclerView = (RecyclerView) view.findViewById(R.id.feedRecyclerView);
+        feedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        feedRecyclerView.setHasFixedSize(true);
+        postItemRecyclerViewAdapter = new
+                PostItemRecyclerViewAdapter(getContext(), postItemDataList);
+        feedRecyclerView.setAdapter(postItemRecyclerViewAdapter);
 
         mstorage = FirebaseStorage.getInstance().getReference();
 
@@ -159,6 +102,61 @@ public class HomePage extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        getFeed();
+    }
+
+    //Get current user feed
+    public void getFeed(){
+        final DocumentReference userDocRef = firebaseFirestore.collection(
+                "UserInformation/Users/User"
+        ).document("ibTb31OODgEbTa8M8Bha");
+
+        userDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                postItemDataList.clear();
+                //if the task is successful, get their first name, last name, and profile pic url
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+
+                    String firstName = documentSnapshot.getString("User.first_name");
+                    String lastName = documentSnapshot.getString("User.last_name");
+                    final String profilePicUrl = documentSnapshot.getString("userAvatarUrl");
+                    final String full_name = firstName + " " + lastName;
+
+                    //Point to the Post collection for this user
+                    CollectionReference postCollectionRef = userDocRef.collection("Posts");
+                    Task<QuerySnapshot> postTask = postCollectionRef.get();
+
+                    postTask.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful()){
+                                //Get all the data needed for each post
+                                for (QueryDocumentSnapshot postSnapShot : task.getResult()) {
+                                    PostItemData postItemData = new PostItemData();
+                                    postItemData.setUserName(full_name);
+                                    postItemData.setUserAvatarUrl(profilePicUrl);
+
+                                    postItemData.setPostString(postSnapShot.getString("Post.post_text"));
+                                    postItemData.setPostTimeStamp(postSnapShot.getDate("Post.post_timestamp"));
+                                    postItemData.setPostPhotoUrl(postSnapShot.getString("Post.post_image_url"));
+                                    postItemDataList.add(postItemData);
+                                }
+                                postItemRecyclerViewAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+
+                }else{
+                    Toast.makeText(getContext(), "This doesn't exist: User", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
 }
 
             /*private void startPosting(String username, Integer userPic) {
