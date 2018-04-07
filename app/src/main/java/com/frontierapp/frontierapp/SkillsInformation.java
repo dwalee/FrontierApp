@@ -42,9 +42,8 @@ public class SkillsInformation extends AppCompatActivity {
     private ImageButton addSkill5;
     private ImageButton addSkill6;
     private Button next;
-    private FirebaseFirestore firestoreUser = FirebaseFirestore.getInstance();
+    private FirebaseFirestore firestoredb = FirebaseFirestore.getInstance();
     private Skills skills;
-    private FirebaseStorage firebaseStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +153,7 @@ public class SkillsInformation extends AppCompatActivity {
         String gender = getIntent().getExtras().getString("Gender");
 
 
-
+        String id = skills.getUid();
         String skill1 = skillOne.getText().toString().toLowerCase();
         String skill2 = skillTwo.getText().toString().toLowerCase();
         String skill3 = skillThree.getText().toString().toLowerCase();
@@ -163,9 +162,10 @@ public class SkillsInformation extends AppCompatActivity {
         String skill6 = skillSix.getText().toString().toLowerCase();
         String skill7 = skillSeven.getText().toString().toLowerCase();
 
-        skills = new Skills(skill1, skill2, skill3, skill4, skill5,
+        skills = new Skills(id,skill1, skill2, skill3, skill4, skill5,
                 skill6, skill7);
         Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("UI", skills.getUid());
         userInfo.put("Skill Name", skills.getSkill1());
         userInfo.put("Skill Name", skills.getSkill2());
         userInfo.put("Skill Name", skills.getSkill3());
@@ -177,9 +177,8 @@ public class SkillsInformation extends AppCompatActivity {
         Map<String, Object> user = new HashMap<>();
 
         user.put("Skills", skills);
-        firestoreUser.collection("Skill Repository").document("Skills")
-                .collection("User").document(uid)
-                .set(skills)
+        firestoredb.collection("Skill Repository").document("Skills")
+                .collection("User").document(id).set(skills)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -189,13 +188,13 @@ public class SkillsInformation extends AppCompatActivity {
                     }
                 });
 
-        String id = databaseUser.push().getKey();
+        //String id = databaseUser.push().getKey();
 
-        Skills  skills = new Skills(skill1,skill2,skill3,skill4,skill5,skill6,skill7);
+        //Skills  skills = new Skills(skill1,skill2,skill3,skill4,skill5,skill6,skill7);
 
-        databaseUser.child("user").child(id).setValue(skills);
+        //databaseUser.child("user").child(id).setValue(skills);
 
-        Toast.makeText(SkillsInformation.this, "Adding User", Toast.LENGTH_LONG).show();
+        //Toast.makeText(SkillsInformation.this, "Adding User", Toast.LENGTH_LONG).show();
 
         }
 
