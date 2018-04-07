@@ -3,6 +3,7 @@ package com.frontierapp.frontierapp;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,13 +14,13 @@ import android.widget.TextView;
 public class PartnerViewHolder extends RecyclerView.ViewHolder {
     ImageView partnerAvatarImageView;
     TextView partnerNameTextView;
-    AppCompatButton partnershipRequest;
+    ImageButton partnershipRequest;
 
     public PartnerViewHolder(final View itemView) {
         super(itemView);
 
         partnerAvatarImageView = (ImageView) itemView.findViewById(R.id.partnerAvatarImageView);
         partnerNameTextView = (TextView) itemView.findViewById(R.id.partnerNameTextView);
-        partnershipRequest = (AppCompatButton) itemView.findViewById(R.id.partnershipRequestButton);
+        partnershipRequest = (ImageButton) itemView.findViewById(R.id.partnershipRequestButton);
     }
 }

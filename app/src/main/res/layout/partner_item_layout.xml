@@ -20,20 +20,33 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/partnerNameTextView"
+                android:layout_width="197dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
                 android:text="Dwaine Lee Jr"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="24dp"/>
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-            <android.support.v7.widget.AppCompatButton
+
+            <ImageButton
+                android:id="@+id/partnershipRequestButton"
+                android:layout_width="59dp"
+                android:layout_height="52dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
+                android:foregroundGravity="right"
+                android:src="@drawable/account_plus" />
+
+            <TextView
+                android:id="@+id/skillsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/partnershipRequestButton"
-                android:text="connect"
-                android:layout_below="@+id/partnerNameTextView"/>
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/partnerNameTextView"
+                android:text="Skills Goes Here" />
 
         </RelativeLayout>
 

@@ -1,19 +1,41 @@
 package com.frontierapp.frontierapp;
 
+import java.util.Date;
+
 public class User {
     private String uid;
     private String first_name;
     private String last_name;
     private String password;
-    private String birthdate;
+    private Date birthdate;
+    private String gender;
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public User(String uid, String first_name, String last_name,
-                String password, String birthdate) {
+                String password, Date birthdate, String gender, String email) {
         this.uid = uid;
         this.first_name = first_name;
         this.last_name = last_name;
         this.password = password;
         this.birthdate = birthdate;
+        this.gender = gender;
+        this.email = email;
     }
 
     public User() {
@@ -51,11 +73,11 @@ public class User {
         this.password = password;
     }
 
-    public String getBirthdate() {
+    public Date getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(String birthdate) {
+    public void setBirthdate(Date birthdate) {
         this.birthdate = birthdate;
     }
 }

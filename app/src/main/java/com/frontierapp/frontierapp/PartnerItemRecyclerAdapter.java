@@ -1,5 +1,6 @@
 package com.frontierapp.frontierapp;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,9 +16,11 @@ import java.util.List;
 
 public class PartnerItemRecyclerAdapter extends RecyclerView.Adapter<PartnerViewHolder> {
     private List<PartnershipViewData> partnershipViewDataList;
+    private Context context;
 
-    public PartnerItemRecyclerAdapter(List<PartnershipViewData> partnershipViewDataList) {
+    public PartnerItemRecyclerAdapter(Context context, List<PartnershipViewData> partnershipViewDataList) {
         this.partnershipViewDataList = partnershipViewDataList;
+        this.context = context;
     }
 
     @Override
@@ -38,6 +41,7 @@ public class PartnerItemRecyclerAdapter extends RecyclerView.Adapter<PartnerView
             @Override
             public void onClick(View v) {
                 Log.i("onClick: ",  Integer.toString(position));
+                Toast.makeText(context, Integer.toString(position), Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -138,7 +138,7 @@ public class Partners extends Fragment{
                 partnerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 partnerRecyclerView.setHasFixedSize(true);
                 PartnerItemRecyclerAdapter partnerItemRecyclerAdapter = new
-                        PartnerItemRecyclerAdapter(partnershipViewDataList);
+                        PartnerItemRecyclerAdapter(getContext(), partnershipViewDataList);
                 partnerRecyclerView.setAdapter(partnerItemRecyclerAdapter);
             }
 
