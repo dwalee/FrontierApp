@@ -20,32 +20,11 @@ public class PostItemData {
     private Bitmap postPhoto;
     private Bitmap userAvatarPhoto;
     private ImageDownloader imageDownloader;
-
-    public Bitmap getPostPhoto() {
-        return postPhoto;
-    }
-
-    public void setPostPhoto(Bitmap postPhoto) {
-        this.postPhoto = postPhoto;
-    }
-
-    public Bitmap getUserAvatarPhoto() {
-        return userAvatarPhoto;
-    }
-
-    public void setUserAvatarPhoto(Bitmap userAvatarPhoto) {
-        this.userAvatarPhoto = userAvatarPhoto;
-    }
-
     private Date postTimeStamp;
     private String userAvatarUrl;
     private Boolean liked;
     private int likeCount, commentCount, shareCount;
     private int userAvatar;
-
-    public PostItemData() {
-
-    }
 
     public PostItemData(String userName, String postString, String postPhotoUrl,
                         Date postTimeStamp, String userAvatarUrl, Boolean liked,
@@ -65,6 +44,26 @@ public class PostItemData {
     public PostItemData(String userName, int userAvatar) {
         this.userName = userName;
         this.userAvatar = userAvatar;
+    }
+
+    public Bitmap getPostPhoto() {
+        return postPhoto;
+    }
+
+    public void setPostPhoto(Bitmap postPhoto) {
+        this.postPhoto = postPhoto;
+    }
+
+    public Bitmap getUserAvatarPhoto() {
+        return userAvatarPhoto;
+    }
+
+    public void setUserAvatarPhoto(Bitmap userAvatarPhoto) {
+        this.userAvatarPhoto = userAvatarPhoto;
+    }
+
+    public PostItemData() {
+
     }
 
     public String getUserName() {

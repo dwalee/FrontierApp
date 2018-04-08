@@ -43,7 +43,7 @@ public class Register extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private DatabaseReference databaseUser;
     private FirebaseUser user;
-    private FirebaseFirestore firestoreUser = FirebaseFirestore.getInstance();
+    private FirebaseFirestore firebaseFireStore = FirebaseFirestore.getInstance();
     private User newUser;
 
     @Override
@@ -135,7 +135,7 @@ public class Register extends AppCompatActivity {
         Map<String, Object> user = new HashMap<>();
 
         user.put("User", userInfo);
-        firestoreUser.collection("UserInformation").document("Users")
+        firebaseFireStore.collection("UserInformation").document("Users")
                 .collection("User").document(uid)
                 .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

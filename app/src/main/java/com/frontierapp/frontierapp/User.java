@@ -10,6 +10,15 @@ public class User {
     private Date birthdate;
     private String gender;
     private String email;
+    private String avatar;
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public String getEmail() {
         return email;

@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 /**
@@ -35,7 +37,9 @@ public class PartnerItemRecyclerAdapter extends RecyclerView.Adapter<PartnerView
     @Override
     public void onBindViewHolder(PartnerViewHolder holder, final int position) {
         PartnershipViewData partnershipViewData = partnershipViewDataList.get(position);
-        holder.partnerAvatarImageView.setImageResource(partnershipViewData.getPartnerAvatar());
+        partnershipViewData.convertUserAvatarUrlToBitmap();
+        Glide.with(context).load(partnershipViewData.getPartnerAvatarBitmap()).into(holder.partnerAvatarImageView);
+        //holder.partnerAvatarImageView.setImageBitmap(partnershipViewData.getPartnerAvatarBitmap());
         holder.partnerNameTextView.setText(partnershipViewData.getPartnerName());
         holder.partnershipRequest.setOnClickListener(new View.OnClickListener() {
             @Override
