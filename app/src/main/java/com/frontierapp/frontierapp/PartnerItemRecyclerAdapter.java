@@ -19,6 +19,7 @@ import java.util.List;
 public class PartnerItemRecyclerAdapter extends RecyclerView.Adapter<PartnerViewHolder> {
     private List<PartnershipViewData> partnershipViewDataList;
     private Context context;
+    private View view;
 
     public PartnerItemRecyclerAdapter(Context context, List<PartnershipViewData> partnershipViewDataList) {
         this.partnershipViewDataList = partnershipViewDataList;
@@ -27,7 +28,7 @@ public class PartnerItemRecyclerAdapter extends RecyclerView.Adapter<PartnerView
 
     @Override
     public PartnerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.partner_item_layout,
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.partner_item_layout,
                 parent, false
         );
 
