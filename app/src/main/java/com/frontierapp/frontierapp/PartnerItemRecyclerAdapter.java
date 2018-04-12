@@ -39,7 +39,7 @@ public class PartnerItemRecyclerAdapter extends RecyclerView.Adapter<PartnerView
     public void onBindViewHolder(PartnerViewHolder holder, final int position) {
         PartnershipViewData partnershipViewData = partnershipViewDataList.get(position);
         partnershipViewData.convertUserAvatarUrlToBitmap();
-        Glide.with(context).load(partnershipViewData.getPartnerAvatarBitmap()).into(holder.partnerAvatarImageView);
+        Glide.with(context).load(partnershipViewData.getPartnerAvatarUrl()).into(holder.partnerAvatarImageView);
         //holder.partnerAvatarImageView.setImageBitmap(partnershipViewData.getPartnerAvatarBitmap());
         holder.partnerNameTextView.setText(partnershipViewData.getPartnerName());
         holder.partnershipRequest.setOnClickListener(new View.OnClickListener() {

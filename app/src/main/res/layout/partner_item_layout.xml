@@ -20,13 +20,24 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/partnerNameTextView"
+                android:id="@+id/statTextView"
                 android:layout_width="197dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="Dwaine Lee Jr"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:background="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/partnerNameTextView"
+                android:layout_width="197dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Dwaine Lee Jr"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_below="@+id/statTextView"/>
 
 
             <ImageButton
@@ -52,5 +63,12 @@
 
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="TextView" />
 
 </LinearLayout>
