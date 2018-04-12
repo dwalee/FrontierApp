@@ -2,6 +2,7 @@ package com.frontierapp.frontierapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private String TAG;
     private ProgressDialog progressDialog;
     private CheckBox remember;
+    private String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
                                 else {
                                     Toast.makeText(MainActivity.this, "Sign in Successful", Toast.LENGTH_SHORT).show();
                                     Intent welcome = new Intent(MainActivity.this, Home.class);
+                                    uid = mAuth.getCurrentUser().getUid();
+                                    SharedPreferences sharedPreferences;
+                                    Log.i("onComplete: ", "uid: " + uid);
                                     startActivity(welcome);
                                     progressDialog.dismiss();
                                 }

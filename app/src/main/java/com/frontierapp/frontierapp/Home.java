@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ public class Home extends AppCompatActivity {
     Toolbar toolbar;
     ViewPager viewPager;
     TabLayout tabLayout;
-
 
 
     @Override

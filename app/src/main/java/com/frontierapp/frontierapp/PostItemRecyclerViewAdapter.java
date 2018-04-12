@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.GlideBuilder;
 
 import java.util.List;
 
@@ -46,11 +47,10 @@ public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemVi
         holder.postTextView.setText(postItemData.getPostString());
         holder.postTimestampTextView.setText(java.text.DateFormat.getInstance().format(postItemData.getPostTimeStamp()));
         postItemData.convertPostUrlToBitmap();
-        //
-        Glide.with(context).load(postItemData.getPostPhoto()).into(holder.postImageButton);
+        Glide.with(context).load(postItemData.getPostPhotoUrl()).into(holder.postImageButton);
         //holder.postImageButton.setImageBitmap(postItemData.getPostPhoto());
         postItemData.convertUserAvatarUrlToBitmap();
-        Glide.with(context).load(postItemData.getUserAvatarPhoto()).into(holder.userAvatarImageView);
+        Glide.with(context).load(postItemData.getUserAvatarUrl()).into(holder.userAvatarImageView);
         //holder.userAvatarImageView.setImageBitmap(postItemData.getUserAvatarPhoto());
         holder.likeIconImageView.setOnClickListener(new View.OnClickListener() {
             @Override
