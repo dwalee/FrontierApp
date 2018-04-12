@@ -26,7 +26,7 @@
         <!-- Firebase InstanceId Service -->
 
         <activity android:name=".Register" />
-        <activity android:name=".Skills" />
+        <activity android:name=".SkillsInformation" />
         <activity android:name=".ResetPassword" />
         <activity android:name=".Home" />
         <activity android:name=".ProfilePic">

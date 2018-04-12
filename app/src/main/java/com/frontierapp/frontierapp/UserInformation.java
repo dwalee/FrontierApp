@@ -5,34 +5,30 @@ package com.frontierapp.frontierapp;
  */
 
 public class UserInformation {
-    private String nameText, emailText, birthDate, passwordText, Uid, photoUrl,
-            Interest1,Interest2,Interest3,Interest4,Interest5,Interest6,Interest7;
+    private String nameText, emailText, birthDate, passwordText, Uid, photoUrl,gender, skill1, skill2, skill3, skill4, skill5, skill6, skill7;
 
     public UserInformation(){
 
     }
 
 
-    public UserInformation(String birthDate, String passwordText,String emailText, String nameText, String Uid) {
-        this. Uid = Uid;
+    public UserInformation(String nameText, String emailText, String passwordText, String BirthDate, String gender){
+        this.Uid = Uid;
         this.emailText = emailText;
         this.nameText = nameText;
-        this.birthDate = birthDate;
+        this.birthDate = BirthDate;
         this.passwordText = passwordText;
+        this.gender = gender;
+        this.skill1 = skill1;
+        this.skill2 = skill2;
+        this.skill3 = skill3;
+        this.skill4 = skill4;
+        this.skill5 = skill5;
+        this.skill6 = skill6;
+        this.skill7 = skill7;
 
     }
 
-
-    public UserInformation(String Interest1,String Interest2,String Interest3,String Interest4,String Interest5,String Interest6,String Interest7) {
-        this.Interest1 = Interest1;
-        this.Interest2 = Interest2;
-        this.Interest3 = Interest3;
-        this.Interest4 = Interest4;
-        this.Interest5 = Interest5;
-        this.Interest6 = Interest6;
-        this.Interest7 = Interest7;
-
-    }
 
 
     public String getUid(){
@@ -55,29 +51,10 @@ public class UserInformation {
         return passwordText;
     }
 
+    public String getGender(){ return gender;}
+
     public String getPhotoUrl(){
         return photoUrl;
-    }
-    public String getInterest1(){
-        return Interest1;
-    }
-    public String getInterest2(){
-        return Interest2;
-    }
-    public String getInterest3(){
-        return Interest3;
-    }
-    public String getInterest4(){
-        return Interest4;
-    }
-    public String getInterest5(){
-        return Interest5;
-    }
-    public String getInterest6(){
-        return Interest6;
-    }
-    public String getInterest7(){
-        return Interest7;
     }
 
     public void setName(String nameText){
@@ -102,25 +79,4 @@ public class UserInformation {
         this.photoUrl = photoUrl;
     }
 
-    public void setInterest1(String Interest1){
-        this.Interest1 = Interest1;
-    }
-    public void setInterest2(String Interest2){
-        this.Interest2 = Interest2;
-    }
-    public void setInterest3(String Interest3){
-        this.Interest3 = Interest3;
-    }
-    public void setInterest4(String Interest4){
-        this.Interest4 = Interest4;
-    }
-    public void setInterest5(String Interest5){
-        this.Interest5 = Interest5;
-    }
-    public void setInterest6(String Interest6){
-        this.Interest6 = Interest6;
-    }
-    public void setInterest7(String Interest7){
-        this.Interest7 = Interest7;
-    }
 }

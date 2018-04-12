@@ -236,7 +236,7 @@ public class Register extends AppCompatActivity {
                             Toast.makeText(Register.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         }else{
-                            Intent welcome = new Intent(Register.this, Skills.class);
+                            Intent welcome = new Intent(Register.this, SkillsInformation.class);
                             startActivity(welcome);
                         }
                         progressDialog.dismiss();

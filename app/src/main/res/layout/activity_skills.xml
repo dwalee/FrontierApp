@@ -1,64 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <EditText
         android:id="@+id/skillOne"
-        android:layout_width="match_parent"
+        android:layout_width="316dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="82dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="81dp"
         android:hint="Skill #1" />
-
-    <EditText
-        android:id="@+id/skillTwo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/skillOne"
-        android:hint="Skill #2" />
-
-    <EditText
-        android:id="@+id/skillThree"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/skillTwo"
-        android:hint="Skill #3" />
-
-    <EditText
-        android:id="@+id/skillFour"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/skillThree"
-        android:hint="Skill #4" />
-
-    <EditText
-        android:id="@+id/skillFive"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_below="@+id/skillFour"
-        android:hint="Skill #5" />
-
-    <EditText
-        android:id="@+id/skillSix"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/skillFive"
-        android:hint="Skill #6" />
-
-    <EditText
-        android:id="@+id/skillSeven"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/skillSix"
-        android:hint="Skill #7" />
 
     <TextView
         android:id="@+id/Enter"
@@ -71,21 +24,145 @@
         android:textSize="18sp" />
 
     <Button
-        android:id="@+id/addSkill"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/skillSix"
-        android:layout_marginTop="55dp"
-        android:text="Add Skill" />
-
-    <Button
         android:id="@+id/next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/addSkill"
+        android:layout_marginBottom="71dp"
         android:text="Next Page" />
 
+    <TextView
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Enter"
+        android:layout_centerHorizontal="true"
+        android:text="Click + button to add more skills"
+        android:textSize="10sp" />
+
+    <ImageButton
+        android:id="@+id/addSkill1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/skillOne"
+        android:layout_marginEnd="18dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_add_circle_black_24dp" />
+
+    <EditText
+        android:id="@+id/skillTwo"
+        android:layout_width="316dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/skillOne"
+        android:ems="10"
+        android:hint="Skill #2"
+        android:inputType="text" />
+
+    <ImageButton
+        android:id="@+id/addSkill2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/skillTwo"
+        android:layout_marginEnd="18dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_add_circle_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/addSkill3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/skillThree"
+        android:layout_marginEnd="18dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_add_circle_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/addSkill4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/skillFour"
+        android:layout_marginEnd="18dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_add_circle_black_24dp" />
+
+    <EditText
+        android:id="@+id/skillThree"
+        android:layout_width="316dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/skillTwo"
+        android:ems="10"
+        android:hint="Skill #3"
+        android:inputType="none" />
+
+
+    <EditText
+        android:id="@+id/skillFour"
+        android:layout_width="316dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/skillThree"
+        android:ems="10"
+        android:hint="Skill #4"
+        android:inputType="none" />
+
+    <ImageButton
+        android:id="@+id/addSkill5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/skillFive"
+        android:layout_marginEnd="18dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_add_circle_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/addSkill6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/skillSix"
+        android:layout_marginEnd="18dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_add_circle_black_24dp" />
+
+
+    <EditText
+        android:id="@+id/skillFive"
+        android:layout_width="316dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/skillFour"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:hint="Skill #5"
+        android:inputType="none" />
+
+
+    <EditText
+        android:id="@+id/skillSix"
+        android:layout_width="316dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/skillFive"
+        android:ems="10"
+        android:hint="Skill #6"
+        android:inputType="none" />
+
+    <EditText
+        android:id="@+id/skillSeven"
+        android:layout_width="316dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/skillSix"
+        android:ems="10"
+        android:hint="Skill #7"
+        android:inputType="none" />
 
 </RelativeLayout>

@@ -21,6 +21,7 @@ import java.util.List;
 public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemViewHolder> {
     private List<PostItemData> postItemDataList;
     private Context context;
+    private View view;
 
     //Create constructor to get the list
     public PostItemRecyclerViewAdapter(Context context, List<PostItemData> postItemDataList) {
@@ -31,7 +32,7 @@ public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemVi
     //Create your parent view and tie it to the viewholder
     @Override
     public PostItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_item_layout,
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_item_layout,
                                         parent, false);
         return new PostItemViewHolder(view);
     }
@@ -47,10 +48,11 @@ public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemVi
         holder.postTextView.setText(postItemData.getPostString());
         holder.postTimestampTextView.setText(java.text.DateFormat.getInstance().format(postItemData.getPostTimeStamp()));
         postItemData.convertPostUrlToBitmap();
-        Glide.with(context).load(postItemData.getPostPhotoUrl()).into(holder.postImageButton);
+        //
+        Glide.with(view).load(postItemData.getPostPhoto()).into(holder.postImageButton);
         //holder.postImageButton.setImageBitmap(postItemData.getPostPhoto());
         postItemData.convertUserAvatarUrlToBitmap();
-        Glide.with(context).load(postItemData.getUserAvatarUrl()).into(holder.userAvatarImageView);
+        Glide.with(view).load(postItemData.getUserAvatarPhoto()).into(holder.userAvatarImageView);
         //holder.userAvatarImageView.setImageBitmap(postItemData.getUserAvatarPhoto());
         holder.likeIconImageView.setOnClickListener(new View.OnClickListener() {
             @Override
