@@ -77,7 +77,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         }
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView= (NavigationView) findViewById(R.id.navigationView);
+        navigationView= (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
