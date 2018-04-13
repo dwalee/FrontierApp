@@ -1,20 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/Home"
-        android:title=""
-        android:icon="@drawable/home" />
 
-    <item android:id="@+id/trending_news"
-        android:title=""
-        android:icon="@drawable/trending" />
+    <group android:checkableBehavior="single">
+        <item
+            android:title="My Profile"
+            android:id="@+id/inbox"
+            android:icon="@drawable/my_profile"/>
 
-    <item android:id="@+id/Events"
-        android:title=""
-        android:icon="@drawable/events" />
+        <item
+            android:title="Messages"
+            android:id="@+id/outbox"
+            android:icon="@drawable/inbox"/>
+        <item
+            android:title="@string/Notifications"
+            android:id="@+id/notifications"
+            android:icon="@drawable/notification"/>
 
-    <item android:id="@+id/Partners"
-        android:title=""
-        android:icon="@drawable/partnertab" />
+        <item
+            android:title="@string/Partners"
+            android:id="@+id/partners"
+            android:icon="@drawable/partners"/>
 
+    </group>
+
+    <item
+        android:title="Personal Options">
+        <menu>
+            <item
+                android:id="@+id/vbc"
+                android:title="Virtual Business Card"
+                android:icon="@drawable/vbc"/>
+        </menu>
+    </item>
 </menu>

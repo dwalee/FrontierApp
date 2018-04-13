@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 String passwordText = userPassword.getText().toString();
 
                 progressDialog.setMessage("Logging In");
-                progressDialog.show();
+                //progressDialog.show();
 
                 mAuth.signInWithEmailAndPassword(emailText, passwordText)
                         .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {

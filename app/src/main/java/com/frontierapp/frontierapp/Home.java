@@ -1,14 +1,19 @@
 package com.frontierapp.frontierapp;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -19,23 +24,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Home extends AppCompatActivity {
+public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
     ViewPager viewPager;
     TabLayout tabLayout;
+    NavigationView navigationView;
+    DrawerLayout drawerLayout;
+    ListView feedListView;
+
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.navigation_drawer);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout_id);
-
-        //ListView feedListView = (ListView) findViewById(R.id.feedListView);
 
         List<Map<String, String>> postData = new ArrayList<Map<String, String>>();
 
@@ -69,9 +76,15 @@ public class Home extends AppCompatActivity {
             postData.add(postInfo);
         }
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this,postData, android.R.layout.simple_list_item_1, new String[] {"content", "username"}, new int [] {android.R.id.text1, android.R.id.text2});
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView= (NavigationView) findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(this);
 
-        //feedListView.setAdapter(simpleAdapter);
+
+        //Navigation Drawer
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);
+        drawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
     }
 
     @Override
@@ -97,5 +110,37 @@ public class Home extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item){
+        int id = item.getItemId();
 
-}
+        switch(id){
+            case R.id.partners:
+                Intent partnerScreen = new Intent(this, Partners.class);
+                startActivity(partnerScreen);
+                break;
+
+            case R.id.inbox:
+
+                break;
+
+            case R.id.outbox:
+
+                break;
+
+            case R.id.notifications:
+
+                break;
+
+            case R.id.vbc:
+
+                break;
+
+
+        }
+
+        return true;
+    }
+
+    }
+
