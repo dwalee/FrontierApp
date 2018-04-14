@@ -13,12 +13,21 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +41,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     NavigationView navigationView;
     DrawerLayout drawerLayout;
     ListView feedListView;
+    FirebaseFirestore mfirestore;
+    FirebaseUser firebaseuser;
 
 
 
@@ -39,6 +50,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer);
+
+        mfirestore = FirebaseFirestore.getInstance();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -85,6 +98,38 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
+
+        //Navigation Drawer data
+        firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = firebaseuser.getUid();
+
+        mfirestore.collection("UserInformation").document("User").collection(userId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        //User user = new User();
+
+                        //Get data from the current user
+                        String first_name = document.getString("User.first_name");
+                        String last_name = document.getString("User.last_name");
+                        String profileUrl = document.getString("userAvatarUrl");
+                        String email = document.getString("User.email");
+
+                        //Create new String to spell out full name
+                        String userName = first_name + " " + last_name;
+
+                        //Connect Views of Navigation bar
+                        View headerView = navigationView.getHeaderView(0);
+                        TextView navName = (TextView) headerView.findViewById(R.id.userName);
+                        TextView navEmail = (TextView) headerView.findViewById(R.id.email);
+                        navName.setText(userName);
+                        navEmail.setText(email);
+
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -121,10 +166,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
 
             case R.id.inbox:
-
-                break;
-
-            case R.id.outbox:
 
                 break;
 

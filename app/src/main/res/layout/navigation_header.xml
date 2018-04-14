@@ -10,6 +10,7 @@
     android:background="@color/colorPrimary">
 
     <ImageView
+        android:id="@+id/profilePic"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:src="@drawable/my_profile"
@@ -19,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="User"
+        android:id="@+id/userName"
         android:paddingTop="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
     <TextView

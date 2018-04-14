@@ -29,13 +29,6 @@
         <activity android:name=".SkillsInformation" />
         <activity android:name=".ResetPassword" />
         <activity android:name=".Home" />
-        <activity android:name=".ProfilePic">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <meta-data
             android:name="preloaded_fonts"
