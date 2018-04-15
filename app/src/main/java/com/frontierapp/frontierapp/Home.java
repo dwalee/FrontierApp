@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -103,30 +104,35 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
         String userId = firebaseuser.getUid();
 
-        mfirestore.collection("UserInformation").document("User").collection(userId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        mfirestore.collection("UserInformation")
+                .document("Users")
+                .collection("User")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        //User user = new User();
+                    DocumentSnapshot document = task.getResult();
+                    //User user = new User();
 
-                        //Get data from the current user
-                        String first_name = document.getString("User.first_name");
-                        String last_name = document.getString("User.last_name");
-                        String profileUrl = document.getString("userAvatarUrl");
-                        String email = document.getString("User.email");
+                    //Get data from the current user
+                    String first_name = document.getString("User.first_name");
+                    String last_name = document.getString("User.last_name");
+                    String profileUrl = document.getString("userAvatarUrl");
+                    String email = document.getString("User.email");
 
-                        //Create new String to spell out full name
-                        String userName = first_name + " " + last_name;
+                    //Create new String to spell out full name
+                    String userName = first_name + " " + last_name;
 
-                        //Connect Views of Navigation bar
-                        View headerView = navigationView.getHeaderView(0);
-                        TextView navName = (TextView) headerView.findViewById(R.id.userName);
-                        TextView navEmail = (TextView) headerView.findViewById(R.id.email);
-                        navName.setText(userName);
-                        navEmail.setText(email);
+                    //Connect Views of Navigation bar
+                    View headerView = navigationView.getHeaderView(0);
+                    TextView navName = (TextView) headerView.findViewById(R.id.userName);
+                    TextView navEmail = (TextView) headerView.findViewById(R.id.email);
+                    navName.setText(userName);
+                    navEmail.setText(email);
 
-                    }
                 }
             }
         });
