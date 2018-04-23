@@ -21,13 +21,16 @@
 
             <TextView
                 android:id="@+id/statTextView"
-                android:layout_width="197dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Dwaine Lee Jr"
-                android:textSize="10sp"
+                android:lines="1"
+                android:text="Either you run the day, or the day runs you."
+                android:textSize="12sp"
                 android:textStyle="bold"
-                android:background="@color/colorAccent" />
+                android:padding="5dp"
+                android:layout_toLeftOf="@+id/partnershipRequestButton"
+                android:background="@drawable/status_textview_border"/>
 
             <TextView
                 android:id="@+id/partnerNameTextView"

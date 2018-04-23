@@ -45,8 +45,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     FirebaseFirestore mfirestore;
     FirebaseUser firebaseuser;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +129,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                     TextView navName = (TextView) headerView.findViewById(R.id.userName);
                     TextView navEmail = (TextView) headerView.findViewById(R.id.email);
                     navName.setText(userName);
-                    navEmail.setText(email);
+                    //navEmail.setText(email);
 
                 }
             }
