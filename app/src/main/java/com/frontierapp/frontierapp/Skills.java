@@ -2,14 +2,13 @@ package com.frontierapp.frontierapp;
 
 public class Skills {
 
-    private String skill1, skill2, skill3, skill4, skill5, skill6, skill7, uid;
+    private String skill1, skill2, skill3, skill4, skill5, skill6, skill7;
 
     public  Skills(){
 
     }
 
-    public Skills(String uid, String skill1, String skill2, String skill3,String skill4, String skill5, String skill6,String skill7) {
-        this.uid = uid;
+    public Skills(String skill1, String skill2, String skill3,String skill4, String skill5, String skill6,String skill7) {
         this.skill1 = skill1;
         this.skill2 = skill2;
         this.skill3 = skill3;
@@ -76,13 +75,6 @@ public class Skills {
         this.skill7 = skill7;
     }
 
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
 }
 
 

@@ -1,19 +1,23 @@
 package com.frontierapp.frontierapp;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -42,8 +46,9 @@ public class SkillsInformation extends AppCompatActivity {
     private ImageButton addSkill5;
     private ImageButton addSkill6;
     private Button next;
-    private FirebaseFirestore firestoredb = FirebaseFirestore.getInstance();
+    private FirebaseFirestore firebaseFireStore = FirebaseFirestore.getInstance();
     private Skills skills;
+    private String currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +84,13 @@ public class SkillsInformation extends AppCompatActivity {
         addSkill5.setVisibility(View.GONE);
         addSkill6.setVisibility(View.GONE);
 
-        FirebaseUser userNow = FirebaseAuth.getInstance().getCurrentUser();
+
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         userID = user.getUid();
-        databaseUser = FirebaseDatabase.getInstance().getReference(userID);
+        currentUser = userID.toString().trim();
+        databaseUser = FirebaseDatabase.getInstance().getReference("UserInformation");
+
 
 
         next.setOnClickListener(new View.OnClickListener() {
@@ -145,15 +152,6 @@ public class SkillsInformation extends AppCompatActivity {
 
 
     public void addSkills() {
-
-        String name = getIntent().getExtras().getString("Name");
-        String email = getIntent().getExtras().getString("Email");
-        String birth_date = getIntent().getExtras().getString("Birth Date");
-        String password = getIntent().getExtras().getString("Password");
-        String gender = getIntent().getExtras().getString("Gender");
-
-
-        String id = skills.getUid();
         String skill1 = skillOne.getText().toString().toLowerCase();
         String skill2 = skillTwo.getText().toString().toLowerCase();
         String skill3 = skillThree.getText().toString().toLowerCase();
@@ -162,39 +160,37 @@ public class SkillsInformation extends AppCompatActivity {
         String skill6 = skillSix.getText().toString().toLowerCase();
         String skill7 = skillSeven.getText().toString().toLowerCase();
 
-        skills = new Skills(id,skill1, skill2, skill3, skill4, skill5,
+        com.google.firebase.firestore.Query skillQuery = firebaseFireStore.collection("User Information").document("Users").collection("User")
+                .whereEqualTo("uid", userID);
+
+        skills = new Skills(skill1, skill2, skill3, skill4, skill5,
                 skill6, skill7);
         Map<String, Object> userInfo = new HashMap<>();
-        userInfo.put("UI", skills.getUid());
-        userInfo.put("Skill Name", skills.getSkill1());
-        userInfo.put("Skill Name", skills.getSkill2());
-        userInfo.put("Skill Name", skills.getSkill3());
-        userInfo.put("Skill Name", skills.getSkill4());
-        userInfo.put("Skill Name", skills.getSkill5());
-        userInfo.put("Skill Name", skills.getSkill6());
-        userInfo.put("Skill Name", skills.getSkill7());
+        userInfo.put("Skill 1", skills.getSkill1());
+        userInfo.put("Skill 2", skills.getSkill2());
+        userInfo.put("Skill 3", skills.getSkill3());
+        userInfo.put("Skill 4", skills.getSkill4());
+        userInfo.put("Skill 5", skills.getSkill5());
+        userInfo.put("Skill 6", skills.getSkill6());
+        userInfo.put("Skill 7", skills.getSkill7());
 
-        Map<String, Object> user = new HashMap<>();
+        //Map<String, Object> user = new HashMap<>();
 
-        user.put("Skills", skills);
-        firestoredb.collection("Skill Repository").document("Skills")
-                .collection("User").document(id).set(skills)
+        //user.put("Skill", skills);
+        firebaseFireStore.collection("UserInformation").document("Users").collection("User")
+                .document(currentUser).update(userInfo)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(SkillsInformation.this, "Your Skills have been ."
-                                , Toast.LENGTH_LONG)
-                                .show();
+                        Log.d(TAG, "Successfully added skills to user");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating skills for user", e);
                     }
                 });
-
-        //String id = databaseUser.push().getKey();
-
-        //Skills  skills = new Skills(skill1,skill2,skill3,skill4,skill5,skill6,skill7);
-
-        //databaseUser.child("user").child(id).setValue(skills);
-
-        //Toast.makeText(SkillsInformation.this, "Adding User", Toast.LENGTH_LONG).show();
 
         }
 

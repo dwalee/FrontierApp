@@ -38,7 +38,6 @@ public class Register extends AppCompatActivity {
     private CheckBox manGenderCheckBox, womanGenderCheckBox;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseDatabase mFirebaseDatabase;
     private String userID;
     private ProgressDialog progressDialog;
     private DatabaseReference databaseUser;
@@ -99,12 +98,12 @@ public class Register extends AppCompatActivity {
     //Unique key must be added preferably from Auth key created
     //Add User to firestore
     public void addUser(String uid){
-        String emailText = userEmailEditText.getText().toString();
-        String passwordText = userPasswordEditText.getText().toString();
-        String conPasswordText = conPasswordEditText.getText().toString();
-        String firstNameText = firstNameEditText.getText().toString();
-        String lastNameText = lastNameEditText.getText().toString();
-        String birthDateText = dateOfBirthEditText.getText().toString();
+        String emailText = userEmailEditText.getText().toString().trim();
+        String passwordText = userPasswordEditText.getText().toString().trim();
+        String conPasswordText = conPasswordEditText.getText().toString().trim();
+        String firstNameText = firstNameEditText.getText().toString().trim();
+        String lastNameText = lastNameEditText.getText().toString().trim();
+        String birthDateText = dateOfBirthEditText.getText().toString().trim();
         String gender;
         Date birthDate = new Date();
 
