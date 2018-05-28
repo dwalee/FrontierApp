@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -130,7 +131,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                     TextView navEmail = (TextView) headerView.findViewById(R.id.email);
                     navName.setText(userName);
                     //navEmail.setText(email);
-
                 }
             }
         });
@@ -140,7 +140,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.welcome_menu, menu);
         return true;
-        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -164,13 +164,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         int id = item.getItemId();
 
         switch(id){
+            case R.id.profile:
+                Toast.makeText(this, "This works", Toast.LENGTH_SHORT).show();
+                Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivity(profileScreen);
+                break;
             case R.id.partners:
                 Intent partnerScreen = new Intent(this, Partners.class);
                 startActivity(partnerScreen);
-                break;
-
-            case R.id.inbox:
-
                 break;
 
             case R.id.notifications:
@@ -184,6 +185,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         }
 
+        drawerLayout.closeDrawer(Gravity.START);
         return true;
     }
 
