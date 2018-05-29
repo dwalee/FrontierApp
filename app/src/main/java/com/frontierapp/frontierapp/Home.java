@@ -126,11 +126,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                     String userName = first_name + " " + last_name;
 
                     //Connect Views of Navigation bar
+
                     View headerView = navigationView.getHeaderView(0);
                     TextView navName = (TextView) headerView.findViewById(R.id.userName);
                     TextView navEmail = (TextView) headerView.findViewById(R.id.email);
                     navName.setText(userName);
-                    //navEmail.setText(email);
+                    navEmail.setText(email);
                 }
             }
         });
