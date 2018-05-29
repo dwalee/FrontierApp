@@ -12,15 +12,18 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +48,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     ListView feedListView;
     FirebaseFirestore mfirestore;
     FirebaseUser firebaseuser;
+    ImageView profilePicImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +144,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.welcome_menu, menu);
+
+        profilePicImageView = (ImageView) findViewById(R.id.profilePic);
+        Glide.with(this)
+                .load("https://pbs.twimg.com/media/DXVX493U8AAvqLf.jpg")
+                .apply(RequestOptions.circleCropTransform())
+                .into(profilePicImageView);
         return true;
     }
 

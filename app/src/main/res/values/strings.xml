@@ -26,8 +26,8 @@
     <string name="settings">Settings</string>
     <string name="Logout">Logout</string>
     <string name="post_string">This is a post text text view. Let me type this to the next line. I will type more to make it go to the next line</string>
-    <string name="Notifications">notifications</string>
-    <string name="Partners">partners</string>
+    <string name="Notifications">Notifications</string>
+    <string name="Partners">Partners</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
 
