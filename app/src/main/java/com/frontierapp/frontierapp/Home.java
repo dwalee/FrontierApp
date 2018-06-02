@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -97,11 +98,31 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         navigationView= (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //View headerView = navigationView.getHeaderView(0);
+        //LinearLayout headerImageView = (t) headerView.findViewById(R.id.profileBackground);
+        /*Glide.with(this)
+                .load("https://vignette.wikia.nocookie.net/dragonball/images/c/c2/" +
+                        "Gizard_Wasteland_DBZ_Ep_33_003.png/revision/latest?cb=20170827060816")
+                .into(headerImageView);*/
 
         //Navigation Drawer
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,
+                R.string.open_drawer,R.string.close_drawer);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
+
+        /*toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                    drawerLayout.closeDrawer(Gravity.RIGHT);
+                } else {
+                    drawerLayout.openDrawer(Gravity.RIGHT);
+                }
+            }
+        });*/
+
 
         //Navigation Drawer data
         firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -146,6 +167,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         getMenuInflater().inflate(R.menu.welcome_menu, menu);
 
         profilePicImageView = (ImageView) findViewById(R.id.profilePic);
+        //Go to profile activity if profile pic is clicked
+        profilePicImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivity(profileScreen);
+            }
+        });
         Glide.with(this)
                 .load("https://pbs.twimg.com/media/DXVX493U8AAvqLf.jpg")
                 .apply(RequestOptions.circleCropTransform())
@@ -176,7 +205,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         switch(id){
             case R.id.profile:
-                Toast.makeText(this, "This works", Toast.LENGTH_SHORT).show();
                 Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(profileScreen);
                 break;
