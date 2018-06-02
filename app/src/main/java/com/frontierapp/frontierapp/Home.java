@@ -122,7 +122,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 }
             }
         });*/
-
+//
 
         //Navigation Drawer data
         firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
