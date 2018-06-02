@@ -18,9 +18,15 @@
             android:icon="@drawable/notification"/>
 
         <item
-            android:title="@string/Partners"
-            android:id="@+id/partners"
+            android:title="@string/Connect"
+            android:id="@+id/Connect"
             android:icon="@drawable/partners"/>
+
+        <item
+            android:title="@string/circles"
+            android:id="@+id/Circles"
+            android:icon="@drawable/circles"/>
+
 
     </group>
 

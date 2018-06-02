@@ -28,7 +28,9 @@
     <string name="post_string">This is a post text text view. Let me type this to the next line. I will type more to make it go to the next line</string>
     <string name="Notifications">Notifications</string>
     <string name="Partners">Partners</string>
+    <string name="Connect">Connect</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
+    <string name="circles">Circles</string>
 
 </resources>

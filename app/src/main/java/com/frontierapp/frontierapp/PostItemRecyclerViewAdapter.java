@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemVi
         Glide.with(view).load(postItemData.getPostPhoto()).into(holder.postImageButton);
         //holder.postImageButton.setImageBitmap(postItemData.getPostPhoto());
         postItemData.convertUserAvatarUrlToBitmap();
-        Glide.with(view).load(postItemData.getUserAvatarPhoto()).into(holder.userAvatarImageView);
+        Glide.with(view).load(postItemData.getUserAvatarPhoto()).apply(RequestOptions.circleCropTransform()).into(holder.userAvatarImageView);
         //holder.userAvatarImageView.setImageBitmap(postItemData.getUserAvatarPhoto());
         holder.likeIconImageView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class PartnerItemRecyclerAdapter extends RecyclerView.Adapter<PartnerView
     public void onBindViewHolder(PartnerViewHolder holder, final int position) {
         PartnershipViewData partnershipViewData = partnershipViewDataList.get(position);
         partnershipViewData.convertUserAvatarUrlToBitmap();
-        Glide.with(context).load(partnershipViewData.getPartnerAvatarUrl()).into(holder.partnerAvatarImageView);
+        Glide.with(context).load(partnershipViewData.getPartnerAvatarUrl()).apply(RequestOptions.circleCropTransform()).into(holder.partnerAvatarImageView);
         //holder.partnerAvatarImageView.setImageBitmap(partnershipViewData.getPartnerAvatarBitmap());
         holder.partnerNameTextView.setText(partnershipViewData.getPartnerName());
         holder.partnershipRequest.setOnClickListener(new View.OnClickListener() {
