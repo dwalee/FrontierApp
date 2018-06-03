@@ -75,14 +75,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         viewPager = (ViewPager) findViewById(R.id.viewPager_id);
 
-
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
 
         adapter.addFragment(new HomePage(),"Home");
         adapter.addFragment(new Hub(),"Hub");
         adapter.addFragment(new Partners(),"Partners");
-
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
