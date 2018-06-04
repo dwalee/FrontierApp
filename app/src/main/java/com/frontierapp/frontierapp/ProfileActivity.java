@@ -17,12 +17,23 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.drive.DriveFile;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfileActivity extends AppCompatActivity {
     CollapsingToolbarLayout profileCollapsingToolbar;
     Toolbar profileToolbar;
     ImageView profileBackgroundImageView, profilePicCircleImageView;
     TextView userTitleTextView, userAboutMeTextView, locationTextView, goalTextView;
+    FirebaseAuth mAuth;
+    String currentUser;
+    private FirebaseUser user;
+    String userID;
+    DatabaseReference databaseUser;
+    private FirebaseFirestore firebaseFireStore = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +47,20 @@ public class ProfileActivity extends AppCompatActivity {
         goalTextView = (TextView) findViewById(R.id.goalsTextView);
         loadProfileData();
 
+
+
         profileCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.profileCollapsingToolbar);
 
         profileToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.profileToolbar);
-        profileCollapsingToolbar.setTitle("Yoshua Isreal");
+        profileCollapsingToolbar.setTitle("Dwaine Lee");
         setSupportActionBar(profileToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(profilePicCircleImageView.getDrawable());
 
         loadProfileData();
+
+
 
     }
 

@@ -24,6 +24,7 @@ public class Post {
 
     }
 
+
     public Post(String post_id, String author, String title, String body) {
             this.post_id = post_id;
             //this.author = author;

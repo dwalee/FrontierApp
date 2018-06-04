@@ -108,9 +108,9 @@ public class SkillsInformation extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addDbSkills();
-                addSkills();
-                Intent welcome = new Intent(SkillsInformation.this, Home.class);
-                startActivity(welcome);
+                //addSkills();
+                Intent pic = new Intent(SkillsInformation.this, register_pic2.class);
+                startActivity(pic);
             }
         });
 
@@ -208,18 +208,18 @@ public class SkillsInformation extends AppCompatActivity {
         public void addDbSkills(){
 
             String dbSKill1 = skillOne.getText().toString().toLowerCase();
-            String dbSKill2 = skillTwo.getText().toString().toLowerCase();;
-            String dbSKill3 = skillThree.getText().toString().toLowerCase();;
-            String dbSKill4 = skillFour.getText().toString().toLowerCase();;
-            String dbSKill5 = skillFive.getText().toString().toLowerCase();;
-            String dbSKill6 = skillSix.getText().toString().toLowerCase();;
+            String dbSKill2 = skillTwo.getText().toString().toLowerCase();
+            String dbSKill3 = skillThree.getText().toString().toLowerCase();
+            String dbSKill4 = skillFour.getText().toString().toLowerCase();
+            String dbSKill5 = skillFive.getText().toString().toLowerCase();
+            String dbSKill6 = skillSix.getText().toString().toLowerCase();
             String dbSKill7 = skillSeven.getText().toString().toLowerCase();
 
 
             dataSkills = new Skills(dbSKill1, dbSKill2, dbSKill3, dbSKill4, dbSKill5,
                     dbSKill6, dbSKill7);
 
-            Map<String, Object> skillDb  = new HashMap<>();
+            ArrayMap<String, Object> skillDb  = new ArrayMap<>();
             skillDb.put("Skill", dataSkills.getSkill1());
             skillDb.put("Skill", dataSkills.getSkill2());
             skillDb.put("Skill", dataSkills.getSkill3());
