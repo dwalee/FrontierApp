@@ -234,7 +234,7 @@
                             android:layout_height="wrap_content"
                             android:text="Detroit, MI"
                             android:textSize="18sp"
-                            android:id="@+id/LocationTextView"
+                            android:id="@+id/locationTextView"
                             android:layout_weight=".5"/>
 
                     </LinearLayout>

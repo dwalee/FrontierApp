@@ -1,43 +1,42 @@
 package com.frontierapp.frontierapp;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.Image;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.drive.DriveFile;
 
 public class ProfileActivity extends AppCompatActivity {
     CollapsingToolbarLayout profileCollapsingToolbar;
     Toolbar profileToolbar;
     ImageView profileBackgroundImageView, profilePicCircleImageView;
+    TextView userTitleTextView, userAboutMeTextView, locationTextView, goalTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        profileBackgroundImageView = (ImageView) findViewById(R.id.profileBackgroundImageView);
+        profilePicCircleImageView = (ImageView) findViewById(R.id.profilePicCircleImageView);
+        userTitleTextView = (TextView) findViewById(R.id.titleTextView) ;
+        userAboutMeTextView = (TextView) findViewById(R.id.aboutMeTextView);
+        locationTextView = (TextView) findViewById(R.id.locationTextView);
+        goalTextView = (TextView) findViewById(R.id.goalsTextView);
+        loadProfileData();
 
         profileCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.profileCollapsingToolbar);
-
-        //Load image into the backgound
-        profileBackgroundImageView = (ImageView) findViewById(R.id.profileBackgroundImageView);
-        Glide.with(this)
-                .load("https://vignette.wikia.nocookie.net/dragonball/images/c/c2/" +
-                        "Gizard_Wasteland_DBZ_Ep_33_003.png/revision/latest?cb=20170827060816")
-                .into(profileBackgroundImageView);
-
-        //Input image into profile pic view
-        profilePicCircleImageView = (ImageView) findViewById(R.id.profilePicCircleImageView);
-        Glide.with(this)
-                .load("https://pbs.twimg.com/media/DXVX493U8AAvqLf.jpg")
-                .apply(RequestOptions.circleCropTransform())
-                .into(profilePicCircleImageView);
 
         profileToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.profileToolbar);
         profileCollapsingToolbar.setTitle("Yoshua Isreal");
@@ -45,6 +44,67 @@ public class ProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(profilePicCircleImageView.getDrawable());
+
+        loadProfileData();
+
+    }
+
+    public void loadProfileData(){
+        String backgroundUrl = "";
+        String profileUrl = "";
+        String title = "";
+        String about_me = "";
+        String city = "";
+        String state = "";
+        String location = "";
+        String goals = "";
+
+        try{
+            SQLiteDatabase database = openOrCreateDatabase("User_Data",
+                    MODE_PRIVATE,
+                    null);
+
+            String selectAll = "SELECT * FROM user_profile";
+
+            Cursor cursor = database.rawQuery(selectAll, null);
+            int profileUrlIndex = cursor.getColumnIndex("profile_url");
+            int profileBackgroundUrlIndex = cursor.getColumnIndex("profile_background_url");
+            int titleIndex = cursor.getColumnIndex("title");
+            int aboutMeIndex = cursor.getColumnIndex("about_me");
+            int cityIndex = cursor.getColumnIndex("city");
+            int stateIndex = cursor.getColumnIndex("state");
+            int goalIndex = cursor.getColumnIndex("goal");
+
+            cursor.moveToFirst();
+            profileUrl = cursor.getString(profileUrlIndex);
+            backgroundUrl = cursor.getString(profileBackgroundUrlIndex);
+            title = cursor.getString(titleIndex);
+            about_me = cursor.getString(aboutMeIndex);
+            city = cursor.getString(cityIndex);
+            state = cursor.getString(stateIndex);
+            goals = cursor.getString(goalIndex);
+            location = city + ", " + state;
+
+            database.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        userTitleTextView.setText(title);
+        userAboutMeTextView.setText(about_me);
+        goalTextView.setText(goals);
+        locationTextView.setText(location);
+
+        //Load image into the backgound
+        Glide.with(this)
+                .load(backgroundUrl)
+                .into(profileBackgroundImageView);
+
+        //Input image into profile pic view
+        Glide.with(this)
+                .load(profileUrl)
+                .apply(RequestOptions.circleCropTransform())
+                .into(profilePicCircleImageView);
 
     }
 

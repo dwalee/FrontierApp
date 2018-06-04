@@ -1,5 +1,6 @@
 package com.frontierapp.frontierapp;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -142,26 +143,25 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                     //User user = new User();
 
                     //Get data from the current user
-                    String first_name;
+                    String first_name = "";
                     String last_name;
                     //String profileUrl = document.getString("userAvatarUrl");
-                    String email;
-                    String aboutMe;
-                    String city;
-                    String state;
-                    String goal;
-                    String profileUrl;
-                    String profileBackgroundUrl;
-                    String title;
+                    String email = "";
+                    String aboutMe = "";
+                    String city = "";
+                    String state = "";
+                    String goal = "";
+                    String profileUrl = "";
+                    String profileBackgroundUrl = "";
+                    String title = "";
 
                     //Create new String to spell out full name
-                    String userName;
+                    String userName = "";
                     //Combine city and state
                     String location;
 
 
                     try{
-
                         //Get data from the current user
                         first_name = document.getString("User.first_name");
                         last_name = document.getString("User.last_name");
@@ -181,10 +181,16 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                         //Combine city and state
                         location = city + ", " + state;
 
-                        SQLiteDatabase userDatabase = openOrCreateDatabase(
+                        SQLiteDatabase database = openOrCreateDatabase(
                                 "User_Data",
                                 MODE_PRIVATE,
                                 null);
+
+                        database.execSQL("DROP TABLE user_profile");
+                        SQLiteDatabase userDatabase = openOrCreateDatabase(
+                                "User_Data",MODE_PRIVATE,
+                                null);
+
 
                         String createUserProfileTableSQL = "CREATE TABLE IF NOT EXISTS user_profile ";
                         String userProfileDataFormat = "(user_id VARCHAR, first_name VARCHAR, last_name VARCHAR," +
@@ -195,33 +201,39 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
                         userDatabase.execSQL(createQuery);
 
-                        String insertIntoUserProfile = "INSERT INTO user_profile (user_id, first_name, last_name," +
-                                "email,about_me, city, state, goal," +
-                                "profile_url, profile_background_url, title) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)";
+                        String user_id = userId.toString();
 
-                        String insertIntoFormat = String.format(insertIntoUserProfile, userId.toString(), first_name, last_name,
-                                email, aboutMe, city, state, goal, profileUrl, profileBackgroundUrl, title);
+                        ContentValues insertValues = new ContentValues();
+                        insertValues.put("user_id", user_id);
+                        insertValues.put("first_name", first_name);
+                        insertValues.put("last_name", last_name);
+                        insertValues.put("email", email);
+                        insertValues.put("about_me", aboutMe);
+                        insertValues.put("city", city);
+                        insertValues.put("state", state);
+                        insertValues.put("goal", goal);
+                        insertValues.put("profile_url", profileUrl);
+                        insertValues.put("profile_background_url", profileBackgroundUrl);
+                        insertValues.put("title", title);
 
-                        userDatabase.execSQL(insertIntoFormat);
+                        userDatabase.insert("user_profile", null, insertValues);
 
                         Cursor c = userDatabase.rawQuery("SELECT * FROM user_profile", null);
-                        int firstNameIndex = c.getColumnIndex("first_name");
-                        int profileUrlIndex = c.getColumnIndex("profile_url");
 
                         c.moveToFirst();
-                        while (c!=null){
-                            Log.i("First Name: ", c.getString(firstNameIndex));
-                            Log.i("Url: ", c.getString(profileUrlIndex));
-
+                        /*while(c != null){
+                            Log.i("FirstName: ", c.getString(firstNameIndex));
+                            Log.i("ProfileUrl: ", c.getString(profileUrlIndex));
                             c.moveToNext();
-                        }
+                        }*/
+
+                        database.close();
                     }
                     catch(Exception e){
                         e.printStackTrace();
                     }
 
                     //Connect Views of Navigation bar
-
                     View headerView = navigationView.getHeaderView(0);
                     TextView navName = (TextView) headerView.findViewById(R.id.userName);
                     TextView navEmail = (TextView) headerView.findViewById(R.id.email);
