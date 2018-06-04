@@ -41,7 +41,7 @@
                 android:scaleType="centerCrop"
                 android:id="@+id/profilePicCircleImageView"
                 android:layout_gravity="center"
-                app:layout_collapseMode="parallax"/>
+                app:layout_collapseMode="pin"/>
 
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package com.frontierapp.frontierapp;
 
 import android.content.Intent;
+import android.media.Image;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,7 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
                 .into(profilePicCircleImageView);
 
         profileToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.profileToolbar);
-        profileToolbar.setTitle("Yoshua Isreal");
+        profileCollapsingToolbar.setTitle("Yoshua Isreal");
         setSupportActionBar(profileToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

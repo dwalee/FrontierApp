@@ -1,6 +1,8 @@
 package com.frontierapp.frontierapp;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -35,6 +37,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -123,7 +126,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         //Navigation Drawer data
         firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
-        String userId = firebaseuser.getUid();
+        final String userId = firebaseuser.getUid();
 
         mfirestore.collection("UserInformation")
                 .document("Users")
@@ -139,13 +142,83 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                     //User user = new User();
 
                     //Get data from the current user
-                    String first_name = document.getString("User.first_name");
-                    String last_name = document.getString("User.last_name");
-                    String profileUrl = document.getString("userAvatarUrl");
-                    String email = document.getString("User.email");
+                    String first_name;
+                    String last_name;
+                    //String profileUrl = document.getString("userAvatarUrl");
+                    String email;
+                    String aboutMe;
+                    String city;
+                    String state;
+                    String goal;
+                    String profileUrl;
+                    String profileBackgroundUrl;
+                    String title;
 
                     //Create new String to spell out full name
-                    String userName = first_name + " " + last_name;
+                    String userName;
+                    //Combine city and state
+                    String location;
+
+
+                    try{
+
+                        //Get data from the current user
+                        first_name = document.getString("User.first_name");
+                        last_name = document.getString("User.last_name");
+                        //String profileUrl = document.getString("userAvatarUrl");
+                        email = document.getString("User.email");
+                        aboutMe = document.getString("Profile.about_me");
+                        city = document.getString("Profile.city");
+                        state = document.getString("Profile.state");
+                        goal = document.getString("Profile.goal");
+                        profileUrl = document.getString("Profile.profile_avatar");
+                        profileBackgroundUrl = document.getString(
+                                "Profile.profile_background_image_url");
+                        title = document.getString("Profile.title");
+
+                        //Create new String to spell out full name
+                        userName = first_name + " " + last_name;
+                        //Combine city and state
+                        location = city + ", " + state;
+
+                        SQLiteDatabase userDatabase = openOrCreateDatabase(
+                                "User_Data",
+                                MODE_PRIVATE,
+                                null);
+
+                        String createUserProfileTableSQL = "CREATE TABLE IF NOT EXISTS user_profile ";
+                        String userProfileDataFormat = "(user_id VARCHAR, first_name VARCHAR, last_name VARCHAR," +
+                                "email VARCHAR, about_me VARCHAR, city VARCHAR, state VARCHAR(2), goal VARCHAR," +
+                                "profile_url VARCHAR, profile_background_url VARCHAR, title VARCHAR)";
+
+                        String createQuery = createUserProfileTableSQL + userProfileDataFormat;
+
+                        userDatabase.execSQL(createQuery);
+
+                        String insertIntoUserProfile = "INSERT INTO user_profile (user_id, first_name, last_name," +
+                                "email,about_me, city, state, goal," +
+                                "profile_url, profile_background_url, title) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)";
+
+                        String insertIntoFormat = String.format(insertIntoUserProfile, userId.toString(), first_name, last_name,
+                                email, aboutMe, city, state, goal, profileUrl, profileBackgroundUrl, title);
+
+                        userDatabase.execSQL(insertIntoFormat);
+
+                        Cursor c = userDatabase.rawQuery("SELECT * FROM user_profile", null);
+                        int firstNameIndex = c.getColumnIndex("first_name");
+                        int profileUrlIndex = c.getColumnIndex("profile_url");
+
+                        c.moveToFirst();
+                        while (c!=null){
+                            Log.i("First Name: ", c.getString(firstNameIndex));
+                            Log.i("Url: ", c.getString(profileUrlIndex));
+
+                            c.moveToNext();
+                        }
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                    }
 
                     //Connect Views of Navigation bar
 
