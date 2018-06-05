@@ -184,7 +184,6 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Developer, SQL"
                             android:textSize="18sp"
                             android:id="@+id/titleTextView"
                             android:layout_weight=".5"/>
@@ -208,7 +207,6 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/aboutMeText"
                             android:textSize="18sp"
                             android:id="@+id/aboutMeTextView"
                             android:layout_weight=".5"/>
@@ -232,7 +230,6 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Detroit, MI"
                             android:textSize="18sp"
                             android:id="@+id/locationTextView"
                             android:layout_weight=".5"/>
@@ -280,7 +277,6 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="To get this Frontier app up and running by the end of July."
                             android:textSize="18sp"
                             android:id="@+id/goalsTextView"
                             android:layout_weight=".5"/>

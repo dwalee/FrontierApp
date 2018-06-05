@@ -17,23 +17,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.drive.DriveFile;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfileActivity extends AppCompatActivity {
     CollapsingToolbarLayout profileCollapsingToolbar;
     Toolbar profileToolbar;
     ImageView profileBackgroundImageView, profilePicCircleImageView;
     TextView userTitleTextView, userAboutMeTextView, locationTextView, goalTextView;
-    FirebaseAuth mAuth;
-    String currentUser;
-    private FirebaseUser user;
-    String userID;
-    DatabaseReference databaseUser;
-    private FirebaseFirestore firebaseFireStore = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,34 +34,30 @@ public class ProfileActivity extends AppCompatActivity {
         userAboutMeTextView = (TextView) findViewById(R.id.aboutMeTextView);
         locationTextView = (TextView) findViewById(R.id.locationTextView);
         goalTextView = (TextView) findViewById(R.id.goalsTextView);
-        loadProfileData();
-
 
 
         profileCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.profileCollapsingToolbar);
 
         profileToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.profileToolbar);
-        profileCollapsingToolbar.setTitle("Dwaine Lee");
+        loadProfileData();
         setSupportActionBar(profileToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(profilePicCircleImageView.getDrawable());
-
-        loadProfileData();
-
-
+        getSupportActionBar().setDisplayShowHomeEnabled(true);;
 
     }
 
     public void loadProfileData(){
         String backgroundUrl = "";
         String profileUrl = "";
-        String title = "";
-        String about_me = "";
+        String title = "n\\a";
+        String about_me = "n\\a";
         String city = "";
         String state = "";
-        String location = "";
-        String goals = "";
+        String location = "n\\a";
+        String goals = "n\\a";
+        String first_name = "";
+        String last_name = "";
+        String username = "";
 
         try{
             SQLiteDatabase database = openOrCreateDatabase("User_Data",
@@ -89,8 +74,13 @@ public class ProfileActivity extends AppCompatActivity {
             int cityIndex = cursor.getColumnIndex("city");
             int stateIndex = cursor.getColumnIndex("state");
             int goalIndex = cursor.getColumnIndex("goal");
+            int firstNameIndex = cursor.getColumnIndex("first_name");
+            int lastNameIndex = cursor.getColumnIndex("last_name");
 
             cursor.moveToFirst();
+            first_name = cursor.getString(firstNameIndex);
+            last_name = cursor.getString(lastNameIndex);
+            username = first_name + " " + last_name;
             profileUrl = cursor.getString(profileUrlIndex);
             backgroundUrl = cursor.getString(profileBackgroundUrlIndex);
             title = cursor.getString(titleIndex);
@@ -105,6 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        profileCollapsingToolbar.setTitle(username);
         userTitleTextView.setText(title);
         userAboutMeTextView.setText(about_me);
         goalTextView.setText(goals);

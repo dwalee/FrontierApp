@@ -54,6 +54,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     FirebaseFirestore mfirestore;
     FirebaseUser firebaseuser;
     ImageView profilePicImageView;
+    static String profileUrlNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,12 +221,15 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
                         Cursor c = userDatabase.rawQuery("SELECT * FROM user_profile", null);
 
+                        int profileUrlIndex = c.getColumnIndex("profile_url");
+
                         c.moveToFirst();
                         /*while(c != null){
                             Log.i("FirstName: ", c.getString(firstNameIndex));
                             Log.i("ProfileUrl: ", c.getString(profileUrlIndex));
                             c.moveToNext();
                         }*/
+                        profileUrlNav = c.getString(profileUrlIndex);
 
                         database.close();
                     }
@@ -239,6 +243,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                     TextView navEmail = (TextView) headerView.findViewById(R.id.email);
                     navName.setText(userName);
                     navEmail.setText(email);
+
+                    Glide.with(headerView)
+                            .load(profileUrlNav)
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(profilePicImageView);
                 }
             }
         });
@@ -257,10 +266,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 startActivity(profileScreen);
             }
         });
-        Glide.with(this)
-                .load("https://pbs.twimg.com/media/DXVX493U8AAvqLf.jpg")
-                .apply(RequestOptions.circleCropTransform())
-                .into(profilePicImageView);
+
         return true;
     }
 
