@@ -45,22 +45,17 @@ import java.util.List;
 import java.util.Map;
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    Toolbar toolbar;
-    ViewPager viewPager;
-    TabLayout tabLayout;
-    NavigationView navigationView;
-    DrawerLayout drawerLayout;
-    ListView feedListView;
-    FirebaseFirestore mfirestore;
-    FirebaseUser firebaseuser;
-    ImageView profilePicImageView;
-    static String profileUrlNav;
+    Toolbar toolbar; ViewPager viewPager; TabLayout tabLayout; NavigationView navigationView;
+    DrawerLayout drawerLayout; ListView feedListView;
+    FirebaseFirestore mfirestore; FirebaseUser firebaseuser;
+    TextView titleTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer);
 
+        titleTextView = (TextView) findViewById(R.id.titleTextView);
         mfirestore = FirebaseFirestore.getInstance();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout_id);
@@ -113,7 +108,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 }
             }
         });*/
-//
+
         firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
         String userId = firebaseuser.getUid();
 
@@ -144,7 +139,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                             String city;
                             String state;
                             String goal;
-                            String profileUrl;
+                            String profileUrl = "";
                             String profileBackgroundUrl;
                             String title;
 
@@ -214,8 +209,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                                     c.moveToNext();
                                 }
 
-                                profileUrlNav = profileUrl;
-
                                 c.close();
                                 userDatabase.close();
                             }
@@ -227,13 +220,22 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                             View headerView = navigationView.getHeaderView(0);
                             TextView navName = (TextView) headerView.findViewById(R.id.userName);
                             TextView navEmail = (TextView) headerView.findViewById(R.id.email);
+                            ImageView navImageView = (ImageView) headerView.findViewById(R.id.profilePic);
                             navName.setText(userName);
                             navEmail.setText(email);
 
                             Glide.with(headerView)
-                                    .load(profileUrlNav)
+                                    .load(profileUrl)
                                     .apply(RequestOptions.circleCropTransform())
-                                    .into(profilePicImageView);
+                                    .into(navImageView);
+
+                            navImageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
+                                    startActivity(profileScreen);
+                                }
+                            });
                         }
                     }
                 });
@@ -243,16 +245,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.welcome_menu, menu);
-
-        profilePicImageView = (ImageView) findViewById(R.id.profilePic);
-        //Go to profile activity if profile pic is clicked
-        profilePicImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(profileScreen);
-            }
-        });
 
         return true;
     }
