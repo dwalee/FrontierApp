@@ -144,23 +144,20 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                     //User user = new User();
 
                     //Get data from the current user
-                    String first_name = "";
+                    String first_name;
                     String last_name;
                     //String profileUrl = document.getString("userAvatarUrl");
                     String email = "";
-                    String aboutMe = "";
-                    String city = "";
-                    String state = "";
-                    String goal = "";
-                    String profileUrl = "";
-                    String profileBackgroundUrl = "";
-                    String title = "";
+                    String aboutMe;
+                    String city;
+                    String state;
+                    String goal;
+                    String profileUrl;
+                    String profileBackgroundUrl;
+                    String title;
 
                     //Create new String to spell out full name
                     String userName = "";
-                    //Combine city and state
-                    String location;
-
 
                     try{
                         //Get data from the current user
@@ -180,18 +177,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                         //Create new String to spell out full name
                         userName = first_name + " " + last_name;
                         //Combine city and state
-                        location = city + ", " + state;
 
-                        SQLiteDatabase database = openOrCreateDatabase(
-                                "User_Data",
-                                MODE_PRIVATE,
-                                null);
 
-                        database.execSQL("DROP TABLE user_profile");
                         SQLiteDatabase userDatabase = openOrCreateDatabase(
                                 "User_Data",MODE_PRIVATE,
                                 null);
-
 
                         String createUserProfileTableSQL = "CREATE TABLE IF NOT EXISTS user_profile ";
                         String userProfileDataFormat = "(user_id VARCHAR, first_name VARCHAR, last_name VARCHAR," +
@@ -201,6 +191,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                         String createQuery = createUserProfileTableSQL + userProfileDataFormat;
 
                         userDatabase.execSQL(createQuery);
+                        userDatabase.execSQL("DELETE FROM user_profile");
+
 
                         String user_id = userId.toString();
 
@@ -224,14 +216,16 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                         int profileUrlIndex = c.getColumnIndex("profile_url");
 
                         c.moveToFirst();
-                        /*while(c != null){
-                            Log.i("FirstName: ", c.getString(firstNameIndex));
-                            Log.i("ProfileUrl: ", c.getString(profileUrlIndex));
+                        while(c != null){
+                            Log.i("FirstName: ", c.getString(1));
+                            Log.i("ProfileUrl: ", c.getString(8));
                             c.moveToNext();
-                        }*/
-                        profileUrlNav = c.getString(profileUrlIndex);
+                        }
 
-                        database.close();
+                        profileUrlNav = profileUrl;
+
+                        c.close();
+                        userDatabase.close();
                     }
                     catch(Exception e){
                         e.printStackTrace();

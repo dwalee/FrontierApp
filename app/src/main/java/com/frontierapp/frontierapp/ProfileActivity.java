@@ -3,12 +3,10 @@ package com.frontierapp.frontierapp;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.Image;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -16,7 +14,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.drive.DriveFile;
 
 public class ProfileActivity extends AppCompatActivity {
     CollapsingToolbarLayout profileCollapsingToolbar;
@@ -39,14 +36,14 @@ public class ProfileActivity extends AppCompatActivity {
         profileCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.profileCollapsingToolbar);
 
         profileToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.profileToolbar);
-        loadProfileData();
+        loadProfileDataToSQLite();
         setSupportActionBar(profileToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);;
 
     }
 
-    public void loadProfileData(){
+    public void loadProfileDataToSQLite(){
         String backgroundUrl = "";
         String profileUrl = "";
         String title = "n\\a";
@@ -90,7 +87,9 @@ public class ProfileActivity extends AppCompatActivity {
             goals = cursor.getString(goalIndex);
             location = city + ", " + state;
 
+            cursor.close();
             database.close();
+
         }catch(Exception e){
             e.printStackTrace();
         }

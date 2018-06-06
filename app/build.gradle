@@ -5,7 +5,7 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.frontierapp.frontierapp"
-        minSdkVersion 23
+        minSdkVersion 15
         targetSdkVersion 26
         multiDexEnabled true
         versionCode 1
