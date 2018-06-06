@@ -229,7 +229,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                                     .apply(RequestOptions.circleCropTransform())
                                     .into(navImageView);
 
-                            navImageView.setOnClickListener(new View.OnClickListener() {
+                            headerView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
