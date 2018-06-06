@@ -36,14 +36,14 @@ public class ProfileActivity extends AppCompatActivity {
         profileCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.profileCollapsingToolbar);
 
         profileToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.profileToolbar);
-        loadProfileDataToSQLite();
+        loadProfileDataFromSQLite();
         setSupportActionBar(profileToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);;
 
     }
 
-    public void loadProfileDataToSQLite(){
+    public void loadProfileDataFromSQLite(){
         String backgroundUrl = "";
         String profileUrl = "";
         String title = "n\\a";

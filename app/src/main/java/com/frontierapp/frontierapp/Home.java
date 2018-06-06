@@ -62,12 +62,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         setContentView(R.layout.navigation_drawer);
 
         mfirestore = FirebaseFirestore.getInstance();
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         tabLayout = (TabLayout) findViewById(R.id.tabLayout_id);
-
-        List<Map<String, String>> postData = new ArrayList<Map<String, String>>();
 
         //CREATE ACTIONBAR FROM WITH TOOLBAR VIEW
         setSupportActionBar(toolbar);
@@ -88,13 +84,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-
-        for(int i =1; i <=5; i++){
-            Map<String, String> postInfo = new HashMap<String, String>();
-            postInfo.put("context", "Tweet Content" + Integer.toString(i));
-            postInfo.put("username", "User" + Integer.toString(i));
-            postData.add(postInfo);
-        }
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView= (NavigationView) findViewById(R.id.navigation_view);
@@ -125,11 +114,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             }
         });*/
 //
-
-        //Navigation Drawer data
         firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
-        final String userId = firebaseuser.getUid();
+        String userId = firebaseuser.getUid();
 
+        loadDataToSQLite(userId);
+
+    }
+
+    public void loadDataToSQLite(final String userId){
         mfirestore.collection("UserInformation")
                 .document("Users")
                 .collection("User")
@@ -137,115 +129,116 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    //User user = new User();
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            //User user = new User();
 
-                    //Get data from the current user
-                    String first_name;
-                    String last_name;
-                    //String profileUrl = document.getString("userAvatarUrl");
-                    String email = "";
-                    String aboutMe;
-                    String city;
-                    String state;
-                    String goal;
-                    String profileUrl;
-                    String profileBackgroundUrl;
-                    String title;
+                            //Get data from the current user
+                            String first_name;
+                            String last_name;
+                            //String profileUrl = document.getString("userAvatarUrl");
+                            String email = "";
+                            String aboutMe;
+                            String city;
+                            String state;
+                            String goal;
+                            String profileUrl;
+                            String profileBackgroundUrl;
+                            String title;
 
-                    //Create new String to spell out full name
-                    String userName = "";
+                            //Create new String to spell out full name
+                            String userName = "";
 
-                    try{
-                        //Get data from the current user
-                        first_name = document.getString("User.first_name");
-                        last_name = document.getString("User.last_name");
-                        //String profileUrl = document.getString("userAvatarUrl");
-                        email = document.getString("User.email");
-                        aboutMe = document.getString("Profile.about_me");
-                        city = document.getString("Profile.city");
-                        state = document.getString("Profile.state");
-                        goal = document.getString("Profile.goal");
-                        profileUrl = document.getString("Profile.profile_avatar");
-                        profileBackgroundUrl = document.getString(
-                                "Profile.profile_background_image_url");
-                        title = document.getString("Profile.title");
+                            try{
+                                //Get data from the current user
+                                first_name = document.getString("User.first_name");
+                                last_name = document.getString("User.last_name");
+                                //String profileUrl = document.getString("userAvatarUrl");
+                                email = document.getString("User.email");
+                                aboutMe = document.getString("Profile.about_me");
+                                city = document.getString("Profile.city");
+                                state = document.getString("Profile.state");
+                                goal = document.getString("Profile.goal");
+                                profileUrl = document.getString("Profile.profile_avatar");
+                                profileBackgroundUrl = document.getString(
+                                        "Profile.profile_background_image_url");
+                                title = document.getString("Profile.title");
 
-                        //Create new String to spell out full name
-                        userName = first_name + " " + last_name;
-                        //Combine city and state
-
-
-                        SQLiteDatabase userDatabase = openOrCreateDatabase(
-                                "User_Data",MODE_PRIVATE,
-                                null);
-
-                        String createUserProfileTableSQL = "CREATE TABLE IF NOT EXISTS user_profile ";
-                        String userProfileDataFormat = "(user_id VARCHAR, first_name VARCHAR, last_name VARCHAR," +
-                                "email VARCHAR, about_me VARCHAR, city VARCHAR, state VARCHAR(2), goal VARCHAR," +
-                                "profile_url VARCHAR, profile_background_url VARCHAR, title VARCHAR)";
-
-                        String createQuery = createUserProfileTableSQL + userProfileDataFormat;
-
-                        userDatabase.execSQL(createQuery);
-                        userDatabase.execSQL("DELETE FROM user_profile");
+                                //Create new String to spell out full name
+                                userName = first_name + " " + last_name;
+                                //Combine city and state
 
 
-                        String user_id = userId.toString();
+                                SQLiteDatabase userDatabase = openOrCreateDatabase(
+                                        "User_Data",MODE_PRIVATE,
+                                        null);
 
-                        ContentValues insertValues = new ContentValues();
-                        insertValues.put("user_id", user_id);
-                        insertValues.put("first_name", first_name);
-                        insertValues.put("last_name", last_name);
-                        insertValues.put("email", email);
-                        insertValues.put("about_me", aboutMe);
-                        insertValues.put("city", city);
-                        insertValues.put("state", state);
-                        insertValues.put("goal", goal);
-                        insertValues.put("profile_url", profileUrl);
-                        insertValues.put("profile_background_url", profileBackgroundUrl);
-                        insertValues.put("title", title);
+                                String createUserProfileTableSQL = "CREATE TABLE IF NOT EXISTS user_profile ";
+                                String userProfileDataFormat = "(user_id VARCHAR, first_name VARCHAR, last_name VARCHAR," +
+                                        "email VARCHAR, about_me VARCHAR, city VARCHAR, state VARCHAR(2), goal VARCHAR," +
+                                        "profile_url VARCHAR, profile_background_url VARCHAR, title VARCHAR)";
 
-                        userDatabase.insert("user_profile", null, insertValues);
+                                String createQuery = createUserProfileTableSQL + userProfileDataFormat;
 
-                        Cursor c = userDatabase.rawQuery("SELECT * FROM user_profile", null);
+                                userDatabase.execSQL(createQuery);
+                                userDatabase.execSQL("DELETE FROM user_profile");
 
-                        int profileUrlIndex = c.getColumnIndex("profile_url");
 
-                        c.moveToFirst();
-                        while(c != null){
-                            Log.i("FirstName: ", c.getString(1));
-                            Log.i("ProfileUrl: ", c.getString(8));
-                            c.moveToNext();
+                                String user_id = userId.toString();
+
+                                ContentValues insertValues = new ContentValues();
+                                insertValues.put("user_id", user_id);
+                                insertValues.put("first_name", first_name);
+                                insertValues.put("last_name", last_name);
+                                insertValues.put("email", email);
+                                insertValues.put("about_me", aboutMe);
+                                insertValues.put("city", city);
+                                insertValues.put("state", state);
+                                insertValues.put("goal", goal);
+                                insertValues.put("profile_url", profileUrl);
+                                insertValues.put("profile_background_url", profileBackgroundUrl);
+                                insertValues.put("title", title);
+
+                                userDatabase.insert("user_profile", null, insertValues);
+
+                                Cursor c = userDatabase.rawQuery("SELECT * FROM user_profile", null);
+
+                                int profileUrlIndex = c.getColumnIndex("profile_url");
+
+                                c.moveToFirst();
+                                while(c != null){
+                                    Log.i("FirstName: ", c.getString(1));
+                                    Log.i("ProfileUrl: ", c.getString(8));
+                                    c.moveToNext();
+                                }
+
+                                profileUrlNav = profileUrl;
+
+                                c.close();
+                                userDatabase.close();
+                            }
+                            catch(Exception e){
+                                e.printStackTrace();
+                            }
+
+                            //Connect Views of Navigation bar
+                            View headerView = navigationView.getHeaderView(0);
+                            TextView navName = (TextView) headerView.findViewById(R.id.userName);
+                            TextView navEmail = (TextView) headerView.findViewById(R.id.email);
+                            navName.setText(userName);
+                            navEmail.setText(email);
+
+                            Glide.with(headerView)
+                                    .load(profileUrlNav)
+                                    .apply(RequestOptions.circleCropTransform())
+                                    .into(profilePicImageView);
                         }
-
-                        profileUrlNav = profileUrl;
-
-                        c.close();
-                        userDatabase.close();
                     }
-                    catch(Exception e){
-                        e.printStackTrace();
-                    }
-
-                    //Connect Views of Navigation bar
-                    View headerView = navigationView.getHeaderView(0);
-                    TextView navName = (TextView) headerView.findViewById(R.id.userName);
-                    TextView navEmail = (TextView) headerView.findViewById(R.id.email);
-                    navName.setText(userName);
-                    navEmail.setText(email);
-
-                    Glide.with(headerView)
-                            .load(profileUrlNav)
-                            .apply(RequestOptions.circleCropTransform())
-                            .into(profilePicImageView);
-                }
-            }
-        });
+                });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
