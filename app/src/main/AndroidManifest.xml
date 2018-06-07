@@ -39,7 +39,8 @@
 
         <activity android:name=".ImageViewer" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".register_pic2"></activity>
+        <activity android:name=".register_pic2" />
+        <activity android:name=".ProfileEditActivity"></activity>
     </application>
 
 </manifest>

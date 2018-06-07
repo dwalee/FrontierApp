@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileEditActivity">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleTextInputLayout"
+        android:layout_margin="8dp">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/titleEditTextView"
+            android:hint="Title"
+            android:layout_margin="16dp"
+            android:inputType="text"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/aboutMeTextInputLayout"
+        android:layout_below="@+id/titleTextInputLayout"
+        android:layout_margin="8dp">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/aboutMeEditTextView"
+            android:hint="About Me"
+            android:layout_margin="16dp"
+            android:inputType="textMultiLine"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cityTextInputLayout"
+        android:layout_below="@+id/aboutMeTextInputLayout"
+        android:layout_margin="8dp">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cityEditTextView"
+            android:hint="City"
+            android:layout_margin="16dp"
+            android:inputType="text"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/stateTextInputLayout"
+        android:layout_below="@+id/cityTextInputLayout"
+        android:layout_margin="8dp">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/stateEditTextView"
+            android:hint="State"
+            android:layout_margin="16dp"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/goalsTextInputLayout"
+        android:layout_below="@+id/stateTextInputLayout"
+        android:layout_margin="8dp">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/goalsEditTextView"
+            android:hint="Goal(s)"
+            android:layout_margin="16dp"
+            android:inputType="textMultiLine"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/profileEditButtonLinearLayout"
+        android:layout_below="@+id/goalsTextInputLayout"
+        android:layout_margin="16dp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/saveEditProfileInfoRaisedButton"
+            android:layout_weight="1"
+            android:text="Save"
+            style="@style/RaisedButton"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancelEditProfileInfoRaisedButton"
+            android:layout_weight="1"
+            android:text="cancel"
+            style="@style/RaisedButton" />
+
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+
+
+
+</RelativeLayout>

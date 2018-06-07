@@ -130,6 +130,10 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(homeIntent);
                 finish();
                 return true;
+            case R.id.editMenu:
+                Intent profileEditIntent = new Intent(this, ProfileEditActivity.class);
+                startActivity(profileEditIntent);
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }
