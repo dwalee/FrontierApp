@@ -3,6 +3,7 @@ package com.frontierapp.frontierapp;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,12 +15,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileActivity extends AppCompatActivity {
     CollapsingToolbarLayout profileCollapsingToolbar;
     Toolbar profileToolbar;
     ImageView profileBackgroundImageView, profilePicCircleImageView;
     TextView userTitleTextView, userAboutMeTextView, locationTextView, goalTextView;
+    FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    UserFirestore userFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +41,14 @@ public class ProfileActivity extends AppCompatActivity {
         profileCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.profileCollapsingToolbar);
 
         profileToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.profileToolbar);
-        loadProfileDataFromSQLite();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadProfileDataFromSQLite();
+            }
+        }, 150);
+
         setSupportActionBar(profileToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);;
@@ -113,6 +125,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    public void updateSQLiteFromFirestore(){
+        String userId = currentFirebaseUser.getUid();
+        userFirestore = new UserFirestore(getApplicationContext());
+        //Log.i("ProfileEditActivity/", "loadEditTextFromFireStore: " + userId);
+        userFirestore.getProfileDataFromFireStore(userId, UserDB.UPDATE);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.profile_menu,menu);
@@ -132,6 +151,7 @@ public class ProfileActivity extends AppCompatActivity {
                 return true;
             case R.id.editMenu:
                 Intent profileEditIntent = new Intent(this, ProfileEditActivity.class);
+                updateSQLiteFromFirestore();
                 startActivity(profileEditIntent);
                 finish();
             default:

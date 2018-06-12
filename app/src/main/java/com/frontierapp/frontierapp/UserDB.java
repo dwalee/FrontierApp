@@ -1,6 +1,11 @@
 package com.frontierapp.frontierapp;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -11,128 +16,151 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class UserDB {
     User user;
-    final Profile profile = new Profile();
+    private Profile profile;
+    private Context context;
 
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    CollectionReference userInfo = firebaseFirestore.collection("UserInformation");
-    DocumentReference userData;
+    public static final int ADD = 0;
+    public static final int UPDATE = 1;
+    public static final int DELETE = 2;
 
-    public UserDB(User user, Profile profile) {
+    private static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private static CollectionReference userInfo = firebaseFirestore.collection("UserInformation");
+    private static DocumentReference userData;
+
+    public UserDB(Context context, User user, Profile profile) {
         this.user = user;
-        //this.profile = profile;
+        this.profile = profile;
+        this.context = context;
     }
 
-    public UserDB(User user) {
+    public UserDB(Context context, User user) {
         this.user = user;
-        //profile = null;
+        this.context = context;
     }
 
-    public UserDB(Profile profile) {
-        //this.profile = profile;
-        this.user = null;
+    public UserDB(Context context, Profile profile) {
+        this.profile = profile;
+        this.context = context;
     }
 
-    public UserDB() {
-    }
-
-    public void addUserToFireStore(){
-
-    }
-
-    public void addProfileToFireStore(){
-        try{
-            userData = userInfo.document("Users").collection("User").document(user.getUid());
-
-        }
-        catch(Exception e){
-
-        }
-    }
-
-    public void updateProfileToFireStore(){
-        try{
-            userData = userInfo.document("Users").collection("User").document(user.getUid());
-            userData.update(
-                    "Profile.about_me", profile.getAboutMe(),
-                    "Profile.title", profile.getUserTitle(),
-                    "Profile.goal", profile.getGoal(),
-                    "Profile.city", profile.getCity(),
-                    "Profile.state", profile.getState(),
-                    "Profile.profile_avatar", profile.getProfileAvatarUrl(),
-                    "Profile.profile_background_image_url",profile.getProfileBackgroundUrl()
-            );
-        }
-        catch(Exception e){
-
-        }
+    public UserDB(Context context) {
+        this.context = context;
     }
 
     public void addUserProfileToSQLite(){
 
     }
 
-    public User getUserDataFromFireStore(){
-
+    //Update only the profile columns in user_profile table
+    @NonNull
+    public Boolean updateProfileToSQLite(Profile profile){
         try{
-            userData = userInfo.document("Users").collection("User").document(user.getUid());
-            userData.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            SQLiteDatabase userDatabase = SQLiteDatabase.openDatabase(
+                    context.getDatabasePath("User_Data").toString(),
+                    null, SQLiteDatabase.OPEN_READWRITE
+            );
 
-                }
-            });
+            ContentValues updateValues = new ContentValues();
+            updateValues.put("about_me", profile.aboutMe);
+            updateValues.put("city", profile.city);
+            updateValues.put("state", profile.state);
+            updateValues.put("goal", profile.goal);
+            updateValues.put("title", profile.userTitle);
 
-            return user;
-        }
-        catch (Exception e){
+            userDatabase.update("user_profile",updateValues,null,null);
 
-        }
+            Cursor c = userDatabase.rawQuery("SELECT * FROM user_profile", null);
 
-        return null;
-    }
+            int profileUrlIndex = c.getColumnIndex("profile_url");
 
-    public Profile getProfileDataFromFireStore(String userID){
+            int cityColumnIndex = c.getColumnIndex("city");
+            int stateColumnIndex = c.getColumnIndex("state");
 
-        try{
-            final Profile profile = new Profile();
-            userData = userInfo.document("Users").collection("User").document(userID);
-            userData.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful()){
-                        DocumentSnapshot documentSnapshot = task.getResult();
-                        if(documentSnapshot.exists()){
-                            profile.setAboutMe(documentSnapshot.getString("Profile.about_me"));
-                            Log.i("UserDB/", "onComplete: " + profile.getAboutMe());
-                            profile.setUserTitle(documentSnapshot.getString("Profile.title"));
-                            profile.setGoal(documentSnapshot.getString("Profile.goal"));
-                            profile.setCity(documentSnapshot.getString("Profile.city"));
-                            profile.setState(documentSnapshot.getString("Profile.state"));
-                            profile.setProfileAvatarUrl(documentSnapshot.getString("Profile.profile_avatar"));
-                            profile.setProfileBackgroundUrl(documentSnapshot.getString("Profile.profile_background_image_url"));
-                        }
+            c.moveToFirst();
+            while(c != null){
+                Log.i("FirstName: ", c.getString(1));
+                Log.i("City: ", c.getString(cityColumnIndex));
+                Log.i("State: ", c.getString(stateColumnIndex));
+                c.moveToNext();
+            }
 
-                    }
-                }
-            });
-
-            return profile;
-        }
-        catch (Exception e){
+            c.close();
+            userDatabase.close();
+            return true;
+        }catch(Exception e){
             e.printStackTrace();
+            return false;
         }
+
+    }
+
+    //Get the user data from sqlite and return the user object
+    public User getUserDataFromSQLite(){
+
         return null;
     }
 
-    public Profile getUserDataFromSQLite(){
-
-        return null;
-    }
-
+    //Get the profile data from sqlite and return the profile object
+    @Nullable
     public Profile getProfileDataFromSQLite(){
 
+        String backgroundUrl = "";
+        String profileUrl = "";
+        String title = "n\\a";
+        String about_me = "n\\a";
+        String city = "";
+        String state = "";
+        String location = "n\\a";
+        String goals = "n\\a";
+        String first_name = "";
+        String last_name = "";
+        String username = "";
+
+        try{
+            profile = new Profile();
+
+            SQLiteDatabase database = SQLiteDatabase.openDatabase(
+                    context.getDatabasePath("User_Data").toString(),
+                    null, SQLiteDatabase.OPEN_READONLY
+            );
+
+            String selectAll = "SELECT * FROM user_profile";
+
+            database.rawQuery(selectAll, null);
+            Cursor cursor = database.rawQuery(selectAll, null);
+            int titleIndex = cursor.getColumnIndex("title");
+            int aboutMeIndex = cursor.getColumnIndex("about_me");
+            int cityIndex = cursor.getColumnIndex("city");
+            int stateIndex = cursor.getColumnIndex("state");
+            int goalIndex = cursor.getColumnIndex("goal");
+
+            cursor.moveToFirst();
+            title = cursor.getString(titleIndex);
+            about_me = cursor.getString(aboutMeIndex);
+            city = cursor.getString(cityIndex);
+            state = cursor.getString(stateIndex);
+            goals = cursor.getString(goalIndex);
+
+            Log.i("City", "getProfileDataFromSQLite: " + city);
+            profile.setUserTitle(title);
+            profile.setAboutMe(about_me);
+            profile.setCity(city);
+            profile.setState(state);
+            profile.setGoal(goals);
+
+            cursor.close();
+            database.close();
+
+            return profile;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
         return null;
     }
+
 }
