@@ -2,6 +2,7 @@ package com.frontierapp.frontierapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
@@ -9,7 +10,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -55,7 +60,7 @@ public class UserFirestore {
         this.context = context;
     }
 
-    public void addUserToFireStore(){
+    public void addUserToFireStore(final String userId){
 
     }
 
@@ -83,6 +88,66 @@ public class UserFirestore {
         catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    public Boolean getUserProfileDataFromFirestore(final String userId){
+        userData = userInfo.document("Users").collection("User").document(userId);
+        userData.get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        userDB = new UserDB(context);
+                        //Get data from the current user
+                        user = new User();
+                        profile = new Profile();
+                        String first_name = "";
+                        String last_name = "";
+                        //String profileUrl = document.getString("userAvatarUrl");
+                        String email = "";
+                        String aboutMe = "";
+                        String city = "";
+                        String state = "";
+                        String goal = "";
+                        String profileUrl = "";
+                        String profileBackgroundUrl = "";
+                        String title = "";
+
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            //Get data from the current user
+                            first_name = document.getString("User.first_name");
+                            last_name = document.getString("User.last_name");
+                            //String profileUrl = document.getString("userAvatarUrl");
+                            email = document.getString("User.email");
+                            aboutMe = document.getString("Profile.about_me");
+                            city = document.getString("Profile.city");
+                            state = document.getString("Profile.state");
+                            goal = document.getString("Profile.goal");
+                            profileUrl = document.getString("Profile.profile_avatar");
+                            profileBackgroundUrl = document.getString(
+                                    "Profile.profile_background_image_url");
+                            title = document.getString("Profile.title");
+
+
+                            Log.i("City", "onComplete: " + city);
+                        user.setUid(userId);
+                        user.setFirst_name(first_name);
+                        user.setLast_name(last_name);
+                        user.setEmail(email);
+
+                        profile.setUserTitle(title);
+                        profile.setAboutMe(aboutMe);
+                        profile.setGoal(goal);
+                        profile.setCity(city);
+                        profile.setState(state);
+                        profile.setProfileAvatarUrl(profileUrl);
+                        profile.setProfileBackgroundUrl(profileBackgroundUrl);
+
+                        userDB.addUserProfileToSQLite(user, profile);
+                    }}
+                });
+        return true;
     }
 
     public User getUserDataFromFireStore(){

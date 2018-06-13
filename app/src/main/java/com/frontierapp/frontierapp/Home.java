@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -49,6 +50,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     DrawerLayout drawerLayout; ListView feedListView;
     FirebaseFirestore mfirestore; FirebaseUser firebaseuser;
     TextView titleTextView;
+    UserFirestore userFirestore;
+    UserDB userDB;
+    User user;
+    Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,134 +116,54 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
         String userId = firebaseuser.getUid();
+        downloadUserProfileFromFirestore(userId);
 
-        loadDataToSQLite(userId);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadDataToSQLite();
+            }
+        }, 1000);
+
 
     }
 
-    public void loadDataToSQLite(final String userId){
-        mfirestore.collection("UserInformation")
-                .document("Users")
-                .collection("User")
-                .document(userId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    public void downloadUserProfileFromFirestore(String userId){
+        userFirestore = new UserFirestore(getApplicationContext());
+        userFirestore.getUserProfileDataFromFirestore(userId);
+    }
 
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            //User user = new User();
+    public void loadDataToSQLite() {
 
-                            //Get data from the current user
-                            String first_name;
-                            String last_name;
-                            //String profileUrl = document.getString("userAvatarUrl");
-                            String email = "";
-                            String aboutMe;
-                            String city;
-                            String state;
-                            String goal;
-                            String profileUrl = "";
-                            String profileBackgroundUrl;
-                            String title;
+        userDB = new UserDB(getApplicationContext());
 
-                            //Create new String to spell out full name
-                            String userName = "";
+        user = userDB.getUserDataFromSQLite();
+        profile = userDB.getProfileDataFromSQLite();
 
-                            try{
-                                //Get data from the current user
-                                first_name = document.getString("User.first_name");
-                                last_name = document.getString("User.last_name");
-                                //String profileUrl = document.getString("userAvatarUrl");
-                                email = document.getString("User.email");
-                                aboutMe = document.getString("Profile.about_me");
-                                city = document.getString("Profile.city");
-                                state = document.getString("Profile.state");
-                                goal = document.getString("Profile.goal");
-                                profileUrl = document.getString("Profile.profile_avatar");
-                                profileBackgroundUrl = document.getString(
-                                        "Profile.profile_background_image_url");
-                                title = document.getString("Profile.title");
+        String userName = user.getFirst_name() + " " + user.getLast_name();
 
-                                //Create new String to spell out full name
-                                userName = first_name + " " + last_name;
-                                //Combine city and state
+        //Connect Views of Navigation bar
+        View headerView = navigationView.getHeaderView(0);
+        TextView navName = (TextView) headerView.findViewById(R.id.userName);
+        TextView navEmail = (TextView) headerView.findViewById(R.id.email);
+        ImageView navImageView = (ImageView) headerView.findViewById(R.id.profilePic);
+        navName.setText(userName);
+        navEmail.setText(user.getEmail());
 
+        Log.i("Avatar/", "loadDataToSQLite: " + profile.getProfileAvatarUrl());
+        Glide.with(headerView)
+                .load(profile.getProfileAvatarUrl())
+                .apply(RequestOptions.circleCropTransform())
+                .into(navImageView);
 
-                                SQLiteDatabase userDatabase = openOrCreateDatabase(
-                                        "User_Data",MODE_PRIVATE,
-                                        null);
-
-                                String createUserProfileTableSQL = "CREATE TABLE IF NOT EXISTS user_profile ";
-                                String userProfileDataFormat = "(user_id VARCHAR, first_name VARCHAR, last_name VARCHAR," +
-                                        "email VARCHAR, about_me VARCHAR, city VARCHAR, state VARCHAR(2), goal VARCHAR," +
-                                        "profile_url VARCHAR, profile_background_url VARCHAR, title VARCHAR)";
-
-                                String createQuery = createUserProfileTableSQL + userProfileDataFormat;
-
-                                userDatabase.execSQL(createQuery);
-                                userDatabase.execSQL("DELETE FROM user_profile");
-
-
-                                String user_id = userId.toString();
-
-                                ContentValues insertValues = new ContentValues();
-                                insertValues.put("user_id", user_id);
-                                insertValues.put("first_name", first_name);
-                                insertValues.put("last_name", last_name);
-                                insertValues.put("email", email);
-                                insertValues.put("about_me", aboutMe);
-                                insertValues.put("city", city);
-                                insertValues.put("state", state);
-                                insertValues.put("goal", goal);
-                                insertValues.put("profile_url", profileUrl);
-                                insertValues.put("profile_background_url", profileBackgroundUrl);
-                                insertValues.put("title", title);
-
-                                userDatabase.insert("user_profile", null, insertValues);
-
-                                Cursor c = userDatabase.rawQuery("SELECT * FROM user_profile", null);
-
-                                int profileUrlIndex = c.getColumnIndex("profile_url");
-
-                                c.moveToFirst();
-                                while(c != null){
-                                    Log.i("FirstName: ", c.getString(1));
-                                    Log.i("ProfileUrl: ", c.getString(8));
-                                    c.moveToNext();
-                                }
-
-                                c.close();
-                                userDatabase.close();
-                            }
-                            catch(Exception e){
-                                e.printStackTrace();
-                            }
-
-                            //Connect Views of Navigation bar
-                            View headerView = navigationView.getHeaderView(0);
-                            TextView navName = (TextView) headerView.findViewById(R.id.userName);
-                            TextView navEmail = (TextView) headerView.findViewById(R.id.email);
-                            ImageView navImageView = (ImageView) headerView.findViewById(R.id.profilePic);
-                            navName.setText(userName);
-                            navEmail.setText(email);
-
-                            Glide.with(headerView)
-                                    .load(profileUrl)
-                                    .apply(RequestOptions.circleCropTransform())
-                                    .into(navImageView);
-
-                            headerView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
-                                    startActivity(profileScreen);
-                                }
-                            });
-                        }
-                    }
-                });
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivity(profileScreen);
+            }
+        });
     }
 
 

@@ -25,6 +25,9 @@ public class ProfileActivity extends AppCompatActivity {
     TextView userTitleTextView, userAboutMeTextView, locationTextView, goalTextView;
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     UserFirestore userFirestore;
+    UserDB userDB;
+    Profile profile;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,64 +50,31 @@ public class ProfileActivity extends AppCompatActivity {
             public void run() {
                 loadProfileDataFromSQLite();
             }
-        }, 150);
+        }, 300);
 
         setSupportActionBar(profileToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);;
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
 
     public void loadProfileDataFromSQLite(){
-        String backgroundUrl = "";
-        String profileUrl = "";
-        String title = "n\\a";
-        String about_me = "n\\a";
-        String city = "";
-        String state = "";
-        String location = "n\\a";
-        String goals = "n\\a";
-        String first_name = "";
-        String last_name = "";
-        String username = "";
+        userDB = new UserDB(getApplicationContext());
+        profile = userDB.getProfileDataFromSQLite();
+        user = userDB.getUserDataFromSQLite();
 
-        try{
-            SQLiteDatabase database = openOrCreateDatabase("User_Data",
-                    MODE_PRIVATE,
-                    null);
 
-            String selectAll = "SELECT * FROM user_profile";
-
-            Cursor cursor = database.rawQuery(selectAll, null);
-            int profileUrlIndex = cursor.getColumnIndex("profile_url");
-            int profileBackgroundUrlIndex = cursor.getColumnIndex("profile_background_url");
-            int titleIndex = cursor.getColumnIndex("title");
-            int aboutMeIndex = cursor.getColumnIndex("about_me");
-            int cityIndex = cursor.getColumnIndex("city");
-            int stateIndex = cursor.getColumnIndex("state");
-            int goalIndex = cursor.getColumnIndex("goal");
-            int firstNameIndex = cursor.getColumnIndex("first_name");
-            int lastNameIndex = cursor.getColumnIndex("last_name");
-
-            cursor.moveToFirst();
-            first_name = cursor.getString(firstNameIndex);
-            last_name = cursor.getString(lastNameIndex);
-            username = first_name + " " + last_name;
-            profileUrl = cursor.getString(profileUrlIndex);
-            backgroundUrl = cursor.getString(profileBackgroundUrlIndex);
-            title = cursor.getString(titleIndex);
-            about_me = cursor.getString(aboutMeIndex);
-            city = cursor.getString(cityIndex);
-            state = cursor.getString(stateIndex);
-            goals = cursor.getString(goalIndex);
-            location = city + ", " + state;
-
-            cursor.close();
-            database.close();
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        String backgroundUrl = profile.getProfileBackgroundUrl();
+        String profileUrl = profile.getProfileAvatarUrl();
+        String title = profile.getUserTitle();
+        String about_me = profile.getAboutMe();
+        String city = profile.getCity();
+        String state = profile.getState();
+        String location = city + ", " + state;
+        String goals = profile.getGoal();
+        String first_name = user.getFirst_name();
+        String last_name = user.getLast_name();
+        String username = first_name + " " + last_name;
 
         profileCollapsingToolbar.setTitle(username);
         userTitleTextView.setText(title);
