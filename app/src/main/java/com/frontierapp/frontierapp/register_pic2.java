@@ -1,22 +1,46 @@
 package com.frontierapp.frontierapp;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class register_pic2 extends AppCompatActivity {
     Button done;
+    private ArrayList<String> pathArray;
+    private int array_Position;
+    private StorageReference storageReference;
+    private FirebaseAuth mAuth;
+    private ProgressDialog processDialog;
+
+    // Get the default bucket from a custom FirebaseApp
+    FirebaseStorage storage = FirebaseStorage.getInstance("UserImages");
+    // Create a storage reference from our app
+    StorageReference storageRef = storage.getReference();
+
 
     public void getPhoto(){
 
@@ -43,6 +67,11 @@ public class register_pic2 extends AppCompatActivity {
         setContentView(R.layout.activity_register_pic2);
 
         done = (Button) findViewById(R.id.done);
+        pathArray = new ArrayList<>();
+        processDialog = new ProgressDialog(register_pic2.this);
+        mAuth = FirebaseAuth.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
+
 
         if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
@@ -56,6 +85,14 @@ public class register_pic2 extends AppCompatActivity {
             public void onClick(View v) {
                 Intent welcome = new Intent(register_pic2.this, Home.class);
                 startActivity(welcome);
+
+                processDialog.setMessage("Adding Image as profile image");
+                processDialog.show();
+
+                //Get signed in user
+                FirebaseUser user = mAuth.getCurrentUser();
+                String userId = user.getUid();
+                storageReference.child("UserImage/Users" + userId + "jpg");
 
             }
         });
@@ -84,6 +121,8 @@ public class register_pic2 extends AppCompatActivity {
 
         }
     }
+
+
 }
 
 

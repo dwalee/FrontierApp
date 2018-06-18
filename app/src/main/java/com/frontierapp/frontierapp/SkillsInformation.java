@@ -228,7 +228,7 @@ public class SkillsInformation extends AppCompatActivity {
             skillDb.put("Skill", dataSkills.getSkill6());
             skillDb.put("Skill", dataSkills.getSkill7());
 
-            firebaseFireStore.collection("UserInformation").document("Users").collection("Skills").add(skillDb)
+            /*firebaseFireStore.collection("UserInformation").document("Users").collection("Skills").add(skillDb)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
@@ -240,7 +240,7 @@ public class SkillsInformation extends AppCompatActivity {
                         public void onFailure(@NonNull Exception e) {
                             Log.w(TAG, "Error adding document", e);
                         }
-                    });
+                    });*/
         }}
 
 
