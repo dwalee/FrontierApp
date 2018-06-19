@@ -24,4 +24,23 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
         android:text="Button" />
+
+    <TextView
+        android:id="@+id/choose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="85dp"
+        android:text="Choose a picture as your profile pic!"
+        android:textAlignment="center"
+        android:textSize="28sp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageView" />
 </RelativeLayout>
