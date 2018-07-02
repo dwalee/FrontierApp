@@ -107,8 +107,8 @@ public class SkillsInformation extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addDbSkills();
-                //addSkills();
+                //addDbSkills();
+                addSkills();
                 Intent pic = new Intent(SkillsInformation.this, register_pic2.class);
                 startActivity(pic);
             }
@@ -228,7 +228,7 @@ public class SkillsInformation extends AppCompatActivity {
             skillDb.put("Skill", dataSkills.getSkill6());
             skillDb.put("Skill", dataSkills.getSkill7());
 
-            /*firebaseFireStore.collection("UserInformation").document("Users").collection("Skills").add(skillDb)
+            firebaseFireStore.collection("UserInformation").document("Users").collection("Skills").add(skillDb)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
@@ -240,7 +240,7 @@ public class SkillsInformation extends AppCompatActivity {
                         public void onFailure(@NonNull Exception e) {
                             Log.w(TAG, "Error adding document", e);
                         }
-                    });*/
+                    });
         }}
 
 
