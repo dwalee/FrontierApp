@@ -41,8 +41,6 @@ public class register_pic2 extends AppCompatActivity {
     private int array_Position;
     private StorageReference storageReference;
     private FirebaseAuth mAuth;
-    private ProgressDialog processDialog;
-    private DatabaseReference databaseReference;
     private Uri selectedImage;
     private ProgressBar progressBar;
     private DatabaseReference databaseUser;
@@ -51,6 +49,7 @@ public class register_pic2 extends AppCompatActivity {
     private String userID;
     private Upload imageurl;
     private Button choose;
+    private String currentUser;
 
     
     @Override
@@ -58,13 +57,14 @@ public class register_pic2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_pic2);
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBar2);
         choose = (Button) findViewById(R.id.choose);
         submit = (Button) findViewById(R.id.submit);
         pathArray = new ArrayList<>();
-        processDialog = new ProgressDialog(register_pic2.this);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         userID = user.getUid();
+        currentUser = userID.toString().trim();
         databaseUser = FirebaseDatabase.getInstance().getReference("UserInformation");
         storageReference = FirebaseStorage.getInstance().getReference("UserImages").child("Users");
 
@@ -97,8 +97,10 @@ public class register_pic2 extends AppCompatActivity {
     }
 
     private void getPhoto(){
-        Intent getProfilePic = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(getProfilePic, 1);
+        Intent getProfilePic = new Intent();
+        getProfilePic.setType("image/*");
+        getProfilePic.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(getProfilePic, 1 );
     }
 
 
@@ -110,7 +112,7 @@ public class register_pic2 extends AppCompatActivity {
 
         if (requestCode == 1 && resultCode == RESULT_OK && data != null ) {
 
-            Uri selectedImage = data.getData();
+            selectedImage = data.getData();
 
 
             try {
@@ -138,7 +140,7 @@ public class register_pic2 extends AppCompatActivity {
 
     private void uploadFile(){
         if(selectedImage != null){
-            StorageReference fileReference = storageReference.child(System.currentTimeMillis()+ "." + getFileExtension(selectedImage));
+            StorageReference fileReference = storageReference.child("/" + currentUser + "/" + System.currentTimeMillis()+ "." + getFileExtension(selectedImage));
             fileReference.putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -150,19 +152,21 @@ public class register_pic2 extends AppCompatActivity {
 
                         }
                     },5000);
-                    Toast.makeText(getApplicationContext(),"Couldn't upload image",Toast.LENGTH_SHORT).show();
-                    Upload upload = new Upload(taskSnapshot.getDownloadUrl().toString());
-                    String uploadId = databaseUser.push().getKey();
+                    Toast.makeText(getApplicationContext(),"Upload Successful",Toast.LENGTH_SHORT).show();
+                    String uid = databaseUser.push().getKey();
 
-                    Upload profilePic = new Upload(imageurl.toString());
+                    Upload uploadImage = new Upload(uid,taskSnapshot.getUploadSessionUri().toString());
+
+
+                    Upload profilePic = new Upload(uid, uploadImage.toString());
                     Map<String, Object> userImage = new HashMap<>();
-                    userImage.put("userAvatarUrl", profilePic);
+                    userImage.put("ImageUid", uploadImage.getUid());
+                    userImage.put("userAvatarUrl", uploadImage.getImageUrl());
 
-                    Map<String, Object> userAvatar = new HashMap<>();
 
                     firebaseFireStore.collection("UserInformation").document("Users")
-                            .collection("User").document(userID)
-                            .update(userAvatar)
+                            .collection("User").document(currentUser)
+                            .update(userImage)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -195,7 +199,7 @@ public class register_pic2 extends AppCompatActivity {
             });
         }
         else{
-            Toast.makeText(getApplicationContext(),"No File Selected", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(),"No File Selected", Toast.LENGTH_SHORT).show();
 
         }
 
