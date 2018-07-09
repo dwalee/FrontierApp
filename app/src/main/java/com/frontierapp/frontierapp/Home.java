@@ -1,9 +1,6 @@
 package com.frontierapp.frontierapp;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,34 +13,19 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.text.Format;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar; ViewPager viewPager; TabLayout tabLayout; NavigationView navigationView;
@@ -116,7 +98,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
         String userId = firebaseuser.getUid();
-        downloadUserProfileFromFirestore(userId);
+        startBackgroundService();
+        //downloadUserProfileFromFirestore(userId);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -124,9 +107,19 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             public void run() {
                 loadDataToSQLite();
             }
-        }, 1000);
+        }, 2000);
 
+    }
 
+    public void startBackgroundService(){
+        Intent intent = new Intent(this, UserProfileFirestoreBackgroundService.class);
+        intent.putExtra("UserId", firebaseuser.getUid());
+        startService(intent);
+    }
+
+    public void stopBackgroundService(){
+        Intent intent = new Intent(this, UserProfileFirestoreBackgroundService.class);
+        stopService(intent);
     }
 
     public void downloadUserProfileFromFirestore(String userId){
@@ -162,6 +155,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View v) {
                 Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(profileScreen);
+                finish();
             }
         });
     }
@@ -199,6 +193,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.profile:
                 Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(profileScreen);
+                finish();
                 break;
             case R.id.partners:
                 Intent partnerScreen = new Intent(this, Partners.class);
@@ -220,5 +215,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        stopBackgroundService();
+        super.onDestroy();
     }
+}
 

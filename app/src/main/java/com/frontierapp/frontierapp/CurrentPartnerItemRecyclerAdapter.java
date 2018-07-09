@@ -1,0 +1,59 @@
+package com.frontierapp.frontierapp;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.util.List;
+
+public class CurrentPartnerItemRecyclerAdapter extends RecyclerView.Adapter<CurrentPartnerViewHolder>{
+    private List<CurrentPartnershipViewData> currentPartnershipViewDataList;
+    private Context context;
+    private View view;
+
+    public CurrentPartnerItemRecyclerAdapter(Context context, List<CurrentPartnershipViewData> currentPartnershipViewDataList) {
+        this.currentPartnershipViewDataList = currentPartnershipViewDataList;
+        this.context = context;
+    }
+
+    @Override
+    public CurrentPartnerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.partner_item_layout,
+                parent, false
+        );
+
+        return new CurrentPartnerViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(CurrentPartnerViewHolder holder, final int position) {
+        CurrentPartnershipViewData currentPartnershipViewData = currentPartnershipViewDataList.get(position);
+        Glide.with(context).load(currentPartnershipViewData.getCurrentPartnerAvatarUrl())
+                .apply(RequestOptions.circleCropTransform())
+                .into(holder.currenPartnerAvatarImageView);
+        //holder.partnerAvatarImageView.setImageBitmap(partnershipViewData.getPartnerAvatarBitmap());
+        holder.currentPartnerNameTextView.setText(currentPartnershipViewData.getCurrentPartnerName());
+        holder.currentPartnershipRequest.setVisibility(View.GONE);
+        holder.partnerItemLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent partnerProfileIntent = new Intent(context, CurrentPartnerProfileActivity.class);
+                partnerProfileIntent.putExtra("CurrentPartnerIdIndex", position);
+                context.startActivity(partnerProfileIntent);
+                //((CurrentPartnersActivity)context).finish();
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return currentPartnershipViewDataList.size();
+    }
+}

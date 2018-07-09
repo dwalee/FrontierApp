@@ -20,16 +20,16 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class UserDB {
     User user;
-    private Profile profile;
-    private Context context;
+    protected Profile profile;
+    protected Context context;
 
     public static final int ADD = 0;
     public static final int UPDATE = 1;
     public static final int DELETE = 2;
 
-    private static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private static CollectionReference userInfo = firebaseFirestore.collection("UserInformation");
-    private static DocumentReference userData;
+    protected static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    protected static CollectionReference userInfo = firebaseFirestore.collection("UserInformation");
+    protected static DocumentReference userData;
 
     public UserDB(Context context, User user, Profile profile) {
         this.user = user;
@@ -51,12 +51,14 @@ public class UserDB {
         this.context = context;
     }
 
-    public void addUserProfileToSQLite(User user, Profile profile){
+    public Boolean addUserProfileToSQLite(User user, Profile profile){
         try{
-            SQLiteDatabase userDatabase = SQLiteDatabase.openDatabase(
+            SQLiteDatabase userDatabase = context.openOrCreateDatabase("User_Data", MODE_PRIVATE,
+                    null);
+                    /*SQLiteDatabase.openDatabase(
                     context.getDatabasePath("User_Data").toString(),
                     null, SQLiteDatabase.OPEN_READWRITE
-            );
+            );*/
 
             String createUserProfileTableSQL = "CREATE TABLE IF NOT EXISTS user_profile ";
             String userProfileDataFormat = "(user_id VARCHAR, first_name VARCHAR, last_name VARCHAR," +
@@ -101,9 +103,8 @@ public class UserDB {
             e.printStackTrace();
         }
 
-
+        return true;
     }
-
 
     //Update only the profile columns in user_profile table
     @NonNull

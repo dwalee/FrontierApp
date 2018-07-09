@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ProfileActivity">
+    tools:context=".CurrentPartnerProfileActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profileAppBarLayout"
+        android:id="@+id/partnerProfileAppBarLayout"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="270dp"
-            android:id="@+id/profileCollapsingToolbar"
+            android:id="@+id/partnerProfileCollapsingToolbar"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginEnd="64dp"
@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:fitsSystemWindows="true"
-                android:id="@+id/profileBackgroundImageView"
+                android:id="@+id/partnerProfileBackgroundImageView"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
                 android:contentDescription="nothing"/>
@@ -39,15 +39,14 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:scaleType="centerCrop"
-                android:id="@+id/profilePicCircleImageView"
+                android:id="@+id/partnerProfilePicCircleImageView"
                 android:layout_gravity="center"
-                app:layout_collapseMode="pin"
-                android:src="@drawable/my_profile"/>
+                app:layout_collapseMode="pin"/>
 
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
-                android:id="@+id/profileToolbar"
+                android:id="@+id/partnerProfileToolbar"
                 app:layout_collapseMode="pin"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -85,13 +84,13 @@
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/account_multiple_plus_black"
+                            android:src="@drawable/account_multiple_black"
                             />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Add Connect"
+                            android:text="Connects"
                             android:textAlignment="center"/>
 
                     </LinearLayout>
@@ -130,7 +129,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Contact Info"
+                            android:text="VBC"
                             android:textAlignment="center"/>
 
                     </LinearLayout>
@@ -186,7 +185,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="18sp"
-                            android:id="@+id/titleTextView"
+                            android:id="@+id/partnerTitleTextView"
                             android:layout_weight=".5"/>
 
                     </LinearLayout>
@@ -209,7 +208,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="18sp"
-                            android:id="@+id/aboutMeTextView"
+                            android:id="@+id/partnerAboutMeTextView"
                             android:layout_weight=".5"/>
 
                     </LinearLayout>
@@ -232,7 +231,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="18sp"
-                            android:id="@+id/locationTextView"
+                            android:id="@+id/partnerLocationTextView"
                             android:layout_weight=".5"/>
 
                     </LinearLayout>
@@ -256,7 +255,7 @@
                             android:layout_height="wrap_content"
                             android:text="Java, Android, Python, C#, C++, SQL"
                             android:textSize="18sp"
-                            android:id="@+id/skillsTextView"
+                            android:id="@+id/partnerSkillsTextView"
                             android:layout_weight=".5"/>
 
                     </LinearLayout>
@@ -279,7 +278,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="18sp"
-                            android:id="@+id/goalsTextView"
+                            android:id="@+id/partnerGoalsTextView"
                             android:layout_weight=".5"/>
 
                     </LinearLayout>

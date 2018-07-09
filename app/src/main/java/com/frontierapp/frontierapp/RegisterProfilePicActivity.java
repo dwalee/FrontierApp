@@ -1,6 +1,5 @@
 package com.frontierapp.frontierapp;
 
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -34,7 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class register_pic2 extends AppCompatActivity {
+public class RegisterProfilePicActivity extends AppCompatActivity {
     private Button submit;
     private ImageView camera;
     private ArrayList<String> pathArray;
@@ -86,7 +85,7 @@ public class register_pic2 extends AppCompatActivity {
                 uploadFile();
 
 
-                Intent welcome = new Intent(register_pic2.this, Home.class);
+                Intent welcome = new Intent(RegisterProfilePicActivity.this, Home.class);
                 startActivity(welcome);
 
 
@@ -155,22 +154,25 @@ public class register_pic2 extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Upload Successful",Toast.LENGTH_SHORT).show();
                     String uid = databaseUser.push().getKey();
 
-                    Upload uploadImage = new Upload(uid,taskSnapshot.getUploadSessionUri().toString());
+                    Upload uploadImage = new Upload(uid,taskSnapshot.getDownloadUrl().toString());
 
 
                     Upload profilePic = new Upload(uid, uploadImage.toString());
                     Map<String, Object> userImage = new HashMap<>();
-                    userImage.put("ImageUid", uploadImage.getUid());
-                    userImage.put("userAvatarUrl", uploadImage.getImageUrl());
+                    Map<String, Object> profile = new HashMap<>();
+                    //userImage.put("ImageUid", uploadImage.getUid());
+                    userImage.put("profile_avatar", uploadImage.getImageUrl());
+                    profile.put("Profile", userImage);
+
 
 
                     firebaseFireStore.collection("UserInformation").document("Users")
                             .collection("User").document(currentUser)
-                            .update(userImage)
+                            .update(profile)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Toast.makeText(register_pic2.this, "You profile pic has been uploaded."
+                                    Toast.makeText(RegisterProfilePicActivity.this, "You profile pic has been uploaded."
                                             , Toast.LENGTH_LONG)
                                             .show();
                                 }
@@ -178,7 +180,7 @@ public class register_pic2 extends AppCompatActivity {
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(register_pic2.this, "Your profile pic failed to upload!"
+                                    Toast.makeText(RegisterProfilePicActivity.this, "Your profile pic failed to upload!"
                                             , Toast.LENGTH_LONG)
                                             .show();
                                 }

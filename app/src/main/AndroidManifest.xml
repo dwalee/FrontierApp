@@ -30,7 +30,7 @@
         <!-- Firebase InstanceId Service -->
 
         <activity android:name=".Register" />
-        <activity android:name=".SkillsInformation" />
+        <activity android:name=".SkillsInformationActivity" />
         <activity android:name=".ResetPassword" />
         <activity android:name=".Home" />
 
@@ -40,8 +40,25 @@
 
         <activity android:name=".ImageViewer" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".register_pic2" />
-        <activity android:name=".ProfileEditActivity"></activity>
+        <activity android:name=".RegisterProfilePicActivity" />
+        <activity android:name=".ProfileEditActivity" />
+        <activity android:name=".CurrentPartnersActivity" />
+
+        <service
+            android:name=".UserProfileFirestoreBackgroundService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".CurrentPartnerProfileActivity" />
+
+        <service
+            android:name=".UserPartnersFirestoreBackgroundService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".UserFavFirestoreBackgroundService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

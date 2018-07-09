@@ -9,5 +9,7 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorRaisedButton">@color/colorPrimary</color>
     <color name="colorRaisedButtonText">#FFFFFF</color>
+    <color name="colorLoadRefresh">#FF9800</color>
+    <color name="colorFinishRefresh">#4CAF50</color>
 
 </resources>

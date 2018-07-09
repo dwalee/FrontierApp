@@ -1,7 +1,6 @@
 package com.frontierapp.frontierapp;
 
 import android.content.Intent;
-import android.os.health.UidHealthStats;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,18 +17,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class SkillsInformation extends AppCompatActivity {
+public class SkillsInformationActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -102,14 +92,12 @@ public class SkillsInformation extends AppCompatActivity {
         currentUser = userID.toString().trim();
         databaseUser = FirebaseDatabase.getInstance().getReference("UserInformation");
 
-
-
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //addDbSkills();
                 addSkills();
-                Intent pic = new Intent(SkillsInformation.this, register_pic2.class);
+                Intent pic = new Intent(SkillsInformationActivity.this, RegisterProfilePicActivity.class);
                 startActivity(pic);
             }
         });

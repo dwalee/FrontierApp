@@ -103,7 +103,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.profile_menu,menu);
         return true;
     }
@@ -118,15 +118,29 @@ public class ProfileActivity extends AppCompatActivity {
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(homeIntent);
                 finish();
-                return true;
+                break;
             case R.id.editMenu:
                 Intent profileEditIntent = new Intent(this, ProfileEditActivity.class);
                 updateSQLiteFromFirestore();
                 startActivity(profileEditIntent);
                 finish();
+                break;
+            case R.id.partnersMenu:
+                Intent currentPartnerIntent = new Intent(this, CurrentPartnersActivity.class);
+                startActivity(currentPartnerIntent);
+                finish();
+                break;
+            case R.id.logout:
+                FirebaseAuth.getInstance().signOut();
+                Intent signout = new Intent(this, MainActivity.class);
+                startActivity(signout);
+                finish();
+                break;
             default:
-                return super.onOptionsItemSelected(item);
-        }
 
+        }
+        return super.onOptionsItemSelected(item);
     }
+
+
 }

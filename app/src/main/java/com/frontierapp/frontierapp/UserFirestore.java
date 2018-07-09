@@ -24,18 +24,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class UserFirestore {
 
-    private User user;
-    private Profile profile;
-    private Context context;
-    private UserDB userDB;
+    protected User user;
+    protected Profile profile;
+    protected Context context;
+    protected UserDB userDB;
 
     public static final int ADD = 0;
     public static final int UPDATE = 1;
     public static final int DELETE = 2;
 
-    private static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private static CollectionReference userInfo = firebaseFirestore.collection("UserInformation");
-    private static DocumentReference userData;
+    protected static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    protected static CollectionReference userInfo = firebaseFirestore.collection("UserInformation");
+    protected static DocumentReference userData;
 
     public UserFirestore() {
     }
@@ -129,22 +129,21 @@ public class UserFirestore {
                                     "Profile.profile_background_image_url");
                             title = document.getString("Profile.title");
 
-
                             Log.i("City", "onComplete: " + city);
-                        user.setUid(userId);
-                        user.setFirst_name(first_name);
-                        user.setLast_name(last_name);
-                        user.setEmail(email);
+                            user.setUid(userId);
+                            user.setFirst_name(first_name);
+                            user.setLast_name(last_name);
+                            user.setEmail(email);
 
-                        profile.setUserTitle(title);
-                        profile.setAboutMe(aboutMe);
-                        profile.setGoal(goal);
-                        profile.setCity(city);
-                        profile.setState(state);
-                        profile.setProfileAvatarUrl(profileUrl);
-                        profile.setProfileBackgroundUrl(profileBackgroundUrl);
+                            profile.setUserTitle(title);
+                            profile.setAboutMe(aboutMe);
+                            profile.setGoal(goal);
+                            profile.setCity(city);
+                            profile.setState(state);
+                            profile.setProfileAvatarUrl(profileUrl);
+                            profile.setProfileBackgroundUrl(profileBackgroundUrl);
 
-                        userDB.addUserProfileToSQLite(user, profile);
+                            userDB.addUserProfileToSQLite(user, profile);
                     }}
                 });
         return true;

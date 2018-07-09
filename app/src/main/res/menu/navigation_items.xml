@@ -8,6 +8,11 @@
             android:id="@+id/profile"
             android:icon="@drawable/my_profile"/>
 
+        <item android:id="@+id/connections"
+            android:title="My Connections"
+            android:icon="@drawable/account_multiple_black"/>
+
+
         <item
             android:title="Messages"
             android:id="@+id/outbox"
@@ -20,7 +25,7 @@
         <item
             android:title="@string/Connect"
             android:id="@+id/Connect"
-            android:icon="@drawable/partners"/>
+            android:icon="@drawable/account_network"/>
 
         <item
             android:title="@string/circles"

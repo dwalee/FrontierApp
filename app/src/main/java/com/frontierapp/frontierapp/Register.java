@@ -20,8 +20,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.ParseException;
@@ -38,10 +36,7 @@ public class Register extends AppCompatActivity {
     private CheckBox manGenderCheckBox, womanGenderCheckBox;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private String userID;
     private ProgressDialog progressDialog;
-    private DatabaseReference databaseUser;
-    private FirebaseUser user;
     private FirebaseFirestore firebaseFireStore = FirebaseFirestore.getInstance();
     private User newUser;
 
@@ -59,12 +54,6 @@ public class Register extends AppCompatActivity {
         manGenderCheckBox = (CheckBox) findViewById(R.id.manGenderCheckBox);
         womanGenderCheckBox = (CheckBox) findViewById(R.id.womanGenderCheckBox);
         nextButton = (Button) findViewById(R.id.nextButton);
-
-
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-        userID = user.getUid();
-        databaseUser = FirebaseDatabase.getInstance().getReference("UserInformation");
 
         progressDialog = new ProgressDialog(this);
 
@@ -86,18 +75,20 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View View) {
                 registerUser();
-                addUser();
+                addUserToFirestore();
 
                 progressDialog.setMessage("Registering Please Wait...");
                 progressDialog.show();
 
             }
         });
+
+        mAuth = FirebaseAuth.getInstance();
     }
 
     //Unique key must be added preferably from Auth key created
     //Add User to firestore
-    public void addUser(String uid){
+    public void addUserToFirestore(String uid){
         String emailText = userEmailEditText.getText().toString().trim();
         String passwordText = userPasswordEditText.getText().toString().trim();
         String conPasswordText = conPasswordEditText.getText().toString().trim();
@@ -157,7 +148,7 @@ public class Register extends AppCompatActivity {
     }
 
     // Provides user data such as name email, and birthday
-   private void addUser() {
+   private void addUserToFirestore() {
 
         String emailText = userEmailEditText.getText().toString();
         String passwordText = userPasswordEditText.getText().toString();
@@ -187,11 +178,8 @@ public class Register extends AppCompatActivity {
 
         if (!TextUtils.isEmpty(emailText) && !TextUtils.isEmpty(passwordText) && !TextUtils.isEmpty(conPasswordText) &&
                 !TextUtils.isEmpty(fullName) && !TextUtils.isEmpty(birthDateText) && (womanGenderCheckBox.isChecked()|| manGenderCheckBox.isChecked())){
-            String id = databaseUser.push().getKey();
 
             UserInformation userInformation = new UserInformation(birthDateText ,passwordText, emailText, fullName,gender);
-
-            databaseUser.child("user").child(userID).setValue(userInformation);
 
             Toast.makeText(Register.this, "Adding User", Toast.LENGTH_LONG).show();
 
@@ -227,7 +215,7 @@ public class Register extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
                         String newUserID = task.getResult().getUser().getUid();
-                        addUser(newUserID);
+                        addUserToFirestore(newUserID);
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
@@ -235,7 +223,7 @@ public class Register extends AppCompatActivity {
                             Toast.makeText(Register.this, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         }else{
-                            Intent welcome = new Intent(Register.this, SkillsInformation.class);
+                            Intent welcome = new Intent(Register.this, SkillsInformationActivity.class);
                             startActivity(welcome);
                         }
                         progressDialog.dismiss();

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -59,13 +60,17 @@ public class Partners extends Fragment{
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_partners, container, false);
 
+        return instantiateViews(view);
+    }
+
+    public View instantiateViews(View view){
         partnerRecyclerView = (RecyclerView) view.findViewById(R.id.partnerRecyclerView);
         userInformationList = new ArrayList<>();
 
         partnerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         partnerRecyclerView.setHasFixedSize(true);
         partnerItemRecyclerAdapter = new PartnerItemRecyclerAdapter(getContext(),
-                                                                        partnershipViewDataList);
+                partnershipViewDataList);
         partnerRecyclerView.setAdapter(partnerItemRecyclerAdapter);
 
         partnerSwipeRefreshLayout = (SwipeRefreshLayout)  view.findViewById(
@@ -101,7 +106,7 @@ public class Partners extends Fragment{
                         User user = new User();
                         String first_name = document.getString("User.first_name");
                         String last_name = document.getString("User.last_name");
-                        String profileUrl = document.getString("userAvatarUrl");
+                        String profileUrl = document.getString("Profile.profile_avatar");
 
                         user.setFirst_name(first_name);
                         user.setLast_name(last_name);
@@ -123,44 +128,6 @@ public class Partners extends Fragment{
                     }
 
                 }
-            }
-        });
-    }
-    public void getUserDataFromDatabase(){
-        databaseReferenceUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                userInformationList.clear();
-                for(DataSnapshot userSnapShot: dataSnapshot.getChildren()){
-                    UserInformation userInformation = userSnapShot.
-                            getValue(UserInformation.class);
-                    Log.i("onDataChange: ",userInformation.getName());
-                    userInformationList.add(userInformation);
-                    //Log.i("onDataChange: ",userInformationList.get(i).getName());
-                }
-
-
-                Log.i("onActivityCreated: ", Integer.toString(userInformationList.size()));
-                for(int i=0;i<userInformationList.size();i++){
-                    PartnershipViewData partnershipViewData = new PartnershipViewData();
-                    Log.i("onActivityCreated: ", userInformationList.get(i).getName());
-                    partnershipViewData.setPartnerName(userInformationList.get(i).getName());
-
-                    partnershipViewDataList.add(partnershipViewData);
-                    Collections.sort(partnershipViewDataList, new Comparator<PartnershipViewData>() {
-                        @Override
-                        public int compare(PartnershipViewData o1, PartnershipViewData o2) {
-                            return o1.getPartnerName().compareToIgnoreCase(o2.getPartnerName());
-                        }
-                    });
-                }
-                Log.i(TAG, "onActivityCreated: After");
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }

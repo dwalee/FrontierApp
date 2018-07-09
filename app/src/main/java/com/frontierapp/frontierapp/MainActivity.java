@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(MainActivity.this, "Sign successful", Toast.LENGTH_SHORT).show();
                                     Intent welcome = new Intent(MainActivity.this, Home.class);
                                     uid = mAuth.getCurrentUser().getUid();
-                                    SharedPreferences sharedPreferences;
                                     Log.i("onComplete: ", "uid: " + uid);
                                     startActivity(welcome);
                                     progressDialog.dismiss();
