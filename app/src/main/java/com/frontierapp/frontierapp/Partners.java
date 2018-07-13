@@ -40,9 +40,7 @@ import static com.google.android.gms.plus.PlusOneDummyView.TAG;
 public class Partners extends Fragment{
     View view;
     FloatingActionButton post;
-    AlertDialog.Builder builder;
     RecyclerView partnerRecyclerView;
-    DatabaseReference databaseReferenceUser;
     List<UserInformation> userInformationList;
     SwipeRefreshLayout partnerSwipeRefreshLayout;
     private final List<User> userList = new ArrayList<>();
@@ -83,8 +81,6 @@ public class Partners extends Fragment{
             }
         });
 
-        databaseReferenceUser = FirebaseDatabase.getInstance().
-                getReference("UserInformation/user");
         getPartnerList();
         //getUserDataFromDatabase();
         return view;

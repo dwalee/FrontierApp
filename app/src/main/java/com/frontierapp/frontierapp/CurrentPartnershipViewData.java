@@ -1,17 +1,26 @@
 package com.frontierapp.frontierapp;
 
-import android.graphics.Bitmap;
-
 public class CurrentPartnershipViewData {
     String currentPartnerName;
-    String currentPartnerAvatarUrl;
+    String currentPartnerProfilePicUrl;
+    String currentPartnerId;
 
-    public CurrentPartnershipViewData(String currentPartnerName, String currentPartnerAvatarUrl) {
+    public CurrentPartnershipViewData(String currentPartnerName, String currentPartnerProfilePicUrl,
+                                      String currentPartnerId) {
         this.currentPartnerName = currentPartnerName;
-        this.currentPartnerAvatarUrl = currentPartnerAvatarUrl;
+        this.currentPartnerProfilePicUrl = currentPartnerProfilePicUrl;
+        this.currentPartnerId = currentPartnerId;
     }
 
     public CurrentPartnershipViewData() {
+    }
+
+    public String getCurrentPartnerId() {
+        return currentPartnerId;
+    }
+
+    public void setCurrentPartnerId(String currentPartnerId) {
+        this.currentPartnerId = currentPartnerId;
     }
 
     public String getCurrentPartnerName() {
@@ -22,12 +31,12 @@ public class CurrentPartnershipViewData {
         this.currentPartnerName = currentPartnerName;
     }
 
-    public String getCurrentPartnerAvatarUrl() {
-        return currentPartnerAvatarUrl;
+    public String getCurrentPartnerProfilePicUrl() {
+        return currentPartnerProfilePicUrl;
     }
 
-    public void setCurrentPartnerAvatarUrl(String currentPartnerAvatarUrl) {
-        this.currentPartnerAvatarUrl = currentPartnerAvatarUrl;
+    public void setCurrentPartnerProfilePicUrl(String currentPartnerProfilePicUrl) {
+        this.currentPartnerProfilePicUrl = currentPartnerProfilePicUrl;
     }
 
 }

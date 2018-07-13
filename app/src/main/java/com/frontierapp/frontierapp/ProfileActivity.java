@@ -126,9 +126,10 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.partnersMenu:
-                Intent currentPartnerIntent = new Intent(this, CurrentPartnersActivity.class);
-                startActivity(currentPartnerIntent);
-                finish();
+                Intent connectionsIntent = new Intent(this,
+                        ConnectionsActivity.class);
+                startActivity(connectionsIntent);
+                //finish();
                 break;
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();

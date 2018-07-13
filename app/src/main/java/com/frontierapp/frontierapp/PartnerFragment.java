@@ -1,24 +1,18 @@
-/**
- * <h1>Current Partner Activity</h1>
- * The CurrentPartnerActivity class loads a list of the user's current partners
- *
- * @author Yoshua Isreal
- * @version 1.0
- * @since 2018-07-01
- */
-
 package com.frontierapp.frontierapp;
+
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,53 +20,61 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurrentPartnersActivity extends AppCompatActivity {
-    private static final String TAG = "CurrentPartnerActivity";
-    RecyclerView currentPartnerRecyclerView;
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class PartnerFragment extends Fragment {
+    private static final String TAG = "PartnerFragment";
+    RecyclerView partnerRecyclerView;
     List<UserInformation> userInformationList;
-    SwipeRefreshLayout currentPartnerSwipeRefreshLayout;
-    Toolbar currentPartnersToolbar;
+    SwipeRefreshLayout partnerSwipeRefreshLayout;
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     CurrentPartnersDB currentPartnersDB;
-    final Context context = this;
+    Context context;
 
     private final List<User> userList = new ArrayList<>();
     private final List<CurrentPartnershipViewData> currentPartnershipViewDataList = new ArrayList<>();
     private CurrentPartnerItemRecyclerAdapter currentPartnerItemRecyclerAdapter;
+    View view;
+
+    public PartnerFragment() {
+        // Required empty public constructor
+    }
+
+    public PartnerFragment(Context context) {
+        this.context = context;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_current_partners);
-        startBackgroundService();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_partner, container, false);
+        //startBackgroundService();
 
-        instantiateViews();
+        instantiateViews(view);
+        return view;
     }
 
     /**
      * This method is used to instantiate all views
      * in the activity_current_partners xml to variables in this class
      */
-    public void instantiateViews(){
-        currentPartnersToolbar = (Toolbar) findViewById(R.id.currentPartnersToolbar);
-        currentPartnersToolbar.setTitle("Partners");
+    public void instantiateViews(View view){
 
-        setSupportActionBar(currentPartnersToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        currentPartnerRecyclerView = (RecyclerView) findViewById(R.id.currentPartnerRecyclerView);
+        partnerRecyclerView = (RecyclerView) view.findViewById(R.id.partnerRecyclerView);
         userInformationList = new ArrayList<>();
 
-        currentPartnerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        currentPartnerRecyclerView.setHasFixedSize(true);
-        currentPartnerItemRecyclerAdapter = new CurrentPartnerItemRecyclerAdapter(this,
+        partnerRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        partnerRecyclerView.setHasFixedSize(true);
+        currentPartnerItemRecyclerAdapter = new CurrentPartnerItemRecyclerAdapter(context,
                 currentPartnershipViewDataList);
-        currentPartnerRecyclerView.setAdapter(currentPartnerItemRecyclerAdapter);
+        partnerRecyclerView.setAdapter(currentPartnerItemRecyclerAdapter);
 
-        currentPartnerSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(
-                R.id.currentPartnerSwipeRefreshLayout);
-        currentPartnerSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        partnerSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(
+                R.id.partnerRefreshLayout);
+        partnerSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshCurrentPartnerList();
@@ -122,7 +124,7 @@ public class CurrentPartnersActivity extends AppCompatActivity {
                 }
 
             }
-        }, 1000);
+        }, 5000);
 
     }
 
@@ -131,7 +133,7 @@ public class CurrentPartnersActivity extends AppCompatActivity {
      * in sqlite and load each item in the recyclerview when swipeRefreshLayout is used
      */
     public void refreshCurrentPartnerList(){
-        currentPartnerSwipeRefreshLayout.setColorSchemeResources(R.color.colorLoadRefresh);
+        partnerSwipeRefreshLayout.setColorSchemeResources(R.color.colorLoadRefresh);
         //Collect data all the User IDs(Doc ID) from the User collection
         userList.clear();
         currentPartnershipViewDataList.clear();
@@ -166,46 +168,20 @@ public class CurrentPartnersActivity extends AppCompatActivity {
 
                     currentPartnershipViewDataList.add(currentPartnershipViewData);
 
-                    currentPartnerSwipeRefreshLayout.setColorSchemeResources(R.color.colorFinishRefresh);
+                    partnerSwipeRefreshLayout.setColorSchemeResources(R.color.colorFinishRefresh);
                     currentPartnerItemRecyclerAdapter.notifyDataSetChanged();
                 }
 
-                currentPartnerSwipeRefreshLayout.setRefreshing(false);
+                partnerSwipeRefreshLayout.setRefreshing(false);
             }
-        }, 500);
+        }, 3000);
 
     }
 
-    /**
-     * This method is used to add controls to the menus in tool bar
-     * @param item This parameter captures the value of the menu item selected
-     * @return
-     */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                //go back to the profile activity
-
-                Intent profileIntent = new Intent(this, ProfileActivity.class);
-                profileIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                //startActivity(profileIntent);
-                finish();
-                break;
-            default:
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * This method calls the stopBackgroundService() method
-     * then calls super.OnDestroy() method
-     */
-    @Override
-    protected void onDestroy() {
-        stopBackgroundService();
-        super.onDestroy();
+    public void onDestroyView() {
+        //stopBackgroundService();
+        super.onDestroyView();
     }
 
     /**
@@ -213,13 +189,13 @@ public class CurrentPartnersActivity extends AppCompatActivity {
      * the UserFavFirestoreBackgrounService background services
      */
     public void startBackgroundService(){
-        Intent intent = new Intent(this, UserPartnersFirestoreBackgroundService.class);
+        Intent intent = new Intent(context, UserPartnersFirestoreBackgroundService.class);
         intent.putExtra("UserId", firebaseuser.getUid());
-        startService(intent);
+        context.startService(intent);
 
-        Intent favIntent = new Intent(this, UserFavFirestoreBackgroundService.class);
+        Intent favIntent = new Intent(context, UserFavFirestoreBackgroundService.class);
         favIntent.putExtra("UserId", firebaseuser.getUid());
-        startService(favIntent);
+        context.startService(favIntent);
     }
 
     /**
@@ -227,11 +203,11 @@ public class CurrentPartnersActivity extends AppCompatActivity {
      * the UserFavFirestoreBackgrounService background services
      */
     public void stopBackgroundService(){
-        Intent intent = new Intent(this, UserPartnersFirestoreBackgroundService.class);
-        stopService(intent);
+        Intent intent = new Intent(context, UserPartnersFirestoreBackgroundService.class);
+        context.stopService(intent);
 
-        Intent favIntent = new Intent(this, UserFavFirestoreBackgroundService.class);
-        stopService(favIntent);
+        Intent favIntent = new Intent(context, UserFavFirestoreBackgroundService.class);
+        context.stopService(favIntent);
     }
 
 

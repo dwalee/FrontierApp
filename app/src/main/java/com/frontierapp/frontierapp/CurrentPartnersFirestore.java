@@ -315,18 +315,24 @@ public class CurrentPartnersFirestore extends UserDB{
     }
 
     public Boolean getFollowersIDsFromFireStore(final String currentUserId){
+        Log.d(TAG, "getFollowersIDsFromFireStore() called with: currentUserId = " +
+                "[" + currentUserId + "]");
+
         userData = firebaseFirestore.collection("UserInformation")
                 .document("Users").collection("User").document(currentUserId);
 
         userData.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                Log.d(TAG, "onEvent() called with: documentSnapshot = " +
+                        "[" + documentSnapshot + "], e = [" + e + "]");
                 if(e != null){
                     Log.i("getFollowersIDsFromFS", "onEvent: " + e);
                 }
 
                 if(documentSnapshot != null && documentSnapshot.exists()){
-                    Log.i("getFollowersIDsFromFS", "onEvent: " + documentSnapshot.get("ListOfFollowers"));
+                    Log.i("getFollowersIDsFromFS", "onEvent: " +
+                            documentSnapshot.get("ListOfFollowers"));
 
                     //Get follower IDs from Firestore
                     try{
@@ -343,7 +349,9 @@ public class CurrentPartnersFirestore extends UserDB{
                             currentPartnersDB.addFollowerIdsToSQLite(followerIDList);
                         }
                     }catch(ClassCastException c){
-                        Log.i("getFollowersIDsFromFS", "onEvent: " + c.toString());
+                        Log.w(TAG, "onEvent: ", c);
+                    }catch(Exception error){
+                        Log.w(TAG, "onEvent: ",error );
                     }
 
                 }

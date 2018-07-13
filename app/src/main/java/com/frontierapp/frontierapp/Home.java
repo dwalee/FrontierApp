@@ -199,7 +199,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 Intent partnerScreen = new Intent(this, Partners.class);
                 startActivity(partnerScreen);
                 break;
-
+            case R.id.connections:
+                Intent connectsIntent = new Intent(this, ConnectionsActivity.class);
+                startActivity(connectsIntent);
+                break;
             case R.id.notifications:
 
                 break;

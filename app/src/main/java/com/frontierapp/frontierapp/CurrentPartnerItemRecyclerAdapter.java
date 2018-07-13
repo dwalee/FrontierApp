@@ -1,9 +1,9 @@
 package com.frontierapp.frontierapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +34,8 @@ public class CurrentPartnerItemRecyclerAdapter extends RecyclerView.Adapter<Curr
 
     @Override
     public void onBindViewHolder(CurrentPartnerViewHolder holder, final int position) {
-        CurrentPartnershipViewData currentPartnershipViewData = currentPartnershipViewDataList.get(position);
-        Glide.with(context).load(currentPartnershipViewData.getCurrentPartnerAvatarUrl())
+        final CurrentPartnershipViewData currentPartnershipViewData = currentPartnershipViewDataList.get(position);
+        Glide.with(context).load(currentPartnershipViewData.getCurrentPartnerProfilePicUrl())
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.currenPartnerAvatarImageView);
         //holder.partnerAvatarImageView.setImageBitmap(partnershipViewData.getPartnerAvatarBitmap());
@@ -45,7 +45,11 @@ public class CurrentPartnerItemRecyclerAdapter extends RecyclerView.Adapter<Curr
             @Override
             public void onClick(View v) {
                 Intent partnerProfileIntent = new Intent(context, CurrentPartnerProfileActivity.class);
-                partnerProfileIntent.putExtra("CurrentPartnerIdIndex", position);
+                //partnerProfileIntent.putExtra("CurrentPartnerIdIndex", position);
+                partnerProfileIntent.putExtra("CurrentPartnerId",
+                        currentPartnershipViewData.getCurrentPartnerId());
+                partnerProfileIntent.putExtra("ClassName", "Partner");
+                Log.i("CurrentPartnerRecycler", "onClick: " + currentPartnershipViewData.getCurrentPartnerId());
                 context.startActivity(partnerProfileIntent);
                 //((CurrentPartnersActivity)context).finish();
             }
