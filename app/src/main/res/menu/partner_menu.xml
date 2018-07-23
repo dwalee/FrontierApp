@@ -10,6 +10,14 @@
 
     <item
         android:title=""
+        android:id="@+id/denyMenu"
+        android:icon="@drawable/account_remove_red"
+        app:showAsAction="always"
+        android:visible="false"
+        />
+
+    <item
+        android:title=""
         android:id="@+id/favoriteMenu"
         android:icon="@drawable/star"
         app:showAsAction="always"/>

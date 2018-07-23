@@ -394,7 +394,8 @@ public class CurrentPartnersDB extends UserDB{
      * @return Boolean This returns a value of true if completed successfully
      * otherwise if any exceptions occur this will return false
      */
-    public Boolean addFavoriteToSQLite(User user, Profile profile){
+    public Boolean addFavoriteToSQLite(User user, Profile profile)
+    {
         Log.d(TAG, "addFavoriteToSQLite() called with: user " +
                 "= [" + user + "], profile = [" + profile + "]");
         try{
@@ -515,6 +516,52 @@ public class CurrentPartnersDB extends UserDB{
             Log.d(TAG, "addFollowerToSQLite() returned: " + false);
             return false;
         }
+    }
+
+    public Boolean addCurrentPartnersIdToSQLite(String partnerId){
+        Log.d(TAG, "addCurrentPartnersIdToSQLite() called with: partnerId " +
+                "= [" + partnerId + "]");
+        try{
+            SQLiteDatabase userDatabase = SQLiteDatabase.openDatabase(
+                    context.getDatabasePath("User_Data").toString(),
+                    null, SQLiteDatabase.OPEN_READWRITE
+            );
+
+            String createUserProfileTableSQL = "CREATE TABLE IF NOT EXISTS current_partners_ids ";
+            String userProfileDataFormat = "(partner_index int, partner_id VARCHAR)";
+
+            String createQuery = createUserProfileTableSQL + userProfileDataFormat;
+
+            userDatabase.execSQL(createQuery);
+
+            String id = partnerId;
+
+            ContentValues insertValues = new ContentValues();
+            insertValues.put("partner_id", id);
+
+            Log.i(TAG, "addCurrentPartnersIdToSQLite: insert values " + insertValues);
+            userDatabase.insert("current_partners_ids", null, insertValues);
+
+            Cursor c = userDatabase.rawQuery("SELECT * FROM current_partners_ids", null);
+
+            c.moveToFirst();
+            /*while(c != null){
+                Log.i("PartnerID2/ ", c.getString(0));
+                c.moveToNext();
+            }*/
+
+            c.close();
+            userDatabase.close();
+
+            Log.d(TAG, "addCurrentPartnersIdToSQLite() returned: " + true);
+            return true;
+        }
+        catch(Exception e){
+            Log.w(TAG, "addCurrentPartnersIdToSQLite: ",e );
+            Log.d(TAG, "addCurrentPartnersIdToSQLite() returned: " + false);
+            return false;
+        }
+
     }
 
     /**
@@ -1349,7 +1396,7 @@ public class CurrentPartnersDB extends UserDB{
         catch(Exception e){
             Log.w(TAG, "getCurrentPartnersProfileFromSQLite: ",e );
             Log.d(TAG, "getCurrentPartnersProfileFromSQLite() returned: " + profiles);
-            return profiles;
+            return null;
         }
     }
 
@@ -1367,7 +1414,8 @@ public class CurrentPartnersDB extends UserDB{
                     null, SQLiteDatabase.OPEN_READONLY
             );
 
-            Cursor cursor = userDatabase.rawQuery("SELECT * FROM favorite", null);
+            Cursor cursor = userDatabase.rawQuery("SELECT * FROM favorite" +
+                    " ORDER BY first_name, last_name", null);
             int favoriteIdIndex = cursor.getColumnIndex("favorite_id");
             int firstNameIndex = cursor.getColumnIndex("first_name");
             int lastNameIndex = cursor.getColumnIndex("last_name");
@@ -1421,7 +1469,9 @@ public class CurrentPartnersDB extends UserDB{
                     null, SQLiteDatabase.OPEN_READONLY
             );
 
-            Cursor cursor = userDatabase.rawQuery("SELECT * FROM favorite", null);
+            Cursor cursor = userDatabase.rawQuery("SELECT * FROM favorite " +
+                            "ORDER BY first_name, last_name",
+                    null);
             int profileUrlIndex = cursor.getColumnIndex("profile_url");
 
             profiles = new Profiles();
@@ -1623,6 +1673,40 @@ public class CurrentPartnersDB extends UserDB{
     }
 
     /**
+     * This method finds whether a favorite id is in the favorite_ids table
+     * @param id This parameter requires a String value to search
+     *           whether the id exist in the table
+     * @return Boolean This returns true if the id is found and false if it is not
+     */
+    public Boolean findPartnerById(String id){
+        Log.d(TAG, "findPartnerById() called with: id = [" + id + "]");
+        try{
+            SQLiteDatabase userDatabase = SQLiteDatabase.openDatabase(
+                    context.getDatabasePath("User_Data").toString(),
+                    null, SQLiteDatabase.OPEN_READONLY
+            );
+            String arg = "'" + id + "'";
+            String sql = "SELECT * FROM current_partners " +
+                    "Where partner_id=" + arg;
+
+            Cursor cursor = userDatabase.rawQuery(sql, null);
+
+            Boolean exists = cursor.moveToFirst();
+
+            cursor.close();
+            userDatabase.close();
+
+            Log.d(TAG, "findFavoriteById() returned: " + exists);
+            return exists;
+        }
+        catch(Exception e){
+            Log.w(TAG, "findFavoriteById: ",e );
+            Log.d(TAG, "findFavoriteById() returned: " + false);
+            return false;
+        }
+    }
+
+    /**
      * This method removes a record from the favorite_ids table
      * @param favId This parameter requires a String value to search
      *              and remove an id from the table
@@ -1662,8 +1746,93 @@ public class CurrentPartnersDB extends UserDB{
      * otherwise it returns false if the user isn't found or an exception occurs
      */
     public Boolean removeFavoriteFromSQLite(String favId){
+        Log.d(TAG, "removeFavoriteFromSQLite() called with: favId = [" + favId + "]");
+        try{
+            SQLiteDatabase userDatabase = SQLiteDatabase.openDatabase(
+                    context.getDatabasePath("User_Data").toString(),
+                    null, SQLiteDatabase.OPEN_READWRITE
+            );
+            String arg = "'" + favId + "'";
+            String sql = "DELETE FROM favorite " +
+                    "Where favorite_id=" + arg;
 
+            //userDatabase.rawQuery(sql, null);
+            userDatabase.delete("favorite", "favorite_id=" + arg, null);
 
-        return true;
+            String select = "SELECT * FROM favorite";
+            Cursor cursor = userDatabase.rawQuery(select, null);
+
+            cursor.moveToFirst();
+            if(cursor != null){
+                do{
+                    Log.i(TAG, "removeFavoriteFromSQLite: id = " +
+                    cursor.getString(0));
+                    Log.i(TAG, "removeFavoriteFromSQLite: first_name = " +
+                            cursor.getString(1));
+                    Log.i(TAG, "removeFavoriteFromSQLite: last_name = " +
+                    cursor.getString(2));
+                }while(cursor.moveToNext());
+            }
+
+            cursor.close();
+            userDatabase.close();
+
+            Log.d(TAG, "removeFavoriteFromSQLite() returned: " + true);
+            return true;
+        }
+        catch(Exception e){
+            Log.w(TAG, "removeFavoriteFromSQLite: ",e);
+            Log.d(TAG, "removeFavoriteFromSQLite() returned: " + false);
+            return false;
+        }
+    }
+
+    /**
+     * This method removes follower user and profile data from the follower table
+     * @param followerId This parameter requires a String value to search
+     *                   and remove the follower user and profile data from follower table
+     * @return Boolean This returns true if the user is removed successfully
+     * otherwise it returns false if the user isn't found or an exception occurs
+     */
+    public Boolean removeFollowerFromSQLite(String followerId){
+        Log.d(TAG, "removeFollowerFromSQLite() called with: followerId = [" + followerId + "]");
+        try{
+            SQLiteDatabase userDatabase = SQLiteDatabase.openDatabase(
+                    context.getDatabasePath("User_Data").toString(),
+                    null, SQLiteDatabase.OPEN_READWRITE
+            );
+            String arg = "'" + followerId + "'";
+            String sql = "DELETE FROM follower " +
+                    "Where follower_id=" + arg;
+
+            //userDatabase.rawQuery(sql, null);
+            userDatabase.delete("follower", "follower_id=" + arg, null);
+
+            String select = "SELECT * FROM follower";
+            Cursor cursor = userDatabase.rawQuery(select, null);
+
+            cursor.moveToFirst();
+            if(cursor != null){
+                do{
+                    Log.i(TAG, "removeFollowerFromSQLite: id = " +
+                            cursor.getString(0));
+                    Log.i(TAG, "removeFollowerFromSQLite: first_name = " +
+                            cursor.getString(1));
+                    Log.i(TAG, "removeFollowerFromSQLite: last_name = " +
+                            cursor.getString(2));
+                }while(cursor.moveToNext());
+            }
+
+            cursor.close();
+            userDatabase.close();
+
+            Log.d(TAG, "removeFollowerFromSQLite() returned: " + true);
+            return true;
+        }
+        catch(Exception e){
+            Log.w(TAG, "removeFollowerFromSQLite: ",e);
+            Log.d(TAG, "removeFollowerFromSQLite() returned: " + false);
+            return false;
+        }
     }
 }

@@ -11,10 +11,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
@@ -28,10 +33,12 @@ public class CurrentPartnersFirestore extends UserDB{
     Profiles profiles;
     CurrentPartnersDB currentPartnersDB;
     List<String> partnerIDList;
-    List<String> favIDList;
     List<String> followerIDList;
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    Boolean collectedFavorite = false;
+    Boolean collectedPartner = false;
+    Boolean collectedFollower = false;
 
     public CurrentPartnersFirestore(Context context, User user, Profile profile) {
         super(context, user, profile);
@@ -49,29 +56,136 @@ public class CurrentPartnersFirestore extends UserDB{
         super(context);
     }
 
-    public Boolean addFavoriteIdToFirestore(final String currentUserID, final List<String> favIdList,
-                                            final String newFavId){
+    public Boolean requestNewPartnerToFirestore(final String currentUserID, final String newPartnerId,
+                                                final PartnerStatus status){
+        Log.d(TAG, "addNewPartnerToFirestore() called with: currentUserID = ["
+                + currentUserID + "], newPartnerId = [" + newPartnerId + "]");
         userData = firebaseFirestore.collection("UserInformation")
                 .document("Users").collection("User").document(currentUserID);
 
-        favIdList.add(newFavId);
+        final Map<String, Object> partnered = new HashMap<>();
+        partnered.put("partner", status.getStatus());
 
-        Map<String, List<String>> favList = new HashMap<>();
-        favList.put("ListOfFavs", favIdList);
-        userData
-                .update("ListOfFavs", favIdList)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.i("CurrentPartners", "onSuccess: " + favIdList);
-                        addFollowerIdToFirestore(currentUserID, newFavId);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
+        final DocumentReference userConnections = userData.collection("Connections").document(newPartnerId);
+        Log.i(TAG, "addNewPartnerToFirestore: userConnections = "
+                + userConnections.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d(TAG, "onSuccess() called with: documentSnapshot = ["
+                        + documentSnapshot.exists() + "]");
+                if(documentSnapshot.exists()){
+                    userConnections
+                            .set(partnered, SetOptions.merge())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    sendRequestToNewPartnerToFirestore(currentUserID, newPartnerId, status);
+                                    Log.i(TAG, "onSuccess: true");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "onFailure: ", e);
+                                }
+                            });
+                }else{
+                    partnered.put("favorite", false);
+                    partnered.put("follower", false);
+                    partnered.put("timestamp", FieldValue.serverTimestamp());
+                    userConnections
+                            .set(partnered)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    sendRequestToNewPartnerToFirestore(currentUserID, newPartnerId, status);
+                                    Log.i(TAG, "onSuccess: true");
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "onFailure: ", e);
+                        }
+                    });
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.i("CurrentPartners", "onFailure: " + favIdList);
+                Log.w(TAG, "onFailure: ", e);
             }
-        });
+        }));
+
+        return true;
+    }
+
+    public Boolean sendRequestToNewPartnerToFirestore(final String currentUserID, final String newPartnerId,
+                                                      final PartnerStatus status){
+        Log.d(TAG, "addNewPartnerToFirestore() called with: currentUserID = ["
+                + currentUserID + "], newPartnerId = [" + newPartnerId + "]");
+        userData = firebaseFirestore.collection("UserInformation")
+                .document("Users").collection("User").document(newPartnerId);
+
+        final Map<String, Object> partnered = new HashMap<>();
+        if(status.equals(PartnerStatus.Pending_Sent))
+            partnered.put("partner", PartnerStatus.Pending_Response.getStatus());
+        else
+            partnered.put("partner", status.getStatus());
+
+        final DocumentReference userConnections = userData.collection("Connections").document(currentUserID);
+
+        Log.i(TAG, "addNewPartnerToFirestore: userConnections = "
+                + userConnections.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d(TAG, "onSuccess() called with: documentSnapshot = ["
+                        + documentSnapshot.exists() + "]");
+                if(documentSnapshot.exists()){
+                    userConnections
+                            .set(partnered, SetOptions.merge())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.i(TAG, "onSuccess: true");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "onFailure: ", e);
+                                }
+                            });
+                }else{
+                    partnered.put("favorite", false);
+                    partnered.put("follower", false);
+                    partnered.put("timestamp", FieldValue.serverTimestamp());
+                    userConnections
+                            .set(partnered)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.i(TAG, "onSuccess: true");
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "onFailure: ", e);
+                        }
+                    });
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "onFailure: ", e);
+            }
+        }));
+
+        return true;
+    }
+
+    public Boolean removePartnerFromFirestore(final String currentUserID, final String removePartnerID){
+
 
         return true;
     }
@@ -80,58 +194,83 @@ public class CurrentPartnersFirestore extends UserDB{
         userData = firebaseFirestore.collection("UserInformation")
                 .document("Users").collection("User").document(currentUserID);
 
-        final List<String> favIdList = new ArrayList<>();
-        favIdList.add(newFavId);
+        final Map<String, Object> favorited = new HashMap<>();
+        favorited.put("favorite", true);
 
-        Map<String, List<String>> favList = new HashMap<>();
-        favList.put("ListOfFavs", favIdList);
-        userData
-                .set(favList, SetOptions.merge())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+        final DocumentReference userConnections = userData.collection("Connections").document(newFavId);
+        Log.i(TAG, "addFavoriteIdToFirestore: userConnections = "
+                + userConnections.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        addFollowerIdToFirestore(currentUserID, newFavId);
-                        currentPartnersDB = new CurrentPartnersDB(context);;
-                        currentPartnersDB.addFavoriteIdToSQLite(newFavId);
-                        Log.i("CurrentPartners", "onSuccess: " + favIdList);
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Log.d(TAG, "onSuccess() called with: documentSnapshot = ["
+                                + documentSnapshot.exists() + "]");
+                        if(documentSnapshot.exists()){
+                            userConnections
+                                    .set(favorited, SetOptions.merge())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            addFollowerIdToFirestore(currentUserID, newFavId);
+                                            currentPartnersDB = new CurrentPartnersDB(context);
+                                            currentPartnersDB.addFavoriteIdToSQLite(newFavId);
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "onFailure: ", e);
+                                        }
+                                    });
+                        }else{
+                            favorited.put("partner", "False");
+                            favorited.put("follower", false);
+                            favorited.put("timestamp", FieldValue.serverTimestamp());
+                            userConnections
+                                    .set(favorited)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            addFollowerIdToFirestore(currentUserID, newFavId);
+                                            currentPartnersDB = new CurrentPartnersDB(context);
+                                            currentPartnersDB.addFavoriteIdToSQLite(newFavId);
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "onFailure: ", e);
+                                }
+                            });
+                        }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.i("CurrentPartners", "onFailure: " + favIdList);
+                Log.w(TAG, "onFailure: ", e);
             }
-        });
+        }));
 
         return true;
     }
 
-    public Boolean removeFavoriteIdFromFirestore(final String currentUserID,
-                     final List<String> favIdList, final String removeFavId){
+    public Boolean removeFavoriteIdFromFirestore(final String currentUserID, final String removeFavId){
         userData = firebaseFirestore.collection("UserInformation")
                 .document("Users").collection("User").document(currentUserID);
-        Log.i("BeforeRemove", "removeFavoriteIdFromFirestore: " + favIdList);
-        favIdList.remove(removeFavId);
-        Log.i("AfterRemove", "removeFavoriteIdFromFirestore: " + favIdList);
 
-        Map<String, List<String>> favList = new HashMap<>();
-        favList.put("ListOfFavs", favIdList);
-        userData
-                .update("ListOfFavs", favIdList)
+        userData.collection("Connections").document(removeFavId)
+                .update("favorite", false)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         removeFollowerIdFromFirestore(currentUserID, removeFavId);
                         currentPartnersDB = new CurrentPartnersDB(context);
                         currentPartnersDB.removeFavoriteIdFromSQLite(removeFavId);
-                        Log.i("CurrentPartners", "onSuccess: Remove" + favIdList);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.i("CurrentPartners", "onFailure: Remove" + favIdList);
+                Log.w(TAG, "onFailure: ", e);
             }
         });
-
 
         return true;
     }
@@ -142,51 +281,56 @@ public class CurrentPartnersFirestore extends UserDB{
         userData = firebaseFirestore.collection("UserInformation")
                 .document("Users").collection("User").document(currentFavID);
 
-        userData
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Log.d(TAG, "onSuccess() called with: documentSnapshot = [" + documentSnapshot + "]");
-                        followerIDList = (List<String>) documentSnapshot.get("ListOfFollowers");
-                        if(followerIDList == null){
-                            followerIDList = new ArrayList<>();
-                            followerIDList.add(currentUserID);
-                            Map<String, List<String>> followerList = new HashMap<>();
-                            followerList.put("ListOfFollowers", followerIDList);
+        final Map<String, Object> followed = new HashMap<>();
+        followed.put("follower", true);
 
-                            userData
-                                    .set(followerList, SetOptions.merge())
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "onSuccess() called with: aVoid = [" + aVoid + "]");
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
+        final DocumentReference userConnections = userData.collection("Connections").document(currentUserID);
+        Log.i(TAG, "addFavoriteIdToFirestore: userConnections = "
+                + userConnections.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d(TAG, "onSuccess() called with: documentSnapshot = ["
+                        + documentSnapshot.exists() + "]");
+                if(documentSnapshot.exists()){
+                    userConnections
+                            .set(followed, SetOptions.merge())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.i(TAG, "onSuccess: true");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Log.w(TAG, "onFailure: ", e);
                                 }
                             });
-                        }else{
-                            followerIDList.add(currentUserID);
-
-                            userData
-                                    .update("ListOfFollowers", followerIDList)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.i(TAG, "onSuccess: update successful");
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
+                }else{
+                    followed.put("partner", "False");
+                    followed.put("favorite", false);
+                    followed.put("timestamp", FieldValue.serverTimestamp());
+                    userConnections
+                            .set(followed)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.e(TAG, "onFailure: ", e);
+                                public void onSuccess(Void aVoid) {
+                                    Log.i(TAG, "onSuccess: true");
                                 }
-                            });
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "onFailure: ", e);
                         }
-                    }
-                });
+                    });
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "onFailure: ", e);
+            }
+        }));
 
         Log.d(TAG, "addFollowerIdToFirestore() returned: " + true);
         return true;
@@ -197,35 +341,20 @@ public class CurrentPartnersFirestore extends UserDB{
         userData = firebaseFirestore.collection("UserInformation")
                 .document("Users").collection("User").document(currentFavID);
 
-        userData
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        userData.collection("Connections").document(currentUserID)
+                .update("follower", false)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-
-                        Log.i("removeFollowerIdToFS", "onComplete: " +
-                                documentSnapshot.get("ListOfFollowers"));
-                        followerIDList = (List<String>) documentSnapshot.get("ListOfFollowers");
-                        followerIDList.remove(currentUserID);
-                        Log.i("removeFollowerIdToFS", "onEvent: inside event" + followerIDList);
-
-                        userData
-                                .update("ListOfFollowers", followerIDList)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.i("removeFollowerIdToFS", "onSuccess: " + currentFavID);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.i("removeFollowerIdToFS", "onFailure: " + currentFavID);
-                            }
-                        });
+                    public void onSuccess(Void aVoid) {
+                        Log.i(TAG, "onSuccess: true");
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "onFailure: ", e);
+            }
+        });
 
-        Log.i("removeFollowerIdToFS", "onEvent: outside of event" + followerIDList);
         return true;
     }
 
@@ -233,41 +362,59 @@ public class CurrentPartnersFirestore extends UserDB{
         userData = firebaseFirestore.collection("UserInformation")
                 .document("Users").collection("User").document(currentUserId);
 
-        userData.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                if(e != null){
-                    Log.i("getPartnersIDsFromFS", "onEvent: " + e);
-                }
+        CollectionReference connectionsData = userData.collection("Connections");
 
-                if(documentSnapshot != null && documentSnapshot.exists()){
-                    Log.i("getPartnersIDsFromFS", "onEvent: " + documentSnapshot.get("ListOfPartners"));
+        connectionsData
+                .whereEqualTo("partner", PartnerStatus.True.getStatus())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+                        if(e != null){
+                            Log.w(TAG, "onEvent: ", e);
+                        }
 
-                    Log.i("getPartnersIDsFromFS", "onComplete: " + documentSnapshot.getString("User.first_name"));
+                        partnerIDList = new ArrayList<>();
+                        DocumentChange.Type updateType = null;
 
-                    try{
-                        partnerIDList = (List<String>) documentSnapshot.get("ListOfPartners");
+                        for(DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()){
+                            Log.d(TAG, "onEvent: docId = " + doc.getDocument().getId());
+                            updateType = doc.getType();
+                            Log.d(TAG, "onEvent: docType = " + updateType.toString());
+                            partnerIDList.add(doc.getDocument().getId());
+                        }
 
+                        String[] currentPartnerIdArray;
                         if(partnerIDList == null){
                             currentPartnersDB = new CurrentPartnersDB(context);
                             currentPartnersDB.deleteCurrentPartnerIDTableDataFromSQLite();
+                            currentPartnersDB.deleteCurrentPartnerTableDataFromSQLite();
+                        }else if(collectedPartner == true){
+                            switch(updateType){
+                                case ADDED:
+                                    currentPartnerIdArray = new String[partnerIDList.size()];
+                                    getPartnersUserDataFromFirestore(partnerIDList.toArray(currentPartnerIdArray), DBType.ADDED);
+
+                                    currentPartnersDB = new CurrentPartnersDB(context);
+                                    currentPartnersDB.addCurrentPartnersIdToSQLite(partnerIDList);
+                                    break;
+                                case REMOVED:
+                                    currentPartnerIdArray = new String[partnerIDList.size()];
+                                    getPartnersUserDataFromFirestore(partnerIDList.toArray(currentPartnerIdArray), DBType.REMOVED);
+                                    break;
+                                case MODIFIED:
+                                    break;
+                            }
                         }else{
-                            String[] partnerIdArray = new String[partnerIDList.size()];
-                            getPartnersUserDataFromFirestore(partnerIDList.toArray(partnerIdArray));
+                            currentPartnerIdArray = new String[partnerIDList.size()];
+                            getPartnersUserDataFromFirestore(partnerIDList.toArray(currentPartnerIdArray), DBType.NORMAL);
 
                             currentPartnersDB = new CurrentPartnersDB(context);
                             currentPartnersDB.deleteCurrentPartnerTableDataFromSQLite();
-                            currentPartnersDB.addCurrentPartnersIdToSQLite(partnerIDList);
+                            currentPartnersDB.addCurrentPartnersIdToSQLite(followerIDList);
+                            collectedPartner = true;
                         }
-                    }catch(ClassCastException c){
-                        Log.i("getPartnersIDsFromFS", "onEvent: " + c.toString());
-                    }catch(Exception error){
-
                     }
-
-                }
-            }
-        });
+                });
 
         return true;
     }
@@ -276,40 +423,63 @@ public class CurrentPartnersFirestore extends UserDB{
         userData = firebaseFirestore.collection("UserInformation")
                 .document("Users").collection("User").document(currentUserId);
 
-        userData.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                if(e != null){
-                    Log.i("getFavoritesIDsFromFS", "onEvent: " + e);
-                }
+        CollectionReference connectionsData = userData.collection("Connections");
 
-                if(documentSnapshot != null && documentSnapshot.exists()){
-                    Log.i("getFavoritesIDsFromFS", "onEvent: " + documentSnapshot.get("ListOfFavs"));
+        connectionsData
+                .whereEqualTo("favorite", true)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+                        if(e != null){
+                            Log.w(TAG, "onEvent: ", e);
+                            return;
+                        }
 
-                    //Get favorited ids from firestore
-                    //Any exception, catch and do nothing
-                    //No data, don't add to sqlite
-                    try{
-                        favIDList = (List<String>) documentSnapshot.get("ListOfFavs");
+                        followerIDList = new ArrayList<>();
+                        DocumentChange.Type updateType = null;
 
-                        if(favIDList == null){
+                        for(DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()){
+                            Log.d(TAG, "onEvent: docId = " + doc.getDocument().getId());
+                            updateType = doc.getType();
+                            Log.d(TAG, "onEvent: docType = " + updateType.toString());
+                            followerIDList.add(doc.getDocument().getId());
+                        }
+
+                        String[] favIdArray;
+                        if(followerIDList == null){
                             currentPartnersDB = new CurrentPartnersDB(context);
                             currentPartnersDB.deleteFavoriteIDTableDataFromSQLite();
                             currentPartnersDB.deleteFavoriteTableDataFromSQLite();
+                        }else if(collectedFavorite == true){
+                            switch(updateType){
+                                case ADDED:
+                                    favIdArray = new String[followerIDList.size()];
+                                    getFavoriteUserDataFromFirestore(followerIDList.toArray(favIdArray), DBType.ADDED);
+
+                                    currentPartnersDB = new CurrentPartnersDB(context);
+                                    currentPartnersDB.addFavoriteIdsToSQLite(followerIDList);
+                                    break;
+                                case REMOVED:
+                                    favIdArray = new String[followerIDList.size()];
+                                    getFavoriteUserDataFromFirestore(followerIDList.toArray(favIdArray), DBType.REMOVED);
+
+                                    currentPartnersDB = new CurrentPartnersDB(context);
+                                    currentPartnersDB.removeFavoriteIdFromSQLite(followerIDList.get(0));
+                                    break;
+                                case MODIFIED:
+                                    break;
+                            }
                         }else{
-                            String[] favIdArray = new String[favIDList.size()];
-                            getFavoriteUserDataFromFirestore(favIDList.toArray(favIdArray));
+                            favIdArray = new String[followerIDList.size()];
+                            getFavoriteUserDataFromFirestore(followerIDList.toArray(favIdArray), DBType.NORMAL);
 
                             currentPartnersDB = new CurrentPartnersDB(context);
                             currentPartnersDB.deleteFavoriteTableDataFromSQLite();
-                            currentPartnersDB.addFavoriteIdsToSQLite(favIDList);
+                            currentPartnersDB.addFavoriteIdsToSQLite(followerIDList);
+                            collectedFavorite = true;
                         }
-                    }catch(ClassCastException c){
-                        Log.i("getFavoritesIDsFromFS", "onEvent: " + c.toString());
                     }
-                }
-            }
-        });
+                });
 
         return true;
     }
@@ -321,49 +491,81 @@ public class CurrentPartnersFirestore extends UserDB{
         userData = firebaseFirestore.collection("UserInformation")
                 .document("Users").collection("User").document(currentUserId);
 
-        userData.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                Log.d(TAG, "onEvent() called with: documentSnapshot = " +
-                        "[" + documentSnapshot + "], e = [" + e + "]");
-                if(e != null){
-                    Log.i("getFollowersIDsFromFS", "onEvent: " + e);
-                }
+        CollectionReference connectionsData = userData.collection("Connections");
 
-                if(documentSnapshot != null && documentSnapshot.exists()){
-                    Log.i("getFollowersIDsFromFS", "onEvent: " +
-                            documentSnapshot.get("ListOfFollowers"));
+        connectionsData
+                .whereEqualTo("follower", true)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+                        if(e != null){
+                            Log.w(TAG, "onEvent: ", e);
+                            return;
+                        }
 
-                    //Get follower IDs from Firestore
-                    try{
-                        followerIDList = (List<String>) documentSnapshot.get("ListOfFollowers");
+                        followerIDList = new ArrayList<>();
+                        DocumentChange.Type updateType = null;
 
+                        for(DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()){
+                            Log.d(TAG, "onEvent: docId = " + doc.getDocument().getId());
+                            updateType = doc.getType();
+                            Log.d(TAG, "onEvent: docType = " + updateType.toString());
+                            followerIDList.add(doc.getDocument().getId());
+                        }
+
+                        String[] followerIdArray;
                         if(followerIDList == null){
+                            currentPartnersDB = new CurrentPartnersDB(context);
+                            currentPartnersDB.deleteFollowerIDTableDataFromSQLite();
+                            currentPartnersDB.deleteFollowerTableDataFromSQLite();
+                        }else if(collectedFollower == true){
+                            switch(updateType){
+                                case ADDED:
+                                    followerIdArray = new String[followerIDList.size()];
+                                    getFollowerUserDataFromFirestore(followerIDList.toArray(followerIdArray), DBType.ADDED);
 
+                                    currentPartnersDB = new CurrentPartnersDB(context);
+                                    currentPartnersDB.addFollowerIdsToSQLite(followerIDList);
+                                    break;
+                                case REMOVED:
+                                    followerIdArray = new String[followerIDList.size()];
+                                    getFollowerUserDataFromFirestore(followerIDList.toArray(followerIdArray), DBType.REMOVED);
+                                    break;
+                                case MODIFIED:
+                                    break;
+                            }
                         }else{
-                            String[] followerIDArray = new String[followerIDList.size()];
-                            getFollowerUserDataFromFirestore(followerIDList.toArray(followerIDArray));
+                            followerIdArray = new String[followerIDList.size()];
+                            getFollowerUserDataFromFirestore(followerIDList.toArray(followerIdArray), DBType.NORMAL);
 
                             currentPartnersDB = new CurrentPartnersDB(context);
                             currentPartnersDB.deleteFollowerTableDataFromSQLite();
                             currentPartnersDB.addFollowerIdsToSQLite(followerIDList);
+                            collectedFollower = true;
                         }
-                    }catch(ClassCastException c){
-                        Log.w(TAG, "onEvent: ", c);
-                    }catch(Exception error){
-                        Log.w(TAG, "onEvent: ",error );
                     }
-
-                }
-            }
-        });
+                });
 
         return true;
     }
 
-    public Boolean getPartnersUserDataFromFirestore(final String[] partnerIDs){
+    public Boolean getPartnersUserDataFromFirestore(final String[] partnerIDs, DBType type){
         currentPartnersDB = new CurrentPartnersDB(context);
-        currentPartnersDB.deleteCurrentPartnerTableDataFromSQLite();
+
+        switch(type){
+            case NORMAL:
+                currentPartnersDB.deleteCurrentPartnerTableDataFromSQLite();;
+                break;
+            case REMOVED:
+                return true;
+            case ADDED:
+                break;
+            case MODIFIED:
+                break;
+            default:
+
+        }
+
         for(final String id : partnerIDs){
             userData = userInfo.document("Users").collection("User").document(id);
             userData.get()
@@ -427,9 +629,24 @@ public class CurrentPartnersFirestore extends UserDB{
         return true;
     }
 
-    public Boolean getFavoriteUserDataFromFirestore(final String[] favoriteIDs){
+    public Boolean getFavoriteUserDataFromFirestore(final String[] favoriteIDs, DBType type){
+        Log.d(TAG, "getFavoriteUserDataFromFirestore() called with: favoriteIDs = " +
+                "[" + favoriteIDs + "], type = [" + type + "]");
         currentPartnersDB = new CurrentPartnersDB(context);
-        currentPartnersDB.deleteFavoriteTableDataFromSQLite();
+        switch(type){
+            case NORMAL:
+                currentPartnersDB.deleteFavoriteTableDataFromSQLite();
+                break;
+            case REMOVED:
+                return currentPartnersDB.removeFavoriteFromSQLite(favoriteIDs[0]);
+            case ADDED:
+                break;
+            case MODIFIED:
+                break;
+            default:
+
+        }
+
         for(final String id : favoriteIDs){
             userData = userInfo.document("Users").collection("User").document(id);
             userData.get()
@@ -442,7 +659,6 @@ public class CurrentPartnersFirestore extends UserDB{
                             profile = new Profile();
                             String first_name = "";
                             String last_name = "";
-                            //String profileUrl = document.getString("userAvatarUrl");
                             String email = "";
                             String aboutMe = "";
                             String city = "";
@@ -493,9 +709,24 @@ public class CurrentPartnersFirestore extends UserDB{
         return true;
     }
 
-    public Boolean getFollowerUserDataFromFirestore(final String[] followerIDs){
+    public Boolean getFollowerUserDataFromFirestore(final String[] followerIDs, DBType type){
+        Log.d(TAG, "getFollowerUserDataFromFirestore() called with: followerIDs = ["
+                + followerIDs + "], type = [" + type + "]");
         currentPartnersDB = new CurrentPartnersDB(context);
-        currentPartnersDB.deleteFollowerTableDataFromSQLite();
+        switch(type){
+            case NORMAL:
+                currentPartnersDB.deleteFollowerTableDataFromSQLite();
+                break;
+            case REMOVED:
+                return currentPartnersDB.removeFollowerFromSQLite(followerIDs[0]);
+            case ADDED:
+                break;
+            case MODIFIED:
+                break;
+            default:
+
+        }
+
         for(final String id : followerIDs){
             userData = userInfo.document("Users").collection("User").document(id);
             userData.get()

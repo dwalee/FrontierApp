@@ -1,6 +1,6 @@
 package com.frontierapp.frontierapp;
 
-public class Profile {
+public class Profile extends User {
     String aboutMe;
     String userTitle;
     String city;

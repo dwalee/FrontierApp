@@ -246,12 +246,12 @@ public class UserDB {
 
         String backgroundUrl = "";
         String profileUrl = "";
-        String title = "n\\a";
-        String about_me = "n\\a";
+        String title = "";
+        String about_me = "";
         String city = "";
         String state = "";
-        String location = "n\\a";
-        String goals = "n\\a";
+        String location = "";
+        String goals = "";
         try{
             profile = new Profile();
 

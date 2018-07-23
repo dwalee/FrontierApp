@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,32 +94,47 @@ public class FavoriteFragment extends Fragment {
 
                 currentPartnersDB = new CurrentPartnersDB(context);
 
-                Users users = currentPartnersDB.getFavoritesUserDataFromSQLite();
-                Profiles profiles = currentPartnersDB.getFavoritesProfileFromSQLite();
-                for(int i=0; i<users.size();i++) {
-                    User user = users.get(i);
-                    Profile profile = profiles.get(i);
-                    user.setAvatar(profile.getProfileAvatarUrl());
-                    userList.add(user);
-                }
+                Users users = null;
+                Profiles profiles = null;
+                int timeout = 0;
+
+                do{
+                    users = currentPartnersDB.getFavoritesUserDataFromSQLite();
+                    profiles = currentPartnersDB.getFavoritesProfileFromSQLite();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Log.w(TAG, "run: ", e);
+                    }
+                    timeout++;
+                }while((users == (null) || profiles == (null)) && !(timeout >= 4));
+
+                if(users != (null) && profiles != (null)) {
+                    for (int i = 0; i < users.size(); i++) {
+                        User user = users.get(i);
+                        Profile profile = profiles.get(i);
+                        user.setAvatar(profile.getProfileAvatarUrl());
+                        userList.add(user);
+                    }
 
 
-                for(int j=0;j<userList.size();j++){
-                    User user = userList.get(j);
-                    FavoriteViewData favoriteViewData = new FavoriteViewData();
-                    String full_name = user.getFirst_name() +
-                            " " + user.getLast_name();
-                    favoriteViewData.setFavoriteName(full_name);
-                    favoriteViewData.setFavoriteProfilePicUrl(user.getAvatar());
-                    favoriteViewData.setFavoriteId(user.getUid());
+                    for (int j = 0; j < userList.size(); j++) {
+                        User user = userList.get(j);
+                        FavoriteViewData favoriteViewData = new FavoriteViewData();
+                        String full_name = user.getFirst_name() +
+                                " " + user.getLast_name();
+                        favoriteViewData.setFavoriteName(full_name);
+                        favoriteViewData.setFavoriteProfilePicUrl(user.getAvatar());
+                        favoriteViewData.setFavoriteId(user.getUid());
 
-                    favoriteViewDataList.add(favoriteViewData);
+                        favoriteViewDataList.add(favoriteViewData);
 
-                    favoriteItemRecyclerAdapter.notifyDataSetChanged();
+                        favoriteItemRecyclerAdapter.notifyDataSetChanged();
+                    }
                 }
 
             }
-        }, 7500);
+        }, 1000);
     }
 
     public void refreshFavoriteList(){
@@ -134,32 +150,47 @@ public class FavoriteFragment extends Fragment {
 
                 currentPartnersDB = new CurrentPartnersDB(context);
 
-                Users users = currentPartnersDB.getFavoritesUserDataFromSQLite();
-                Profiles profiles = currentPartnersDB.getFavoritesProfileFromSQLite();
-                for(int i=0; i<users.size();i++) {
-                    User user = users.get(i);
-                    Profile profile = profiles.get(i);
-                    user.setAvatar(profile.getProfileAvatarUrl());
-                    userList.add(user);
+                Users users = null;
+                Profiles profiles = null;
+                int timeout = 0;
+
+                do {
+                    users = currentPartnersDB.getFavoritesUserDataFromSQLite();
+                    profiles = currentPartnersDB.getFavoritesProfileFromSQLite();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Log.w(TAG, "run: ", e);
+                    }
+                    timeout++;
+                } while ((users == (null) || profiles == (null)) && !(timeout >= 4));
+
+                if (users != (null) && profiles != (null)) {
+                    for (int i = 0; i < users.size(); i++) {
+                        User user = users.get(i);
+                        Profile profile = profiles.get(i);
+                        user.setAvatar(profile.getProfileAvatarUrl());
+                        userList.add(user);
+                    }
+
+
+                    for (int j = 0; j < userList.size(); j++) {
+                        User user = userList.get(j);
+                        FavoriteViewData favoriteViewData = new FavoriteViewData();
+                        String full_name = user.getFirst_name() +
+                                " " + user.getLast_name();
+                        favoriteViewData.setFavoriteName(full_name);
+                        favoriteViewData.setFavoriteProfilePicUrl(user.getAvatar());
+                        favoriteViewData.setFavoriteId(user.getUid());
+
+                        favoriteViewDataList.add(favoriteViewData);
+
+                        favoriteItemRecyclerAdapter.notifyDataSetChanged();
+                    }
+                    favoriteSwipeRefreshLayout.setRefreshing(false);
                 }
-
-
-                for(int j=0;j<userList.size();j++){
-                    User user = userList.get(j);
-                    FavoriteViewData favoriteViewData = new FavoriteViewData();
-                    String full_name = user.getFirst_name() +
-                            " " + user.getLast_name();
-                    favoriteViewData.setFavoriteName(full_name);
-                    favoriteViewData.setFavoriteProfilePicUrl(user.getAvatar());
-                    favoriteViewData.setFavoriteId(user.getUid());
-
-                    favoriteViewDataList.add(favoriteViewData);
-
-                    favoriteItemRecyclerAdapter.notifyDataSetChanged();
-                }
-                favoriteSwipeRefreshLayout.setRefreshing(false);
             }
-        }, 3000);
+        }, 1000);
     }
 
     @Override

@@ -11,5 +11,7 @@
     <color name="colorRaisedButtonText">#FFFFFF</color>
     <color name="colorLoadRefresh">#FF9800</color>
     <color name="colorFinishRefresh">#4CAF50</color>
+    <color name="colorAcceptButton">#4CAF50</color>
+    <color name="colorDenyButton">#F44336</color>
 
 </resources>

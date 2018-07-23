@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,8 +100,21 @@ public class PartnerFragment extends Fragment {
             public void run() {
                 currentPartnersDB = new CurrentPartnersDB(context);
 
-                Users users = currentPartnersDB.getCurrentPartnersDataFromSQLite();
-                Profiles profiles = currentPartnersDB.getCurrentPartnersProfileFromSQLite();
+                Users users = null;
+                Profiles profiles = null;
+                int timeout = 0;
+
+                do{
+                    users = currentPartnersDB.getCurrentPartnersDataFromSQLite();
+                    profiles = currentPartnersDB.getCurrentPartnersProfileFromSQLite();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Log.w(TAG, "run: ", e);
+                    }
+                    timeout++;
+                }while((users == (null) || profiles == (null)) && !(timeout >= 4));
+
                 for(int i=0; i<users.size();i++) {
                     User user = users.get(i);
                     Profile profile = profiles.get(i);
@@ -108,23 +122,23 @@ public class PartnerFragment extends Fragment {
                     userList.add(user);
                 }
 
+                if(users != (null) && profiles != (null)) {
+                    for (int j = 0; j < userList.size(); j++) {
+                        User user = userList.get(j);
+                        CurrentPartnershipViewData currentPartnershipViewData = new CurrentPartnershipViewData();
+                        String full_name = user.getFirst_name() +
+                                " " + user.getLast_name();
+                        currentPartnershipViewData.setCurrentPartnerName(full_name);
+                        currentPartnershipViewData.setCurrentPartnerProfilePicUrl(user.getAvatar());
+                        currentPartnershipViewData.setCurrentPartnerId(user.getUid());
 
-                for(int j=0;j<userList.size();j++){
-                    User user = userList.get(j);
-                    CurrentPartnershipViewData currentPartnershipViewData = new CurrentPartnershipViewData();
-                    String full_name = user.getFirst_name() +
-                            " " + user.getLast_name();
-                    currentPartnershipViewData.setCurrentPartnerName(full_name);
-                    currentPartnershipViewData.setCurrentPartnerProfilePicUrl(user.getAvatar());
-                    currentPartnershipViewData.setCurrentPartnerId(user.getUid());
+                        currentPartnershipViewDataList.add(currentPartnershipViewData);
 
-                    currentPartnershipViewDataList.add(currentPartnershipViewData);
-
-                    currentPartnerItemRecyclerAdapter.notifyDataSetChanged();
+                        currentPartnerItemRecyclerAdapter.notifyDataSetChanged();
+                    }
                 }
-
             }
-        }, 5000);
+        }, 1000);
 
     }
 
@@ -147,34 +161,49 @@ public class PartnerFragment extends Fragment {
 
                 currentPartnersDB = new CurrentPartnersDB(context);
 
-                Users users = currentPartnersDB.getCurrentPartnersDataFromSQLite();
-                Profiles profiles = currentPartnersDB.getCurrentPartnersProfileFromSQLite();
-                for(int i=0; i<users.size();i++) {
-                    User user = users.get(i);
-                    Profile profile = profiles.get(i);
-                    user.setAvatar(profile.getProfileAvatarUrl());
-                    userList.add(user);
+                Users users = null;
+                Profiles profiles = null;
+                int timeout = 0;
+
+                do {
+                    users = currentPartnersDB.getCurrentPartnersDataFromSQLite();
+                    profiles = currentPartnersDB.getCurrentPartnersProfileFromSQLite();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Log.w(TAG, "run: ", e);
+                    }
+                    timeout++;
+                } while ((users == (null) || profiles == (null)) && !(timeout >= 4));
+
+                if (users != (null) && profiles != (null)) {
+                    for (int i = 0; i < users.size(); i++) {
+                        User user = users.get(i);
+                        Profile profile = profiles.get(i);
+                        user.setAvatar(profile.getProfileAvatarUrl());
+                        userList.add(user);
+                    }
+
+
+                    for (int j = 0; j < userList.size(); j++) {
+                        User user = userList.get(j);
+                        CurrentPartnershipViewData currentPartnershipViewData = new CurrentPartnershipViewData();
+                        String full_name = user.getFirst_name() +
+                                " " + user.getLast_name();
+                        currentPartnershipViewData.setCurrentPartnerName(full_name);
+                        currentPartnershipViewData.setCurrentPartnerProfilePicUrl(user.getAvatar());
+                        currentPartnershipViewData.setCurrentPartnerId(user.getUid());
+
+                        currentPartnershipViewDataList.add(currentPartnershipViewData);
+
+                        partnerSwipeRefreshLayout.setColorSchemeResources(R.color.colorFinishRefresh);
+                        currentPartnerItemRecyclerAdapter.notifyDataSetChanged();
+                    }
+
+                    partnerSwipeRefreshLayout.setRefreshing(false);
                 }
-
-
-                for(int j=0;j<userList.size();j++){
-                    User user = userList.get(j);
-                    CurrentPartnershipViewData currentPartnershipViewData = new CurrentPartnershipViewData();
-                    String full_name = user.getFirst_name() +
-                            " " + user.getLast_name();
-                    currentPartnershipViewData.setCurrentPartnerName(full_name);
-                    currentPartnershipViewData.setCurrentPartnerProfilePicUrl(user.getAvatar());
-                    currentPartnershipViewData.setCurrentPartnerId(user.getUid());
-
-                    currentPartnershipViewDataList.add(currentPartnershipViewData);
-
-                    partnerSwipeRefreshLayout.setColorSchemeResources(R.color.colorFinishRefresh);
-                    currentPartnerItemRecyclerAdapter.notifyDataSetChanged();
-                }
-
-                partnerSwipeRefreshLayout.setRefreshing(false);
             }
-        }, 3000);
+        }, 1000);
 
     }
 

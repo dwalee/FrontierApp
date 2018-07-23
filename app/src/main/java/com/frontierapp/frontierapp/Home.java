@@ -204,7 +204,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 startActivity(connectsIntent);
                 break;
             case R.id.notifications:
-
+                Intent notificationIntent = new Intent(this, NotificationActivity.class);
+                startActivity(notificationIntent);
                 break;
 
             case R.id.vbc:

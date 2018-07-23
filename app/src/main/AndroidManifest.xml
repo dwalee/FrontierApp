@@ -59,13 +59,13 @@
             android:name=".UserFavFirestoreBackgroundService"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name=".UserFollowerFirestoreBackgroundService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
-        <activity android:name=".ConnectionsActivity"></activity>
+        <activity android:name=".ConnectionsActivity" />
+        <activity android:name=".NotificationActivity"></activity>
     </application>
 
 </manifest>

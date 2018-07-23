@@ -103,36 +103,50 @@ public class FollowerFragment extends Fragment {
 
                 Log.i(TAG, "run: before users = " +
                         currentPartnersDB.getFollowersUserDataFromSQLite());
-                Users users = currentPartnersDB.getFollowersUserDataFromSQLite();
-                Profiles profiles = currentPartnersDB.getFollowersProfileFromSQLite();
+                Users users = null;
+                Profiles profiles = null;
+                int timeout = 0;
+
+                do {
+                    users = currentPartnersDB.getFollowersUserDataFromSQLite();
+                    profiles = currentPartnersDB.getFollowersProfileFromSQLite();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Log.w(TAG, "run: ", e);
+                    }
+                    timeout++;
+                }while((users == (null) || profiles == (null)) && !(timeout >= 4));
+
                 Log.i(TAG, "run: users = " + users);
-                for(int i=0; i<users.size();i++) {
-                    User user = users.get(i);
-                    Log.i(TAG, "run: user.getFirst_name = " + user.getFirst_name());
-                    Profile profile = profiles.get(i);
-                    user.setAvatar(profile.getProfileAvatarUrl());
-                    userList.add(user);
+                if(users != (null) && profiles != (null)) {
+                    for (int i = 0; i < users.size(); i++) {
+                        User user = users.get(i);
+                        Log.i(TAG, "run: user.getFirst_name = " + user.getFirst_name());
+                        Profile profile = profiles.get(i);
+                        user.setAvatar(profile.getProfileAvatarUrl());
+                        userList.add(user);
+                    }
+
+
+                    for (int j = 0; j < userList.size(); j++) {
+                        User user = userList.get(j);
+                        Log.i(TAG, "run: user(userList) = " + user);
+                        FollowerViewData followerViewData = new FollowerViewData();
+                        String full_name = user.getFirst_name() +
+                                " " + user.getLast_name();
+                        Log.i(TAG, "run: full_name = " + full_name);
+                        followerViewData.setFollowerName(full_name);
+                        followerViewData.setFollowerProfilePicUrl(user.getAvatar());
+                        followerViewData.setFollowerId(user.getUid());
+
+                        followerViewDataList.add(followerViewData);
+
+                        followerItemRecyclerAdapter.notifyDataSetChanged();
+                    }
                 }
-
-
-                for(int j=0;j<userList.size();j++){
-                    User user = userList.get(j);
-                    Log.i(TAG, "run: user(userList) = " + user);
-                    FollowerViewData followerViewData = new FollowerViewData();
-                    String full_name = user.getFirst_name() +
-                            " " + user.getLast_name();
-                    Log.i(TAG, "run: full_name = " + full_name);
-                    followerViewData.setFollowerName(full_name);
-                    followerViewData.setFollowerProfilePicUrl(user.getAvatar());
-                    followerViewData.setFollowerId(user.getUid());
-
-                    followerViewDataList.add(followerViewData);
-
-                    followerItemRecyclerAdapter.notifyDataSetChanged();
-                }
-
             }
-        }, 10000);
+        }, 1000);
     }
 
     public void refreshFollowerList(){
@@ -148,30 +162,37 @@ public class FollowerFragment extends Fragment {
 
                 currentPartnersDB = new CurrentPartnersDB(context);
 
-                Users users = currentPartnersDB.getFollowersUserDataFromSQLite();
-                Profiles profiles = currentPartnersDB.getFollowersProfileFromSQLite();
-                for(int i=0; i<users.size();i++) {
-                    User user = users.get(i);
-                    Profile profile = profiles.get(i);
-                    user.setAvatar(profile.getProfileAvatarUrl());
-                    userList.add(user);
+                Users users = null;
+                Profiles profiles = null;
+                int timeout = 0;
+
+                do {
+                    users = currentPartnersDB.getFollowersUserDataFromSQLite();
+                    profiles = currentPartnersDB.getFollowersProfileFromSQLite();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Log.w(TAG, "run: ", e);
+                    }
+                    timeout++;
+                } while ((users == (null) || profiles == (null)) && !(timeout >= 4));
+
+                if (users != (null) && profiles != (null)) {
+                    for (int j = 0; j < userList.size(); j++) {
+                        User user = userList.get(j);
+                        FollowerViewData followerViewData = new FollowerViewData();
+                        String full_name = user.getFirst_name() +
+                                " " + user.getLast_name();
+                        followerViewData.setFollowerName(full_name);
+                        followerViewData.setFollowerProfilePicUrl(user.getAvatar());
+                        followerViewData.setFollowerId(user.getUid());
+
+                        followerViewDataList.add(followerViewData);
+
+                        followerItemRecyclerAdapter.notifyDataSetChanged();
+                    }
+                    followerSwipeRefreshLayout.setRefreshing(false);
                 }
-
-
-                for(int j=0;j<userList.size();j++){
-                    User user = userList.get(j);
-                    FollowerViewData followerViewData = new FollowerViewData();
-                    String full_name = user.getFirst_name() +
-                            " " + user.getLast_name();
-                    followerViewData.setFollowerName(full_name);
-                    followerViewData.setFollowerProfilePicUrl(user.getAvatar());
-                    followerViewData.setFollowerId(user.getUid());
-
-                    followerViewDataList.add(followerViewData);
-
-                    followerItemRecyclerAdapter.notifyDataSetChanged();
-                }
-                followerSwipeRefreshLayout.setRefreshing(false);
             }
         }, 3000);
     }
