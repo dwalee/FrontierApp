@@ -19,7 +19,7 @@ public class UserFollowerFirestoreBackgroundService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         String id = intent.getStringExtra("UserId");
-        Log.i(TAG, "onHandleIntent: id = " + id );
+        Log.i(TAG, "onHandleIntent: notification_id = " + id );
         currentPartnersFirestore = new CurrentPartnersFirestore(getApplicationContext());
         currentPartnersFirestore.getFollowersIDsFromFireStore(id);
     }

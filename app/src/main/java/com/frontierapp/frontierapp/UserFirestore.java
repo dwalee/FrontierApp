@@ -40,22 +40,6 @@ public class UserFirestore {
     public UserFirestore() {
     }
 
-    public UserFirestore(Context context, User user, Profile profile) {
-        this.user = user;
-        this.profile = profile;
-        this.context = context;
-    }
-
-    public UserFirestore(Context context, User user) {
-        this.user = user;
-        this.context = context;
-    }
-
-    public UserFirestore(Context context, Profile profile) {
-        this.profile = profile;
-        this.context = context;
-    }
-
     public UserFirestore(Context context) {
         this.context = context;
     }
@@ -208,4 +192,19 @@ public class UserFirestore {
         return true;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
 }

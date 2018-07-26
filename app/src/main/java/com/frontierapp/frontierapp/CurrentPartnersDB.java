@@ -681,8 +681,8 @@ public class CurrentPartnersDB extends UserDB{
 
     /**
      * This method creates the favorite_ids table if it doesn't exist and adds
-     * a new record of the favorite user's id to the table
-     * @param favId This parameter requires a String value of the user's favorite id
+     * a new record of the favorite user's notification_id to the table
+     * @param favId This parameter requires a String value of the user's favorite notification_id
      * @return Boolean This returns a value of true if completed successfully
      * otherwise if any exceptions occur this will return false
      */
@@ -845,7 +845,7 @@ public class CurrentPartnersDB extends UserDB{
      * This method retrieves user data for the current partner specified in
      * the current_partners table
      * @param partnerId This parameter requires a String value to select
-     *                  which user data to retrieve from the table by id
+     *                  which user data to retrieve from the table by notification_id
      * @return User User This returns user data if any is found
      * otherwise it will return null if there's an exception or there's no value
      */
@@ -903,7 +903,7 @@ public class CurrentPartnersDB extends UserDB{
      * This method retrieves user data for the favorite specified in
      * the favorite table
      * @param favoriteId This parameter requires a String value to select
-     *                  which user data to retrieve from the table by id
+     *                  which user data to retrieve from the table by notification_id
      * @return User User This returns user data if any is found
      * otherwise it will return null if there's an exception or there's no value
      */
@@ -960,7 +960,7 @@ public class CurrentPartnersDB extends UserDB{
      * This method retrieves user data for the follower specified in
      * the follower table
      * @param followerId This parameter requires a String value to select
-     *                  which user data to retrieve from the table by id
+     *                  which user data to retrieve from the table by notification_id
      * @return User User This returns user data if any is found
      * otherwise it will return null if there's an exception or there's no value
      */
@@ -1089,7 +1089,7 @@ public class CurrentPartnersDB extends UserDB{
      * This method retrieves profile data for the current partner specified in
      * the current_partners table
      * @param partnerId This parameter requires a String value to select
-     *                  which profile data to retrieve from teh table by id
+     *                  which profile data to retrieve from teh table by notification_id
      * @return Profile This returns profile data if any is found in the table
      * otherwise it will return null if there's an exception or there's no value
      */
@@ -1162,7 +1162,7 @@ public class CurrentPartnersDB extends UserDB{
      * This method retrieves profile data for the favorite specified in
      * the favorite table
      * @param favId This parameter requires a String value to select
-     *                  which profile data to retrieve from the table by id
+     *                  which profile data to retrieve from the table by notification_id
      * @return Profile This returns profile data if any is found in the table
      * otherwise it will return null if there's an exception or there's no value
      */
@@ -1235,7 +1235,7 @@ public class CurrentPartnersDB extends UserDB{
      * This method retrieves profile data for the follower specified in
      * the follower table
      * @param followerId This parameter requires a String value to select
-     *                  which profile data to retrieve from the table by id
+     *                  which profile data to retrieve from the table by notification_id
      * @return Profile This returns profile data if any is found in the table
      * otherwise it will return null if there's an exception or there's no value
      */
@@ -1639,13 +1639,13 @@ public class CurrentPartnersDB extends UserDB{
     }
 
     /**
-     * This method finds whether a favorite id is in the favorite_ids table
+     * This method finds whether a favorite notification_id is in the favorite_ids table
      * @param id This parameter requires a String value to search
-     *           whether the id exist in the table
-     * @return Boolean This returns true if the id is found and false if it is not
+     *           whether the notification_id exist in the table
+     * @return Boolean This returns true if the notification_id is found and false if it is not
      */
     public Boolean findFavoriteById(String id){
-        Log.d(TAG, "findFavoriteById() called with: id = [" + id + "]");
+        Log.d(TAG, "findFavoriteById() called with: notification_id = [" + id + "]");
         try{
             SQLiteDatabase userDatabase = SQLiteDatabase.openDatabase(
                     context.getDatabasePath("User_Data").toString(),
@@ -1673,13 +1673,13 @@ public class CurrentPartnersDB extends UserDB{
     }
 
     /**
-     * This method finds whether a favorite id is in the favorite_ids table
+     * This method finds whether a favorite notification_id is in the favorite_ids table
      * @param id This parameter requires a String value to search
-     *           whether the id exist in the table
-     * @return Boolean This returns true if the id is found and false if it is not
+     *           whether the notification_id exist in the table
+     * @return Boolean This returns true if the notification_id is found and false if it is not
      */
     public Boolean findPartnerById(String id){
-        Log.d(TAG, "findPartnerById() called with: id = [" + id + "]");
+        Log.d(TAG, "findPartnerById() called with: notification_id = [" + id + "]");
         try{
             SQLiteDatabase userDatabase = SQLiteDatabase.openDatabase(
                     context.getDatabasePath("User_Data").toString(),
@@ -1709,9 +1709,9 @@ public class CurrentPartnersDB extends UserDB{
     /**
      * This method removes a record from the favorite_ids table
      * @param favId This parameter requires a String value to search
-     *              and remove an id from the table
-     * @return Boolean This returns true if the id is removed successfully
-     * otherwise it returns false if the id isn't found or an exception occurs
+     *              and remove an notification_id from the table
+     * @return Boolean This returns true if the notification_id is removed successfully
+     * otherwise it returns false if the notification_id isn't found or an exception occurs
      */
     public Boolean removeFavoriteIdFromSQLite(String favId){
         Log.d(TAG, "removeFavoriteIdFromSQLite() called with: favId = [" + favId + "]");
@@ -1765,7 +1765,7 @@ public class CurrentPartnersDB extends UserDB{
             cursor.moveToFirst();
             if(cursor != null){
                 do{
-                    Log.i(TAG, "removeFavoriteFromSQLite: id = " +
+                    Log.i(TAG, "removeFavoriteFromSQLite: notification_id = " +
                     cursor.getString(0));
                     Log.i(TAG, "removeFavoriteFromSQLite: first_name = " +
                             cursor.getString(1));
@@ -1814,7 +1814,7 @@ public class CurrentPartnersDB extends UserDB{
             cursor.moveToFirst();
             if(cursor != null){
                 do{
-                    Log.i(TAG, "removeFollowerFromSQLite: id = " +
+                    Log.i(TAG, "removeFollowerFromSQLite: notification_id = " +
                             cursor.getString(0));
                     Log.i(TAG, "removeFollowerFromSQLite: first_name = " +
                             cursor.getString(1));

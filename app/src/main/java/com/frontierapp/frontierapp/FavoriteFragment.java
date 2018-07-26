@@ -102,12 +102,12 @@ public class FavoriteFragment extends Fragment {
                     users = currentPartnersDB.getFavoritesUserDataFromSQLite();
                     profiles = currentPartnersDB.getFavoritesProfileFromSQLite();
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(400);
                     } catch (InterruptedException e) {
                         Log.w(TAG, "run: ", e);
                     }
                     timeout++;
-                }while((users == (null) || profiles == (null)) && !(timeout >= 4));
+                }while((users == (null) || profiles == (null)) && !(timeout >= 3));
 
                 if(users != (null) && profiles != (null)) {
                     for (int i = 0; i < users.size(); i++) {
@@ -134,7 +134,7 @@ public class FavoriteFragment extends Fragment {
                 }
 
             }
-        }, 1000);
+        }, 400);
     }
 
     public void refreshFavoriteList(){
@@ -158,12 +158,12 @@ public class FavoriteFragment extends Fragment {
                     users = currentPartnersDB.getFavoritesUserDataFromSQLite();
                     profiles = currentPartnersDB.getFavoritesProfileFromSQLite();
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(400);
                     } catch (InterruptedException e) {
                         Log.w(TAG, "run: ", e);
                     }
                     timeout++;
-                } while ((users == (null) || profiles == (null)) && !(timeout >= 4));
+                } while ((users == (null) || profiles == (null)) && !(timeout >= 3));
 
                 if (users != (null) && profiles != (null)) {
                     for (int i = 0; i < users.size(); i++) {
@@ -190,7 +190,7 @@ public class FavoriteFragment extends Fragment {
                     favoriteSwipeRefreshLayout.setRefreshing(false);
                 }
             }
-        }, 1000);
+        }, 400);
     }
 
     @Override
