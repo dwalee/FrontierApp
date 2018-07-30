@@ -11,7 +11,7 @@
     <item
         android:title=""
         android:id="@+id/denyMenu"
-        android:icon="@drawable/account_remove_red"
+        android:icon="@drawable/sent"
         app:showAsAction="always"
         android:visible="false"
         />
