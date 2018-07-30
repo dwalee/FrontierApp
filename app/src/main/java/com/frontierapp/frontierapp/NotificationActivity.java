@@ -101,7 +101,7 @@ public class NotificationActivity extends AppCompatActivity {
                             } catch (InterruptedException e) {
                                 Log.w(TAG, "run: ", e);
                             }
-
+//
                             timer++;
                         } while (user == null && timer <= 4);
                     }
