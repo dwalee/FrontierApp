@@ -20,7 +20,7 @@ public class ConnectionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connections);
-        startBackgroundService();
+        //startBackgroundService();
 
         instantiateViews();
     }
@@ -47,7 +47,7 @@ public class ConnectionsActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        stopBackgroundService();
+        //stopBackgroundService();
         super.onDestroy();
     }
 

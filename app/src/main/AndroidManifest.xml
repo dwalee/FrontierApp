@@ -65,7 +65,8 @@
             android:exported="true" />
 
         <activity android:name=".ConnectionsActivity" />
-        <activity android:name=".NotificationActivity"></activity>
+        <activity android:name=".NotificationActivity" />
+        <activity android:name=".FrontierSplashActivity"></activity>
     </application>
 
 </manifest>

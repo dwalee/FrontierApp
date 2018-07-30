@@ -64,7 +64,7 @@ public class CurrentPartnersFirestore extends UserDB{
                         + documentSnapshot.exists() + "]");
                 if(documentSnapshot.exists()){
                     userConnections
-                            .set(partnered, SetOptions.merge())
+                            .update(partnered)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {

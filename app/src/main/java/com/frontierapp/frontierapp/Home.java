@@ -71,13 +71,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         navigationView= (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //View headerView = navigationView.getHeaderView(0);
-        //LinearLayout headerImageView = (t) headerView.findViewById(R.notification_id.profileBackground);
-        /*Glide.with(this)
-                .load("https://vignette.wikia.nocookie.net/dragonball/images/c/c2/" +
-                        "Gizard_Wasteland_DBZ_Ep_33_003.png/revision/latest?cb=20170827060816")
-                .into(headerImageView);*/
-
         //Navigation Drawer
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,
                 R.string.open_drawer,R.string.close_drawer);
@@ -98,8 +91,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
         String userId = firebaseuser.getUid();
-        startBackgroundService();
-        //downloadUserProfileFromFirestore(userId);
+        //startBackgroundService();
+        startIntentService();
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -111,6 +104,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     }
 
+    public void startIntentService(){
+        Intent followerIntent = new Intent(this, UserFollowerFirestoreBackgroundService.class);
+        followerIntent.putExtra("UserId", firebaseuser.getUid());
+        startService(followerIntent);
+    }
+
     public void startBackgroundService(){
         Intent intent = new Intent(this, UserProfileFirestoreBackgroundService.class);
         intent.putExtra("UserId", firebaseuser.getUid());
@@ -120,11 +119,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public void stopBackgroundService(){
         Intent intent = new Intent(this, UserProfileFirestoreBackgroundService.class);
         stopService(intent);
-    }
-
-    public void downloadUserProfileFromFirestore(String userId){
-        userFirestore = new UserFirestore(getApplicationContext());
-        userFirestore.getUserProfileDataFromFirestore(userId);
     }
 
     public void loadDataToSQLite() {

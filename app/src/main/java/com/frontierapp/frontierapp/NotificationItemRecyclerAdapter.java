@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
+
+import static com.google.android.gms.wearable.DataMap.TAG;
 
 public class NotificationItemRecyclerAdapter extends RecyclerView.Adapter<NotificationViewHolder> {
     private Context context;
@@ -41,6 +44,7 @@ public class NotificationItemRecyclerAdapter extends RecyclerView.Adapter<Notifi
         String cancelButtonName = notificationViewData.getNotifcationCancelButtonName();
 
         holder.setNotification_id(notificationViewData.getNotification_id());
+
         holder.setSender_id(notificationViewData.getSender_id());
 
         if(acceptButtonName != null)
@@ -55,6 +59,7 @@ public class NotificationItemRecyclerAdapter extends RecyclerView.Adapter<Notifi
 
         String full_name = notificationViewData.getFull_name();
         holder.setFullName(full_name);
+        Log.i(TAG, "onBindViewHolder: full_name = " + full_name);
 
         int fullNameSize = 0;
         if(full_name != null)
@@ -69,6 +74,7 @@ public class NotificationItemRecyclerAdapter extends RecyclerView.Adapter<Notifi
 
         String notificationImageUrl = notificationViewData.getNotificationImageUrl();
 
+        Log.i(TAG, "onBindViewHolder: notificationImageUrl = " + notificationImageUrl);
         Glide.with(context)
                 .load(notificationImageUrl)
                 .apply(RequestOptions.circleCropTransform())
