@@ -13,4 +13,5 @@ public enum NotificationStatus {
     public boolean getValue(){
         return b;
     }
+
 }

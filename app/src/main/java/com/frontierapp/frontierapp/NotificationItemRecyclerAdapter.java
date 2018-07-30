@@ -1,7 +1,11 @@
 package com.frontierapp.frontierapp;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,14 +34,14 @@ public class NotificationItemRecyclerAdapter extends RecyclerView.Adapter<Notifi
     }
 
     @Override
-    public void onBindViewHolder(NotificationViewHolder holder, int position) {
+    public void onBindViewHolder(final NotificationViewHolder holder, int position) {
         final NotificationViewData notificationViewData = notificationsViewDataList.get(position);
-
-        holder.notificationTextView.setText(notificationViewData.getNotificationText());
 
         String acceptButtonName = notificationViewData.getNotificationAcceptButtonName();
         String cancelButtonName = notificationViewData.getNotifcationCancelButtonName();
-        String notifcationImageUrl = notificationViewData.getNotificationImageUrl();
+
+        holder.setNotification_id(notificationViewData.getNotification_id());
+        holder.setSender_id(notificationViewData.getSender_id());
 
         if(acceptButtonName != null)
             holder.notificationAcceptButton.setText(acceptButtonName);
@@ -49,8 +53,24 @@ public class NotificationItemRecyclerAdapter extends RecyclerView.Adapter<Notifi
         else
             holder.notificationCancelButton.setVisibility(View.GONE);
 
+        String full_name = notificationViewData.getFull_name();
+        holder.setFullName(full_name);
+
+        int fullNameSize = 0;
+        if(full_name != null)
+            fullNameSize = notificationViewData.getFull_name().length();
+
+        final SpannableStringBuilder sb = new SpannableStringBuilder( full_name
+                + " " + notificationViewData.getNotificationText());
+        final StyleSpan bold = new StyleSpan(Typeface.BOLD);
+        sb.setSpan(bold, 0, fullNameSize, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        holder.notificationTextView.setText(sb);
+
+        String notificationImageUrl = notificationViewData.getNotificationImageUrl();
+
         Glide.with(context)
-                .load(notifcationImageUrl)
+                .load(notificationImageUrl)
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.notificationImageView);
     }

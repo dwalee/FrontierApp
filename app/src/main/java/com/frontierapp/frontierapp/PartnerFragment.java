@@ -108,12 +108,12 @@ public class PartnerFragment extends Fragment {
                     users = currentPartnersDB.getCurrentPartnersDataFromSQLite();
                     profiles = currentPartnersDB.getCurrentPartnersProfileFromSQLite();
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(400);
                     } catch (InterruptedException e) {
                         Log.w(TAG, "run: ", e);
                     }
                     timeout++;
-                }while((users == (null) || profiles == (null)) && !(timeout >= 4));
+                }while((users == (null) || profiles == (null)) && !(timeout >= 3));
 
                 for(int i=0; i<users.size();i++) {
                     User user = users.get(i);
@@ -138,7 +138,7 @@ public class PartnerFragment extends Fragment {
                     }
                 }
             }
-        }, 1000);
+        }, 500);
 
     }
 
@@ -169,12 +169,12 @@ public class PartnerFragment extends Fragment {
                     users = currentPartnersDB.getCurrentPartnersDataFromSQLite();
                     profiles = currentPartnersDB.getCurrentPartnersProfileFromSQLite();
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(400);
                     } catch (InterruptedException e) {
                         Log.w(TAG, "run: ", e);
                     }
                     timeout++;
-                } while ((users == (null) || profiles == (null)) && !(timeout >= 4));
+                } while ((users == (null) || profiles == (null)) && !(timeout >= 3));
 
                 if (users != (null) && profiles != (null)) {
                     for (int i = 0; i < users.size(); i++) {
@@ -203,7 +203,7 @@ public class PartnerFragment extends Fragment {
                     partnerSwipeRefreshLayout.setRefreshing(false);
                 }
             }
-        }, 1000);
+        }, 500);
 
     }
 

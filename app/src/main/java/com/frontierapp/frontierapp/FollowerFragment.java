@@ -79,7 +79,6 @@ public class FollowerFragment extends Fragment {
             @Override
             public void onRefresh() {
                 refreshFollowerList();
-                followerSwipeRefreshLayout.setRefreshing(false);
             }
         });
 
@@ -111,12 +110,12 @@ public class FollowerFragment extends Fragment {
                     users = currentPartnersDB.getFollowersUserDataFromSQLite();
                     profiles = currentPartnersDB.getFollowersProfileFromSQLite();
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(400);
                     } catch (InterruptedException e) {
                         Log.w(TAG, "run: ", e);
                     }
                     timeout++;
-                }while((users == (null) || profiles == (null)) && !(timeout >= 4));
+                }while((users == (null) || profiles == (null)) && !(timeout >= 3));
 
                 Log.i(TAG, "run: users = " + users);
                 if(users != (null) && profiles != (null)) {
@@ -146,7 +145,7 @@ public class FollowerFragment extends Fragment {
                     }
                 }
             }
-        }, 1000);
+        }, 400);
     }
 
     public void refreshFollowerList(){
@@ -170,12 +169,12 @@ public class FollowerFragment extends Fragment {
                     users = currentPartnersDB.getFollowersUserDataFromSQLite();
                     profiles = currentPartnersDB.getFollowersProfileFromSQLite();
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(400);
                     } catch (InterruptedException e) {
                         Log.w(TAG, "run: ", e);
                     }
                     timeout++;
-                } while ((users == (null) || profiles == (null)) && !(timeout >= 4));
+                } while ((users == (null) || profiles == (null)) && !(timeout >= 3));
 
                 if (users != (null) && profiles != (null)) {
                     for (int j = 0; j < userList.size(); j++) {
@@ -194,7 +193,7 @@ public class FollowerFragment extends Fragment {
                     followerSwipeRefreshLayout.setRefreshing(false);
                 }
             }
-        }, 3000);
+        }, 500);
     }
 
     /**

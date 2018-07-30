@@ -7,6 +7,15 @@ public class Notification {
     NotificationStatus notificationStatus;
     Date timestamp;
     String senderId;
+    String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public NotificationType getNotificationType() {
         return notificationType;

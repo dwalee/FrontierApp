@@ -3,7 +3,8 @@ package com.frontierapp.frontierapp;
 public enum NotificationType {
     PARTNERSHIP_REQUEST("Partnership Request"),
     PARTNERSHIP_ACCEPTED("Partnership Accepted"),
-    FOLLOW("Follow");
+    FOLLOW("Follow"),
+    IGNORE("IGNORE");
 
     NotificationType(String value) {
         this.value = value;

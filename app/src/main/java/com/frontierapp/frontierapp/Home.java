@@ -72,7 +72,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         navigationView.setNavigationItemSelectedListener(this);
 
         //View headerView = navigationView.getHeaderView(0);
-        //LinearLayout headerImageView = (t) headerView.findViewById(R.id.profileBackground);
+        //LinearLayout headerImageView = (t) headerView.findViewById(R.notification_id.profileBackground);
         /*Glide.with(this)
                 .load("https://vignette.wikia.nocookie.net/dragonball/images/c/c2/" +
                         "Gizard_Wasteland_DBZ_Ep_33_003.png/revision/latest?cb=20170827060816")
@@ -107,7 +107,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             public void run() {
                 loadDataToSQLite();
             }
-        }, 2000);
+        }, 5000);
 
     }
 

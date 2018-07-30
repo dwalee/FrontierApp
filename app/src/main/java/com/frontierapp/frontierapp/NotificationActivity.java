@@ -1,13 +1,17 @@
 package com.frontierapp.frontierapp;
 
-import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +22,13 @@ public class NotificationActivity extends AppCompatActivity {
     SwipeRefreshLayout notificationSwipeRefreshLayout;
     Toolbar notificationToolbar;
 
+    UserFirestore userFirestore = new UserFirestore();
+    NotificationFirestore notificationFirestore = new NotificationFirestore();
+
     private final List<NotificationViewData> notificationViewDataList =
             new ArrayList<>();
     private NotificationItemRecyclerAdapter notificationItemRecyclerAdapter;
+    private final FirebaseUser firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +60,7 @@ public class NotificationActivity extends AppCompatActivity {
         notificationSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                refreshNotifications();
             }
         });
 
@@ -60,16 +68,126 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     public void loadNotifications(){
-        NotificationViewData notificationViewData = new NotificationViewData();
-        notificationViewData.setNotificationImageUrl(
-                "https://firebasestorage.googleapis.com/v0/b/frontierapp-65ac1.appspot.com/o/" +
-                        "UserImages%2FUsers%2FNpDh1YWoGAc7Mn39itFNwpQ8pKg2%2F1531215199981." +
-                        "gif?alt=media&token=856714ab-af9d-4874-938a-aa24717ee6af");
-        notificationViewData.setNotificationText("Yoshua Isreal has followed you.");
+        notificationViewDataList.clear();
+        notificationFirestore.receiveNotification(firebaseuser.getUid());
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                final List<Notification> notificationList = notificationFirestore.getNotificationList();
+                Log.i(TAG, "loadNotifications: getNotificationList() = " + notificationList);
 
-        notificationViewDataList.add(notificationViewData);
+                for (int i = 0; i < notificationList.size(); i++) {
+                    final NotificationType notificationType = notificationList.get(i).getNotificationType();
+                    final String notificationId = notificationList.get(i).getId();
+                    final String senderId = notificationList.get(i).getSenderId();
 
-        notificationItemRecyclerAdapter.notifyDataSetChanged();
+                    userFirestore.getUserProfileDataFromFirestore(senderId);
+                    Handler handler1 = new Handler();
+                    handler1.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            NotificationViewData notificationViewData = new NotificationViewData();
+                            User user = userFirestore.getUser();
+                            Profile profile = userFirestore.getProfile();
+
+                            String full_name = user.getFirst_name().toString() + " " + user.getLast_name().toString();
+                            notificationViewData.setFull_name(full_name);
+
+                            String image_url = profile.getProfileAvatarUrl();
+                            notificationViewData.setNotificationImageUrl(image_url);
+
+                            switch (notificationType) {
+                                case FOLLOW:
+                                    notificationViewData.setNotificationText(NotificationConstants.FOLLOWED);
+                                    break;
+                                case PARTNERSHIP_ACCEPTED:
+                                    notificationViewData.setNotificationText(NotificationConstants.PARTNERSHIP_ACCEPTED);
+                                    break;
+                                case PARTNERSHIP_REQUEST:
+                                    notificationViewData.setNotificationText(NotificationConstants.PARTNERSHIP_REQUEST);
+                                    notificationViewData.setNotificationAcceptButtonName("Accept");
+                                    notificationViewData.setNotifcationCancelButtonName("Deny");
+                                    break;
+                                case IGNORE:
+                                    break;
+                            }
+
+
+                            notificationViewData.setNotification_id(notificationId);
+                            notificationViewData.setSender_id(senderId);
+
+                            notificationViewDataList.add(notificationViewData);
+                            notificationItemRecyclerAdapter.notifyDataSetChanged();
+                        }
+                    }, 1000);
+                }
+            }
+        },500);
+    }
+
+    public void refreshNotifications(){
+        notificationViewDataList.clear();
+        notificationSwipeRefreshLayout.setColorSchemeResources(R.color.colorLoadRefresh);
+        notificationFirestore.receiveNotification(firebaseuser.getUid());
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                final List<Notification> notificationList = notificationFirestore.getNotificationList();
+                Log.i(TAG, "loadNotifications: getNotificationList() = " + notificationList);
+
+                for (int i = 0; i < notificationList.size(); i++) {
+                    final NotificationType notificationType = notificationList.get(i).getNotificationType();
+                    final String notificationId = notificationList.get(i).getId();
+                    final String senderId = notificationList.get(i).getSenderId();
+
+                    userFirestore.getUserProfileDataFromFirestore(senderId);
+                    Handler handler1 = new Handler();
+                    handler1.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            NotificationViewData notificationViewData = new NotificationViewData();
+                            User user = userFirestore.getUser();
+                            Profile profile = userFirestore.getProfile();
+
+                            String full_name = user.getFirst_name().toString() + " " + user.getLast_name().toString();
+                            notificationViewData.setFull_name(full_name);
+
+                            String image_url = profile.getProfileAvatarUrl();
+                            notificationViewData.setNotificationImageUrl(image_url);
+
+                            switch (notificationType) {
+                                case FOLLOW:
+                                    notificationViewData.setNotificationText(NotificationConstants.FOLLOWED);
+                                    break;
+                                case PARTNERSHIP_ACCEPTED:
+                                    notificationViewData.setNotificationText(NotificationConstants.PARTNERSHIP_ACCEPTED);
+                                    break;
+                                case PARTNERSHIP_REQUEST:
+                                    notificationViewData.setNotificationText(NotificationConstants.PARTNERSHIP_REQUEST);
+                                    notificationViewData.setNotificationAcceptButtonName("Accept");
+                                    notificationViewData.setNotifcationCancelButtonName("Deny");
+                                    break;
+                                case IGNORE:
+                                    break;
+                            }
+
+                            notificationViewData.setNotification_id(notificationId);
+                            notificationViewData.setSender_id(senderId);
+                            notificationViewDataList.add(notificationViewData);
+
+                            notificationSwipeRefreshLayout.setColorSchemeResources(R.color.colorFinishRefresh);
+                            notificationItemRecyclerAdapter.notifyDataSetChanged();
+                        }
+                    }, 500);
+                }
+
+                notificationSwipeRefreshLayout.setRefreshing(false);
+            }
+        },500);
     }
 
     @Override
@@ -83,4 +201,5 @@ public class NotificationActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

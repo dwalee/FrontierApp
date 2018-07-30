@@ -29,28 +29,17 @@ import java.util.Map;
 
 public class CurrentPartnersFirestore extends UserDB{
     private static final String TAG = "CurrentPartnersFS";
-    Users users;
-    Profiles profiles;
-    CurrentPartnersDB currentPartnersDB;
-    List<String> partnerIDList;
-    List<String> followerIDList;
+    private Users users;
+    private CurrentPartnersDB currentPartnersDB;
+    private List<String> partnerIDList;
+    private List<String> followerIDList;
 
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    Boolean collectedFavorite = false;
-    Boolean collectedPartner = false;
-    Boolean collectedFollower = false;
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private Boolean collectedFavorite = false;
+    private Boolean collectedPartner = false;
+    private Boolean collectedFollower = false;
 
-    public CurrentPartnersFirestore(Context context, User user, Profile profile) {
-        super(context, user, profile);
-    }
-
-    public CurrentPartnersFirestore(Context context, User user) {
-        super(context, user);
-    }
-
-    public CurrentPartnersFirestore(Context context, Profile profile) {
-        super(context, profile);
-    }
+    private NotificationFirestore notificationFirestore = new NotificationFirestore();
 
     public CurrentPartnersFirestore(Context context) {
         super(context);
@@ -121,16 +110,21 @@ public class CurrentPartnersFirestore extends UserDB{
 
     public Boolean sendRequestToNewPartnerToFirestore(final String currentUserID, final String newPartnerId,
                                                       final PartnerStatus status){
-        Log.d(TAG, "addNewPartnerToFirestore() called with: currentUserID = ["
-                + currentUserID + "], newPartnerId = [" + newPartnerId + "]");
+        Log.d(TAG, "sendRequestToNewPartnerToFirestore() called with: currentUserID = [" + currentUserID + "], " +
+                "newPartnerId = [" + newPartnerId + "], status = [" + status + "]");
         userData = firebaseFirestore.collection("UserInformation")
                 .document("Users").collection("User").document(newPartnerId);
 
         final Map<String, Object> partnered = new HashMap<>();
-        if(status.equals(PartnerStatus.Pending_Sent))
+        if(status.equals(PartnerStatus.Pending_Sent)) {
+            notificationFirestore.sendNotification(NotificationType.PARTNERSHIP_REQUEST, currentUserID, newPartnerId);
             partnered.put("partner", PartnerStatus.Pending_Response.getStatus());
-        else
+        }
+        else {
+            if(status.equals(PartnerStatus.True))
+                notificationFirestore.sendNotification(NotificationType.PARTNERSHIP_ACCEPTED, currentUserID, newPartnerId);
             partnered.put("partner", status.getStatus());
+        }
 
         final DocumentReference userConnections = userData.collection("Connections").document(currentUserID);
 
@@ -211,6 +205,7 @@ public class CurrentPartnersFirestore extends UserDB{
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             addFollowerIdToFirestore(currentUserID, newFavId);
+                                            notificationFirestore.sendNotification(NotificationType.FOLLOW, currentUserID, newFavId);
                                             currentPartnersDB = new CurrentPartnersDB(context);
                                             currentPartnersDB.addFavoriteIdToSQLite(newFavId);
                                         }
@@ -231,6 +226,7 @@ public class CurrentPartnersFirestore extends UserDB{
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             addFollowerIdToFirestore(currentUserID, newFavId);
+                                            notificationFirestore.sendNotification(NotificationType.FOLLOW, currentUserID, newFavId);
                                             currentPartnersDB = new CurrentPartnersDB(context);
                                             currentPartnersDB.addFavoriteIdToSQLite(newFavId);
                                         }
