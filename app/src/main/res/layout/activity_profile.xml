@@ -19,7 +19,7 @@
             android:layout_height="270dp"
             android:id="@+id/profileCollapsingToolbar"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/colorPrimary"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleGravity="center_horizontal"
@@ -106,6 +106,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:src="@drawable/message_black"
+                            android:id="@+id/message"
                             />
 
                         <TextView
