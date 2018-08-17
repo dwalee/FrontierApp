@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 else {
                                     Toast.makeText(MainActivity.this, "Sign successful", Toast.LENGTH_SHORT).show();
-                                    Intent welcome = new Intent(MainActivity.this, Home.class);
+                                    Intent welcome = new Intent(MainActivity.this, FrontierSplashActivity.class);
                                     uid = mAuth.getCurrentUser().getUid();
                                     Log.i("onComplete: ", "uid: " + uid);
                                     startActivity(welcome);

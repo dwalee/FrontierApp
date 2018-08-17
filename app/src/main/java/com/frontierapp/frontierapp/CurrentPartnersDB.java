@@ -29,14 +29,6 @@ public class CurrentPartnersDB extends UserDB{
         super(context, user, profile);
     }
 
-    public CurrentPartnersDB(Context context, User user) {
-        super(context, user);
-    }
-
-    public CurrentPartnersDB(Context context, Profile profile) {
-        super(context, profile);
-    }
-
     public CurrentPartnersDB(Context context) {
         super(context);
     }
@@ -1814,7 +1806,7 @@ public class CurrentPartnersDB extends UserDB{
             cursor.moveToFirst();
             if(cursor != null){
                 do{
-                    Log.i(TAG, "removeFollowerFromSQLite: notification_id = " +
+                    Log.i(TAG, "removeFollowerFromSQLite: follower_id = " +
                             cursor.getString(0));
                     Log.i(TAG, "removeFollowerFromSQLite: first_name = " +
                             cursor.getString(1));
@@ -1835,4 +1827,87 @@ public class CurrentPartnersDB extends UserDB{
             return false;
         }
     }
+
+
+    /**
+     * This method removes a record from the favorite_ids table
+     * @param favId This parameter requires a String value to search
+     *              and remove an notification_id from the table
+     * @return Boolean This returns true if the notification_id is removed successfully
+     * otherwise it returns false if the notification_id isn't found or an exception occurs
+     */
+    public Boolean removePartnerIdFromSQLite(String favId){
+        Log.d(TAG, "removeFavoriteIdFromSQLite() called with: favId = [" + favId + "]");
+        try{
+            SQLiteDatabase userDatabase = SQLiteDatabase.openDatabase(
+                    context.getDatabasePath("User_Data").toString(),
+                    null, SQLiteDatabase.OPEN_READONLY
+            );
+            String arg = "'" + favId + "'";
+            String sql = "DELETE FROM favorite_ids " +
+                    "Where favorite_id=" + arg;
+
+            userDatabase.rawQuery(sql, null);
+            userDatabase.close();
+
+            Log.d(TAG, "removeFavoriteIdFromSQLite() returned: " + true);
+            return true;
+        }
+        catch(Exception e){
+            Log.w(TAG, "removeFavoriteIdFromSQLite: ",e);
+            Log.d(TAG, "removeFavoriteIdFromSQLite() returned: " + false);
+            return false;
+        }
+
+    }
+
+    /**
+     * This method removes partner user and profile data from the current_partners table
+     * @param partnerID This parameter requires a String value to search
+     *              and remove the partner user and profile data from current_partners table
+     * @return Boolean This returns true if the user is removed successfully
+     * otherwise it returns false if the user isn't found or an exception occurs
+     */
+    public Boolean removePartnerFromSQLite(String partnerID){
+        Log.d(TAG, "removePartnerFromSQLite() called with: partnerID = [" + partnerID + "]");
+        try{
+            SQLiteDatabase userDatabase = SQLiteDatabase.openDatabase(
+                    context.getDatabasePath("User_Data").toString(),
+                    null, SQLiteDatabase.OPEN_READWRITE
+            );
+            String arg = "'" + partnerID + "'";
+            String sql = "DELETE FROM current_partners " +
+                    "Where partner_id=" + arg;
+
+            //userDatabase.rawQuery(sql, null);
+            userDatabase.delete("current_partners", "partner_id=" + arg, null);
+
+            String select = "SELECT * FROM current_partners";
+            Cursor cursor = userDatabase.rawQuery(select, null);
+
+            cursor.moveToFirst();
+            if(cursor != null){
+                do{
+                    Log.i(TAG, "removePartnerFromSQLite: partner_id = " +
+                            cursor.getString(0));
+                    Log.i(TAG, "removePartnerFromSQLite: first_name = " +
+                            cursor.getString(1));
+                    Log.i(TAG, "removePartnerFromSQLite: last_name = " +
+                            cursor.getString(2));
+                }while(cursor.moveToNext());
+            }
+
+            cursor.close();
+            userDatabase.close();
+
+            Log.d(TAG, "removePartnerFromSQLite() returned: " + true);
+            return true;
+        }
+        catch(Exception e){
+            Log.w(TAG, "removePartnerFromSQLite: ",e);
+            Log.d(TAG, "removePartnerFromSQLite() returned: " + false);
+            return false;
+        }
+    }
+
 }

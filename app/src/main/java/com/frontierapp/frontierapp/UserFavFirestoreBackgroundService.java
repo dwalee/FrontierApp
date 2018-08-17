@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 public class UserFavFirestoreBackgroundService extends Service {
@@ -64,6 +65,9 @@ public class UserFavFirestoreBackgroundService extends Service {
         @Override
         protected void onPostExecute(Void aVoid) {
             Log.i(TAG, "onPostExecute, Thread name: " + Thread.currentThread().getName() );
+
+            Intent localIntent = new Intent("user.background.service.profile");
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(localIntent);
             super.onPostExecute(aVoid);
         }
     }

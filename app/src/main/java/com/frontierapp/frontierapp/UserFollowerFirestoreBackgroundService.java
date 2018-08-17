@@ -3,6 +3,7 @@ package com.frontierapp.frontierapp;
 import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 public class UserFollowerFirestoreBackgroundService extends IntentService {
@@ -23,4 +24,5 @@ public class UserFollowerFirestoreBackgroundService extends IntentService {
         currentPartnersFirestore = new CurrentPartnersFirestore(getApplicationContext());
         currentPartnersFirestore.getFollowersIDsFromFireStore(id);
     }
+
 }
