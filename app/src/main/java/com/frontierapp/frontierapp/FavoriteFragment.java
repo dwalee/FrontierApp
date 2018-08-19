@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,6 +34,7 @@ public class FavoriteFragment extends Fragment {
     CurrentPartnersDB currentPartnersDB;
     Context context;
     View view;
+    TextView defaultTextView;
 
     private final List<User> userList = new ArrayList<>();
     private final List<FavoriteViewData> favoriteViewDataList = new ArrayList<>();
@@ -58,6 +60,7 @@ public class FavoriteFragment extends Fragment {
     }
 
     public View instantiateViews(View view){
+        defaultTextView = (TextView) view.findViewById(R.id.favoriteDefaultTextView);
         favoriteRecyclerView = (RecyclerView) view.findViewById(R.id.favoriteRecyclerview);
         userInformationList = new ArrayList<>();
 
@@ -109,14 +112,13 @@ public class FavoriteFragment extends Fragment {
                     timeout++;
                 }while((users == (null) || profiles == (null)) && !(timeout >= 3));
 
-                if(users != (null) && profiles != (null)) {
+                if(users.size() > 0 && profiles.size() > 0) {
                     for (int i = 0; i < users.size(); i++) {
                         User user = users.get(i);
                         Profile profile = profiles.get(i);
                         user.setAvatar(profile.getProfileAvatarUrl());
                         userList.add(user);
                     }
-
 
                     for (int j = 0; j < userList.size(); j++) {
                         User user = userList.get(j);
@@ -130,9 +132,14 @@ public class FavoriteFragment extends Fragment {
                         favoriteViewDataList.add(favoriteViewData);
 
                         favoriteItemRecyclerAdapter.notifyDataSetChanged();
-                    }
-                }
 
+                        defaultTextView.setVisibility(View.GONE);
+                        favoriteRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                }else if (favoriteViewDataList.size() == 0){
+                    defaultTextView.setVisibility(View.VISIBLE);
+                    favoriteRecyclerView.setVisibility(View.GONE);
+                }
             }
         }, 400);
     }

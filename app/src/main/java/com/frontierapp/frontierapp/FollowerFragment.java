@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -40,6 +41,7 @@ public class FollowerFragment extends Fragment {
     CurrentPartnersDB currentPartnersDB;
     Context context;
     View view;
+    TextView defaultTextView;
 
     private final List<User> userList = new ArrayList<>();
     private final List<FollowerViewData> followerViewDataList = new ArrayList<>();
@@ -65,6 +67,8 @@ public class FollowerFragment extends Fragment {
     }
 
     public View instantiateViews(View view){
+        defaultTextView = (TextView) view.findViewById(R.id.followerDefaultTextView);
+
         followerRecyclerView = (RecyclerView) view.findViewById(R.id.followerRecyclerview);
         userInformationList = new ArrayList<>();
 
@@ -118,7 +122,7 @@ public class FollowerFragment extends Fragment {
                 }while((users == (null) || profiles == (null)) && !(timeout >= 3));
 
                 Log.i(TAG, "run: users = " + users);
-                if(users != (null) && profiles != (null)) {
+                if(users.size() > 0 && profiles.size() > 0) {
                     for (int i = 0; i < users.size(); i++) {
                         User user = users.get(i);
                         Log.i(TAG, "run: user.getFirst_name = " + user.getFirst_name());
@@ -142,7 +146,13 @@ public class FollowerFragment extends Fragment {
                         followerViewDataList.add(followerViewData);
 
                         followerItemRecyclerAdapter.notifyDataSetChanged();
+
+                        defaultTextView.setVisibility(View.GONE);
+                        followerRecyclerView.setVisibility(View.VISIBLE);
                     }
+                }else if(followerViewDataList.size() == 0){
+                    defaultTextView.setVisibility(View.VISIBLE);
+                    followerRecyclerView.setVisibility(View.GONE);
                 }
             }
         }, 400);
