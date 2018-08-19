@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,12 +23,12 @@ public class NotificationActivity extends AppCompatActivity {
     RecyclerView notificationRecyclerview;
     SwipeRefreshLayout notificationSwipeRefreshLayout;
     Toolbar notificationToolbar;
+    TextView defaultTextView;
 
     UserFirestore userFirestore;
     NotificationFirestore notificationFirestore;
 
-    private final List<NotificationViewData> notificationViewDataList =
-            new ArrayList<>();
+    private List<NotificationViewData> notificationViewDataList = new ArrayList<>();
     private NotificationItemRecyclerAdapter notificationItemRecyclerAdapter;
     private final FirebaseUser firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -46,6 +48,8 @@ public class NotificationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        defaultTextView = (TextView) findViewById(R.id.notificationDefaultTextView);
+
         notificationItemRecyclerAdapter = new NotificationItemRecyclerAdapter(this ,
                 notificationViewDataList);
 
@@ -64,7 +68,6 @@ public class NotificationActivity extends AppCompatActivity {
                 refreshNotifications();
             }
         });
-
         loadNotifications();
     }
 
@@ -78,69 +81,71 @@ public class NotificationActivity extends AppCompatActivity {
             public void run() {
                 final List<Notification> notificationList = notificationFirestore.getNotificationList();
                 Log.i(TAG, "loadNotifications: getNotificationList() = " + notificationList);
+                if(notificationList.size() > 0) {
+                    for (int i = 0; i < notificationList.size(); i++) {
 
-                for (int i = 0; i < notificationList.size(); i++) {
-                    final NotificationType notificationType = notificationList.get(i).getNotificationType();
-                    final String notificationId = notificationList.get(i).getId();
-                    final String senderId = notificationList.get(i).getSenderId();
-                    Log.i(TAG, "run: senderId = " + senderId);
+                        final NotificationType notificationType = notificationList.get(i).getNotificationType();
+                        final String notificationId = notificationList.get(i).getId();
+                        final String senderId = notificationList.get(i).getSenderId();
+                        Log.i(TAG, "run: senderId = " + senderId);
 
 
-                    NotificationViewData notificationViewData = new NotificationViewData();
-                    userFirestore = new UserFirestore();
-                    User user = null;
-                    Profile profile = null;
+                        NotificationViewData notificationViewData = new NotificationViewData();
 
-                    int timer = 0;
-                    if(userFirestore.getUserProfileDataFromFirestore(senderId)) {
-                        do {
-                            user = userFirestore.getUser();
-                            profile = userFirestore.getProfile();
-                            try {
-                                Thread.sleep(400);
-                            } catch (InterruptedException e) {
-                                Log.w(TAG, "run: ", e);
+                        String full_name = notificationList.get(i).getFullName();
+                        notificationViewData.setFull_name(full_name);
+
+                        String image_url = notificationList.get(i).getProfileUrl();
+                        Log.i(TAG, "run: profile.image_url = " + image_url);
+                        notificationViewData.setNotificationImageUrl(image_url);
+
+                        switch (notificationType) {
+                            case FOLLOW:
+                                notificationViewData.setNotificationText(NotificationConstants.FOLLOWED);
+                                break;
+                            case PARTNERSHIP_ACCEPTED:
+                                notificationViewData.setNotificationText(NotificationConstants.PARTNERSHIP_ACCEPTED);
+                                break;
+                            case PARTNERSHIP_REQUEST:
+                                notificationViewData.setNotificationText(NotificationConstants.PARTNERSHIP_REQUEST);
+                                notificationViewData.setNotificationAcceptButtonName("Accept");
+                                notificationViewData.setNotifcationCancelButtonName("Deny");
+                                break;
+                            case IGNORE:
+                                Log.i(TAG, "run: notificationListSize = " + notificationViewDataList.size());
+                        }
+
+
+                        if (notificationType.equals(NotificationType.IGNORE)) {
+                            Log.i(TAG, "run: IGNORE");
+
+                            if (notificationViewDataList.size() == 0) {
+                                defaultTextView.setVisibility(View.VISIBLE);
+                                notificationRecyclerview.setVisibility(View.GONE);
+                                Log.i(TAG, "run: SIZE == 0");
                             }
-//
-                            timer++;
-                        } while (user == null && timer <= 4);
+                        } else {
+
+                            notificationViewData.setNotification_id(notificationId);
+                            notificationViewData.setSender_id(notificationList.get(i).getSenderId());
+                            Log.i(TAG, "run: SIZE != 0");
+
+                            notificationViewDataList.add(notificationViewData);
+
+                            notificationItemRecyclerAdapter.notifyDataSetChanged();
+
+                            defaultTextView.setVisibility(View.GONE);
+                            notificationRecyclerview.setVisibility(View.VISIBLE);
+                        }
+
+
                     }
-
-                    Log.d(TAG, "run: user = " + user + " profile = " + profile);
-
-                    String full_name = user.getFirst_name().toString() + " " + user.getLast_name().toString();
-                    notificationViewData.setFull_name(full_name);
-
-                    String image_url = profile.getProfileAvatarUrl();
-                    Log.i(TAG, "run: profile.image_url = " + image_url);
-                    notificationViewData.setNotificationImageUrl(image_url);
-
-                    switch (notificationType) {
-                        case FOLLOW:
-                            notificationViewData.setNotificationText(NotificationConstants.FOLLOWED);
-                            break;
-                        case PARTNERSHIP_ACCEPTED:
-                            notificationViewData.setNotificationText(NotificationConstants.PARTNERSHIP_ACCEPTED);
-                            break;
-                        case PARTNERSHIP_REQUEST:
-                            notificationViewData.setNotificationText(NotificationConstants.PARTNERSHIP_REQUEST);
-                            notificationViewData.setNotificationAcceptButtonName("Accept");
-                            notificationViewData.setNotifcationCancelButtonName("Deny");
-                            break;
-                        case IGNORE:
-                            break;
-                    }
-
-
-                    notificationViewData.setNotification_id(notificationId);
-                    notificationViewData.setSender_id(user.getUid());
-
-                    notificationViewDataList.add(notificationViewData);
-                    notificationItemRecyclerAdapter.notifyDataSetChanged();
-
+                }else{
+                    defaultTextView.setVisibility(View.VISIBLE);
+                    notificationRecyclerview.setVisibility(View.GONE);
                 }
             }
-        },500);
+        },1000);
     }
 
     public void refreshNotifications(){

@@ -7,6 +7,8 @@ public class Notification {
     NotificationStatus notificationStatus;
     Date timestamp;
     String senderId;
+    String fullName;
+    String profileUrl;
     String id;
 
     public String getId() {
@@ -47,5 +49,21 @@ public class Notification {
 
     public void setSenderId(String senderId) {
         this.senderId = senderId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
     }
 }

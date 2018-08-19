@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,6 +34,7 @@ public class PartnerFragment extends Fragment {
     FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     CurrentPartnersDB currentPartnersDB;
     Context context;
+    TextView currentPartnerDefaultTextView;
 
     private final List<User> userList = new ArrayList<>();
     private final List<CurrentPartnershipViewData> currentPartnershipViewDataList = new ArrayList<>();
@@ -63,6 +65,7 @@ public class PartnerFragment extends Fragment {
      * in the activity_current_partners xml to variables in this class
      */
     public void instantiateViews(View view){
+        currentPartnerDefaultTextView = (TextView) view.findViewById(R.id.currentPartnerDefaultTextView);
 
         partnerRecyclerView = (RecyclerView) view.findViewById(R.id.partnerRecyclerView);
         userInformationList = new ArrayList<>();
@@ -83,6 +86,7 @@ public class PartnerFragment extends Fragment {
         });
 
         getCurrentPartnerList();
+
     }
 
     /**
@@ -115,14 +119,14 @@ public class PartnerFragment extends Fragment {
                     timeout++;
                 }while((users == (null) || profiles == (null)) && !(timeout >= 3));
 
-                for(int i=0; i<users.size();i++) {
-                    User user = users.get(i);
-                    Profile profile = profiles.get(i);
-                    user.setAvatar(profile.getProfileAvatarUrl());
-                    userList.add(user);
-                }
+                if(users.size() > 0 && profiles.size() > 0 ) {
+                    for(int i=0; i<users.size();i++) {
+                        User user = users.get(i);
+                        Profile profile = profiles.get(i);
+                        user.setAvatar(profile.getProfileAvatarUrl());
+                        userList.add(user);
+                    }
 
-                if(users != (null) && profiles != (null)) {
                     for (int j = 0; j < userList.size(); j++) {
                         User user = userList.get(j);
                         CurrentPartnershipViewData currentPartnershipViewData = new CurrentPartnershipViewData();
@@ -135,7 +139,13 @@ public class PartnerFragment extends Fragment {
                         currentPartnershipViewDataList.add(currentPartnershipViewData);
 
                         currentPartnerItemRecyclerAdapter.notifyDataSetChanged();
+
+                        currentPartnerDefaultTextView.setVisibility(View.GONE);
+                        partnerRecyclerView.setVisibility(View.VISIBLE);
                     }
+                }else{
+                    currentPartnerDefaultTextView.setVisibility(View.VISIBLE);
+                    partnerRecyclerView.setVisibility(View.GONE);
                 }
             }
         }, 500);
