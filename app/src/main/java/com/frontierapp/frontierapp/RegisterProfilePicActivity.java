@@ -139,7 +139,7 @@ public class RegisterProfilePicActivity extends AppCompatActivity {
 
     private void uploadFile(){
         if(selectedImage != null){
-            StorageReference fileReference = storageReference.child("/" + currentUser + "/" + System.currentTimeMillis()+ "." + getFileExtension(selectedImage));
+            final StorageReference fileReference = storageReference.child("/" + currentUser + "/" + System.currentTimeMillis()+ "." + getFileExtension(selectedImage));
             fileReference.putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -154,7 +154,7 @@ public class RegisterProfilePicActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Upload Successful",Toast.LENGTH_SHORT).show();
                     String uid = databaseUser.push().getKey();
 
-                    Upload uploadImage = new Upload(uid,taskSnapshot.getDownloadUrl().toString());
+                    Upload uploadImage = new Upload(uid,fileReference.getDownloadUrl().toString());
 
 
                     Upload profilePic = new Upload(uid, uploadImage.toString());

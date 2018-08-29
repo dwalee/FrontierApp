@@ -103,17 +103,17 @@
                         android:layout_weight="1">
 
                         <ImageView
+                            android:id="@+id/messagePic"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/message_black"
-                            android:id="@+id/message"
-                            />
+                            android:src="@drawable/message_black" />
 
                         <TextView
+                            android:id="@+id/messageText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Message"
-                            android:textAlignment="center"/>
+                            android:textAlignment="center" />
 
                     </LinearLayout>
 

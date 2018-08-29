@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -106,6 +108,17 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.profile_menu,menu);
         return true;
+    }
+
+    public void goToMessages(View view){
+        switch (view.getId()){
+            case R.id.messagePic:
+            case R.id.messageText:
+                Intent messagesIntent = new Intent(ProfileActivity.this, chat.class);
+                startActivity(messagesIntent);
+            }
+
+
     }
 
     @Override
