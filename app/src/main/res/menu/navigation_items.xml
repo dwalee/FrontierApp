@@ -14,9 +14,9 @@
 
 
         <item
-            android:title="Messages"
-            android:id="@+id/outbox"
-            android:icon="@drawable/inbox"/>
+            android:id="@+id/navMessages"
+            android:icon="@drawable/inbox"
+            android:title="Messages" />
         <item
             android:title="@string/Notifications"
             android:id="@+id/notifications"

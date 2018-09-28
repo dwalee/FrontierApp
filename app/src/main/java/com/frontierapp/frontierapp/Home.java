@@ -53,8 +53,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         getSupportActionBar().setTitle("Frontier");
         //SET METHOD TO SHOW TITLE IN ACTIONBAR
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-        //SET METHOD TO SHOW back arrow in Action Bar
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         viewPager = (ViewPager) findViewById(R.id.viewPager_id);
 
@@ -200,6 +199,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.notifications:
                 Intent notificationIntent = new Intent(this, NotificationActivity.class);
                 startActivity(notificationIntent);
+                break;
+            case R.id.navMessages:
+                Intent messagesIntent = new Intent(this, chat.class);
+                startActivity(messagesIntent);
                 break;
 
             case R.id.vbc:

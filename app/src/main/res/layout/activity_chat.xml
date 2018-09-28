@@ -6,28 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".chat">
 
-    <EditText
-        android:id="@+id/chatEditText"
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/chatToolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#4CAF50" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/partnerList"
+        android:layout_width="match_parent"
+        android:layout_height="514dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:hint="Enter Message" />
-
-    <ListView
-        android:id="@+id/chatList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/chatEditText"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:id="@+id/sendButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:text="Send" />
-
+        android:layout_marginBottom="0dp"
+        android:layout_below="@id/chatToolBar"/>
 
 </RelativeLayout>

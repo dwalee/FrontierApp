@@ -30,9 +30,11 @@
         <!-- Firebase InstanceId Service -->
 
         <activity android:name=".Register" />
+        <activity android:name=".FrontierSplashActivity"/>
         <activity android:name=".SkillsInformationActivity" />
         <activity android:name=".ResetPassword" />
         <activity android:name=".Home" />
+        <activity android:name=".chat" />
 
         <meta-data
             android:name="preloaded_fonts"
