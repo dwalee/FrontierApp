@@ -93,7 +93,7 @@ public class SkillsInformationActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //addDbSkills();
+                addDbSkills();
                 addSkills();
                 Intent pic = new Intent(SkillsInformationActivity.this, RegisterProfilePicActivity.class);
                 startActivity(pic);
