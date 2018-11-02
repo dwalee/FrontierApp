@@ -38,27 +38,69 @@ import java.util.List;
 import java.util.Map;
 
 public class chatInfo {
-    private String userName;
+    private String firstName;
+    private String lastName;
     private String userPicture;
     private String userMessage;
-
-    public chatInfo() {
-
-    }
-
-    public chatInfo(String userName, String userPicture, String userMessage) {
-        this.userName = userName;
+    private String partner;
+    private String follower;
+    private String favorite;
+    private String messageUID;
+    public chatInfo(String firstName,String lastName, String userPicture, String userMessage) {
+        this.firstName = firstName;
         this.userPicture = userPicture;
         this.userMessage = userMessage;
 
+
     }
 
-    public String getUserName() {
-        return userName;
+    public String getPartner() {
+        return partner;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setPartner(String partner) {
+        this.partner = partner;
+    }
+
+    public String getFollower() {
+        return follower;
+    }
+
+    public void setFollower(String follower) {
+        this.follower = follower;
+    }
+
+    public String getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(String favorite) {
+        this.favorite = favorite;
+    }
+
+    public chatInfo(String partner, String follower, String favorite){
+        this.partner = partner;
+        this.follower = follower;
+        this.favorite =favorite;
+
+
+
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getUserPicture() {
@@ -76,4 +118,5 @@ public class chatInfo {
     public void setUserMessage(String userMessage) {
         this.userMessage = userMessage;
     }
+
 }

@@ -14,12 +14,13 @@
         android:background="#4CAF50" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/partnerList"
+        android:id="@+id/chatListRecycler"
         android:layout_width="match_parent"
-        android:layout_height="514dp"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="0dp"
-        android:layout_below="@id/chatToolBar"/>
+        android:layout_below="@id/chatToolBar">
+
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

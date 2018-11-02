@@ -15,6 +15,11 @@ public class CurrentPartnershipViewData {
     public CurrentPartnershipViewData() {
     }
 
+    public CurrentPartnershipViewData(String currentPartnerName, String currentPartnerProfilePicUrl, String currentPartnerId,
+                                      String currentPartnerMessage){
+
+    }
+
     public String getCurrentPartnerId() {
         return currentPartnerId;
     }

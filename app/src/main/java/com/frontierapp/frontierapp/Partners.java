@@ -46,7 +46,7 @@ public class Partners extends Fragment{
     private final List<User> userList = new ArrayList<>();
     private final List<PartnershipViewData> partnershipViewDataList = new ArrayList<>();
     private PartnerItemRecyclerAdapter partnerItemRecyclerAdapter;
-    FirebaseFirestore firebaseFirestore =FirebaseFirestore.getInstance();
+    FirebaseFirestore firebaseFirestore;
 
     public Partners() {
         // Required empty public constructor

@@ -2,7 +2,7 @@ package com.frontierapp.frontierapp;
 
 public class Skills {
 
-    private String  uid, skill1, skill2, skill3, skill4, skill5, skill6, skill7, dataSkill1, dataSkill2,dataSkill3, dataSkill4, dataSkill5, dataSkill6,dataSkill7;
+    private String  uid, skill1, skill2, skill3, skill4, skill5, skill6, skill7, skillName;
 
     public  Skills(){
 
@@ -18,6 +18,10 @@ public class Skills {
         this.skill6 = skill6;
         this.skill7 = skill7;
 
+    }
+
+    public Skills(String skillName){
+        this.skillName = skillName;
     }
 
 

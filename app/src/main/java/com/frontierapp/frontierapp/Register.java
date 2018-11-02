@@ -125,8 +125,7 @@ public class Register extends AppCompatActivity {
         Map<String, Object> user = new HashMap<>();
 
         user.put("User", userInfo);
-        firebaseFireStore.collection("UserInformation").document("Users")
-                .collection("User").document(uid)
+        firebaseFireStore.collection("UserInformation").document("Users").collection("User").document(uid)
                 .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

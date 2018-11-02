@@ -30,7 +30,7 @@
         <!-- Firebase InstanceId Service -->
 
         <activity android:name=".Register" />
-        <activity android:name=".FrontierSplashActivity"/>
+        <activity android:name=".FrontierSplashActivity" />
         <activity android:name=".SkillsInformationActivity" />
         <activity android:name=".ResetPassword" />
         <activity android:name=".Home" />
@@ -65,26 +65,34 @@
             android:name=".UserFollowerFirestoreBackgroundService"
             android:enabled="true"
             android:exported="true" />
-        <service
-            android:name=".MyFirebaseMessagingService">
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <activity android:name=".ConnectionsActivity" />
-        <activity android:name=".NotificationActivity"></activity>
+        <activity android:name=".NotificationActivity" />
 
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more. -->
+        <!--
+     Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/star" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
+
+        <activity android:name=".ChatUI"
+            android:parentActivityName=".chat"
+            >
+        </activity>
     </application>
 
 </manifest>

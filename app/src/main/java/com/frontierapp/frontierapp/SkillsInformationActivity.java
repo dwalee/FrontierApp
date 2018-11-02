@@ -84,8 +84,6 @@ public class SkillsInformationActivity extends AppCompatActivity {
         addSkill6.setVisibility(View.GONE);
 
 
-
-
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         userID = user.getUid();
@@ -107,7 +105,7 @@ public class SkillsInformationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 skillTwo.setVisibility(View.VISIBLE);
                 addSkill2.setVisibility(View.VISIBLE);
-                }
+            }
         });
 
         addSkill2.setOnClickListener(new View.OnClickListener() {
@@ -193,43 +191,50 @@ public class SkillsInformationActivity extends AppCompatActivity {
                 });
     }
 
-        public void addDbSkills(){
+    public void addDbSkills() {
 
-            String dbSKill1 = skillOne.getText().toString().toLowerCase();
-            String dbSKill2 = skillTwo.getText().toString().toLowerCase();
-            String dbSKill3 = skillThree.getText().toString().toLowerCase();
-            String dbSKill4 = skillFour.getText().toString().toLowerCase();
-            String dbSKill5 = skillFive.getText().toString().toLowerCase();
-            String dbSKill6 = skillSix.getText().toString().toLowerCase();
-            String dbSKill7 = skillSeven.getText().toString().toLowerCase();
+        String dbSKill1 = skillOne.getText().toString().toLowerCase();
+        String dbSKill2 = skillTwo.getText().toString().toLowerCase();
+        String dbSKill3 = skillThree.getText().toString().toLowerCase();
+        String dbSKill4 = skillFour.getText().toString().toLowerCase();
+        String dbSKill5 = skillFive.getText().toString().toLowerCase();
+        String dbSKill6 = skillSix.getText().toString().toLowerCase();
+        String dbSKill7 = skillSeven.getText().toString().toLowerCase();
+
+        String[] skillList = {dbSKill1, dbSKill2, dbSKill3, dbSKill4, dbSKill5, dbSKill6, dbSKill7};
 
 
-            dataSkills = new Skills(dbSKill1, dbSKill2, dbSKill3, dbSKill4, dbSKill5,
-                    dbSKill6, dbSKill7);
 
-            ArrayMap<String, Object> skillDb  = new ArrayMap<>();
-            skillDb.put("Skill", dataSkills.getSkill1());
-            skillDb.put("Skill", dataSkills.getSkill2());
-            skillDb.put("Skill", dataSkills.getSkill3());
-            skillDb.put("Skill", dataSkills.getSkill4());
-            skillDb.put("Skill", dataSkills.getSkill5());
-            skillDb.put("Skill", dataSkills.getSkill6());
-            skillDb.put("Skill", dataSkills.getSkill7());
+        for (int i = 0; i <= skillList.length - 1; i++) {
+            if (skillList[i] == "") {
+                break;
 
-            firebaseFireStore.collection("UserInformation").document("Users").collection("Skills").add(skillDb)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error adding document", e);
-                        }
-                    });
-        }}
+            }else {
+                dataSkills = new Skills(skillList[i]);
+
+                ArrayMap<String, Object> skillDb = new ArrayMap<>();
+                skillDb.put("Skill: ", skillList[i]);
+
+                firebaseFireStore.collection("UserInformation").document("Users").collection
+                        ("Skills").add(skillDb)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error adding document", e);
+                            }
+                        });
+
+            }
+        }
+
+    }
+}
 
 
 
