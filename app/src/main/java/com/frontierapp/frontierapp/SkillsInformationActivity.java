@@ -206,7 +206,7 @@ public class SkillsInformationActivity extends AppCompatActivity {
 
 
         for (int i = 0; i <= skillList.length - 1; i++) {
-            if (skillList[i] == "") {
+            if (skillList[i].isEmpty()) {
                 break;
 
             }else {
