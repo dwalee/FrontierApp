@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.ArrayMap;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,12 +27,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 public class ChatUI extends AppCompatActivity {
 
@@ -47,7 +57,14 @@ public class ChatUI extends AppCompatActivity {
     private TextView usernameTitle;
     private TextView userLastSeen;
     private String message_UID;
+    private RecyclerView message_List_user;
+    private final List<Messages> messagesList = new ArrayList<>();
+    private LinearLayoutManager linearLayoutManager;
+    private MessageAdapter messageAdapter;
 
+    private String message;
+    private Long time;
+    private Boolean seen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +85,15 @@ public class ChatUI extends AppCompatActivity {
         MessageSenderID = mAuth.getCurrentUser().getUid();
         MessageReceiverID = profileUserID.getCurrentPartnerId();
         MessageReceiverName = profileUserID.getCurrentPartnerName();
+
+        messageAdapter = new MessageAdapter(messagesList);
+
+        linearLayoutManager = new LinearLayoutManager(this);
+
+        message_List_user = (RecyclerView) findViewById(R.id.messages_List_users);
+
+        message_List_user.setHasFixedSize(true);
+        message_List_user.setLayoutManager(linearLayoutManager);
 
 
         ChatToolBar = (Toolbar) findViewById(R.id.chat_bar_layout);
@@ -94,9 +120,32 @@ public class ChatUI extends AppCompatActivity {
             public void onClick(View v) {
 
                 sendMessage();
+                FetchMessages();
             }
         });
-        };
+        }
+
+    private void FetchMessages() {
+// this shitty comment
+
+        firebaseFirestore.collection("UserInformation").document("Chat").collection(MessageSenderID)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+                        Messages messages = (Messages) queryDocumentSnapshots.getDocumentChanges();
+
+                        messagesList.add(messages);
+
+                        messageAdapter.notifyDataSetChanged();
+
+
+                    }
+                });
+
+    }
+
+    ;
 
     public void sendMessage() {
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -117,14 +166,14 @@ public class ChatUI extends AppCompatActivity {
 
 
             ArrayMap<String, Object> newUserChatInfo = new ArrayMap<>();
-            newUserChatInfo.put("Chat Message", MessageText);
-            newUserChatInfo.put("Timestamp", ServerValue.TIMESTAMP);
+            newUserChatInfo.put("Message", MessageText);
+            newUserChatInfo.put("Time", ServerValue.TIMESTAMP);
             newUserChatInfo.put("Seen", false);
 
             CollectionReference user_message_key = firebaseFirestore.collection("UserInformation").document("Chat").collection(MessageSenderID);
 
-            CollectionReference rec_user_message_key = firebaseFirestore.collection("UserInformation").document("Chat")
-                    .collection(MessageReceiverID);
+            //CollectionReference rec_user_message_key = firebaseFirestore.collection("UserInformation").document("Chat")
+                    //.collection(MessageReceiverID);
 
             Map<String, Object> userChat = new HashMap<>();
 
@@ -148,7 +197,7 @@ public class ChatUI extends AppCompatActivity {
                         }
                     });
 
-            userChat.put("Chat Details", newUserChatInfo);
+           /* userChat.put("Chat Details", newUserChatInfo);
             rec_user_message_key.add(userChat)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
@@ -166,7 +215,7 @@ public class ChatUI extends AppCompatActivity {
                                     , Toast.LENGTH_LONG)
                                     .show();
                         }
-                    });
+                    });*/
 
             Map<String, Object> MessageBodyDetails = new HashMap<>();
 

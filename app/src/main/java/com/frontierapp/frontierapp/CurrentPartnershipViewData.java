@@ -4,6 +4,8 @@ public class CurrentPartnershipViewData {
     String currentPartnerName;
     String currentPartnerProfilePicUrl;
     String currentPartnerId;
+    String currentPartnerMessage;
+
 
     public CurrentPartnershipViewData(String currentPartnerName, String currentPartnerProfilePicUrl,
                                       String currentPartnerId) {
@@ -15,8 +17,8 @@ public class CurrentPartnershipViewData {
     public CurrentPartnershipViewData() {
     }
 
-    public CurrentPartnershipViewData(String currentPartnerName, String currentPartnerProfilePicUrl, String currentPartnerId,
-                                      String currentPartnerMessage){
+    public CurrentPartnershipViewData(String currentPartnerMessage){
+        this.currentPartnerMessage = currentPartnerMessage;
 
     }
 
@@ -42,6 +44,13 @@ public class CurrentPartnershipViewData {
 
     public void setCurrentPartnerProfilePicUrl(String currentPartnerProfilePicUrl) {
         this.currentPartnerProfilePicUrl = currentPartnerProfilePicUrl;
+    }
+    public String getCurrentPartnerMessage() {
+        return currentPartnerMessage;
+    }
+
+    public void setCurrentPartnerMessage(String currentPartnerMessage) {
+        this.currentPartnerMessage = currentPartnerMessage;
     }
 
 }

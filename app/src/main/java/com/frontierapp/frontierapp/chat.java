@@ -18,13 +18,18 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.ArrayMap;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class chat extends AppCompatActivity {
     private static final String TAG = "CurrentPartnerActivity";
@@ -40,6 +45,17 @@ public class chat extends AppCompatActivity {
     private final List<CurrentPartnershipViewData> currentPartnershipViewDataList = new ArrayList<>();
     private ChatItemRecyclerAdapter chatItemRecyclerAdapter;
 
+    private String MessageSenderID;
+    private String MessageReceiverID;
+    private String MessageReceiverName;
+
+    private CurrentPartnershipViewData chatMessage;
+
+    private String currentPartnerMessage;
+
+    private CurrentPartnershipViewData profileUserID;
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +63,11 @@ public class chat extends AppCompatActivity {
         startBackgroundService();
 
         instantiateViews();
+
+       /* MessageSenderID = mAuth.getCurrentUser().getUid();
+        MessageReceiverID = profileUserID.getCurrentPartnerId();
+        MessageReceiverName = profileUserID.getCurrentPartnerName();*/
+
     }
 
     /**
@@ -104,6 +125,7 @@ public class chat extends AppCompatActivity {
                     user.setAvatar(profile.getProfileAvatarUrl());
                     userList.add(user);
                 }
+
 
 
                 for(int j=0;j<userList.size();j++){
