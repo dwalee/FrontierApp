@@ -9,54 +9,34 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class PartnershipViewData {
-    String partnerName;
-    String partnerAvatarUrl;
-    Bitmap partnerAvatarBitmap;
-    ImageDownloader imageDownloader;
-
-    public Bitmap getPartnerAvatarBitmap() {
-        return partnerAvatarBitmap;
-    }
-
-    public void setPartnerAvatarBitmap(Bitmap partnerAvatarBitmap) {
-        this.partnerAvatarBitmap = partnerAvatarBitmap;
-    }
-
-    public PartnershipViewData(String partnerName, String partnerAvatarUrl) {
-        this.partnerName = partnerName;
-        this.partnerAvatarUrl = partnerAvatarUrl;
-    }
+    String first_name;
+    String last_name;
+    String profile_url;
 
     public PartnershipViewData() {
     }
 
-    public String getPartnerName() {
-        return partnerName;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public void setPartnerName(String partnerName) {
-        this.partnerName = partnerName;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
-    public String getPartnerAvatarUrl() {
-        return partnerAvatarUrl;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public void setPartnerAvatarUrl(String partnerAvatarUrl) {
-        this.partnerAvatarUrl = partnerAvatarUrl;
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
-    //Download the bitmap image from the given url
-    public void convertUserAvatarUrlToBitmap(){
-        imageDownloader = new ImageDownloader();
-        if(getPartnerAvatarUrl() != "") {
-            try {
-                setPartnerAvatarBitmap(imageDownloader.execute(getPartnerAvatarUrl()).get());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
+    public String getProfile_url() {
+        return profile_url;
+    }
+
+    public void setProfile_url(String profile_url) {
+        this.profile_url = profile_url;
     }
 }

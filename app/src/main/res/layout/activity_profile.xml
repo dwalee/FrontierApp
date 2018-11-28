@@ -257,7 +257,7 @@
                             android:layout_height="wrap_content"
                             android:text="Java, Android, Python, C#, C++, SQL"
                             android:textSize="18sp"
-                            android:id="@+id/skillsTextView"
+                            android:id="@+id/connectionsSkillsTextView"
                             android:layout_weight=".5"/>
 
                     </LinearLayout>

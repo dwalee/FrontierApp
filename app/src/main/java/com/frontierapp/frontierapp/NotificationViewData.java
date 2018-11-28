@@ -1,14 +1,21 @@
 package com.frontierapp.frontierapp;
 
+import com.google.firebase.Timestamp;
+
+import java.sql.Date;
+
 public class NotificationViewData {
     String notificationText;
     String notificationAcceptButtonName;
     String notifcationCancelButtonName;
     String notificationImageUrl;
     String full_name;
+    Timestamp notificationTimestamp;
     String notification_id;
     String sender_id;
     Boolean read;
+    NotificationType notificationType;
+    String miscId, miscName;
 
     public String getFull_name() {
         return full_name;
@@ -72,5 +79,37 @@ public class NotificationViewData {
 
     public void setRead(Boolean read) {
         this.read = read;
+    }
+
+    public NotificationType getNotificationType() {
+        return notificationType;
+    }
+
+    public void setNotificationType(NotificationType notificationType) {
+        this.notificationType = notificationType;
+    }
+
+    public String getMiscId() {
+        return miscId;
+    }
+
+    public void setMiscId(String miscId) {
+        this.miscId = miscId;
+    }
+
+    public String getMiscName() {
+        return miscName;
+    }
+
+    public void setMiscName(String miscName) {
+        this.miscName = miscName;
+    }
+
+    public Timestamp getNotificationTimestamp() {
+        return notificationTimestamp;
+    }
+
+    public void setNotificationTimestamp(Timestamp notificationTimestamp) {
+        this.notificationTimestamp = notificationTimestamp;
     }
 }

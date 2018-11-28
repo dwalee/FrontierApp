@@ -33,7 +33,7 @@ public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemVi
     //Create your parent view and tie it to the viewholder
     @Override
     public PostItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_item_layout,
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.space_post_item_layout,
                                         parent, false);
         return new PostItemViewHolder(view);
     }
@@ -53,7 +53,9 @@ public class PostItemRecyclerViewAdapter extends RecyclerView.Adapter<PostItemVi
         Glide.with(view).load(postItemData.getPostPhoto()).into(holder.postImageButton);
         //holder.postImageButton.setImageBitmap(postItemData.getPostPhoto());
         postItemData.convertUserAvatarUrlToBitmap();
-        Glide.with(view).load(postItemData.getUserAvatarPhoto()).apply(RequestOptions.circleCropTransform()).into(holder.userAvatarImageView);
+        Glide.with(view).load("https://pbs.twimg.com/media/DXVX493U8AAvqLf.jpg")
+                .apply(RequestOptions.circleCropTransform())
+                .into(holder.userAvatarImageView);
         //holder.userAvatarImageView.setImageBitmap(postItemData.getUserAvatarPhoto());
         holder.likeIconImageView.setOnClickListener(new View.OnClickListener() {
             @Override

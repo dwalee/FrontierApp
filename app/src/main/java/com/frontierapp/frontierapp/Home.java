@@ -23,46 +23,59 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    Toolbar toolbar; ViewPager viewPager; TabLayout tabLayout; NavigationView navigationView;
-    DrawerLayout drawerLayout; ListView feedListView;
-    FirebaseFirestore mfirestore; FirebaseUser firebaseuser;
+    Toolbar toolbar;
+    ViewPager viewPager;
+    TabLayout tabLayout;
+    NavigationView navigationView;
+    DrawerLayout drawerLayout;
+    ListView feedListView;
     TextView titleTextView;
-    UserFirestore userFirestore;
-    UserDB userDB;
-    User user;
-    Profile profile;
+    ImageView navImageView;
+    TextView navEmail;
+    TextView navName;
+    View headerView;
+
+    UserFirestore userFirestore = new UserFirestore();
+    DocumentReference userData = userFirestore.getUserData(userFirestore.getCurrentUserId());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer);
 
+        instantiateViews();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        loadUserProfileFromFirestore();
+    }
+
+    public void instantiateViews(){
         titleTextView = (TextView) findViewById(R.id.titleTextView);
-        mfirestore = FirebaseFirestore.getInstance();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout_id);
 
-        //CREATE ACTIONBAR FROM WITH TOOLBAR VIEW
         setSupportActionBar(toolbar);
-        //SET TITLE FOR ACTIONBAR
         getSupportActionBar().setTitle("Frontier");
-        //SET METHOD TO SHOW TITLE IN ACTIONBAR
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-
 
         viewPager = (ViewPager) findViewById(R.id.viewPager_id);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        adapter.addFragment(new HomePage(),"Home");
+        //adapter.addFragment(new HomePage(),"Home");
         adapter.addFragment(new Hub(),"Hub");
-        adapter.addFragment(new Partners(),"Partners");
-
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -88,69 +101,44 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             }
         });*/
 
-        firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
-        String userId = firebaseuser.getUid();
-        //startBackgroundService();
-        startIntentService();
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadDataToSQLite();
-            }
-        }, 5000);
-
+        headerView = navigationView.getHeaderView(0);
+        navName = (TextView) headerView.findViewById(R.id.userName);
+        navEmail = (TextView) headerView.findViewById(R.id.email);
+        navImageView = (ImageView) headerView.findViewById(R.id.profilePic);
     }
 
-    public void startIntentService(){
-        Intent followerIntent = new Intent(this, UserFollowerFirestoreBackgroundService.class);
-        followerIntent.putExtra("UserId", firebaseuser.getUid());
-        startService(followerIntent);
-    }
+    public void loadUserProfileFromFirestore() {
+        userData
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String userName = documentSnapshot.getString(userFirestore.FIRST_NAME) +
+                                " "
+                                + documentSnapshot.getString(userFirestore.LAST_NAME);
+                        String userEmail = documentSnapshot.getString(userFirestore.EMAIL);
+                        String userProfilePic = documentSnapshot.getString(userFirestore.PROFILE_AVATAR);
 
-    public void startBackgroundService(){
-        Intent intent = new Intent(this, UserProfileFirestoreBackgroundService.class);
-        intent.putExtra("UserId", firebaseuser.getUid());
-        startService(intent);
-    }
 
-    public void stopBackgroundService(){
-        Intent intent = new Intent(this, UserProfileFirestoreBackgroundService.class);
-        stopService(intent);
-    }
+                        //Connect Views of Navigation bar
+                        navName.setText(userName);
+                        navEmail.setText(userEmail);
 
-    public void loadDataToSQLite() {
+                        Glide.with(headerView)
+                                .load(userProfilePic)
+                                .apply(RequestOptions.circleCropTransform())
+                                .into(navImageView);
 
-        userDB = new UserDB(getApplicationContext());
-
-        user = userDB.getUserDataFromSQLite();
-        profile = userDB.getProfileDataFromSQLite();
-
-        String userName = user.getFirst_name() + " " + user.getLast_name();
-
-        //Connect Views of Navigation bar
-        View headerView = navigationView.getHeaderView(0);
-        TextView navName = (TextView) headerView.findViewById(R.id.userName);
-        TextView navEmail = (TextView) headerView.findViewById(R.id.email);
-        ImageView navImageView = (ImageView) headerView.findViewById(R.id.profilePic);
-        navName.setText(userName);
-        navEmail.setText(user.getEmail());
-
-        Log.i("Avatar/", "loadDataToSQLite: " + profile.getProfileAvatarUrl());
-        Glide.with(headerView)
-                .load(profile.getProfileAvatarUrl())
-                .apply(RequestOptions.circleCropTransform())
-                .into(navImageView);
-
-        headerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
-                startActivity(profileScreen);
-                finish();
-            }
-        });
+                        headerView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
+                                startActivity(profileScreen);
+                                finish();
+                            }
+                        });
+                    }
+                });
     }
 
 
@@ -170,9 +158,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             Log.i("Information", "Options menu clicked");
         }
         else if (id == R.id.logout){
-            FirebaseAuth.getInstance().signOut();
+            userFirestore.getCurrentFirebaseAuth().signOut();
+
             Intent signout = new Intent(Home.this, MainActivity.class);
             startActivity(signout);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -188,9 +178,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 startActivity(profileScreen);
                 finish();
                 break;
-            case R.id.partners:
-                Intent partnerScreen = new Intent(this, Partners.class);
-                startActivity(partnerScreen);
+            case R.id.navMessages:
+                Intent chatActivity = new Intent(getApplicationContext(), ChatsActivity.class);
+                startActivity(chatActivity);
+                finish();
                 break;
             case R.id.connections:
                 Intent connectsIntent = new Intent(this, ConnectionsActivity.class);
@@ -200,9 +191,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 Intent notificationIntent = new Intent(this, NotificationActivity.class);
                 startActivity(notificationIntent);
                 break;
-            case R.id.navMessages:
-                Intent messagesIntent = new Intent(this, chat.class);
-                startActivity(messagesIntent);
+            case R.id.Circles:
+                Intent spaceIntent = new Intent(this, SpacesActivity.class);
+                startActivity(spaceIntent);
+                finish();
                 break;
 
             case R.id.vbc:
@@ -216,10 +208,5 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         return true;
     }
 
-    @Override
-    protected void onDestroy() {
-        stopBackgroundService();
-        super.onDestroy();
-    }
 }
 

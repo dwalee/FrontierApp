@@ -1,8 +1,7 @@
 package com.frontierapp.frontierapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,57 +9,57 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-import java.util.List;
 
-
-
-public class FollowerItemRecyclerAdapter extends RecyclerView.Adapter<FollowerViewHolder> {
+public class FollowerItemRecyclerAdapter extends FirestoreRecyclerAdapter<ConnectionsViewDataModel, ConnectionViewHolder> {
     private static final String TAG = "FollowerRecycler";
-    private List<FollowerViewData> followerViewDataList;
-    private Context context;
     private View view;
+    private final String CURRENT_CONNECTIONS_ID = "current_connections_id";
 
-    public FollowerItemRecyclerAdapter(Context context, List<FollowerViewData> followerViewDataList) {
-        this.context = context;
-        this.followerViewDataList = followerViewDataList;
+    /**
+     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
+     * FirestoreRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public FollowerItemRecyclerAdapter(@NonNull FirestoreRecyclerOptions<ConnectionsViewDataModel> options) {
+        super(options);
     }
 
     @Override
-    public FollowerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.partner_item_layout,
-                parent, false);
-
-        return new FollowerViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(FollowerViewHolder holder, int position) {
-        final FollowerViewData followerViewData = followerViewDataList.get(position);
-        Glide.with(context).load(followerViewData.getFollowerProfilePicUrl())
+    protected void onBindViewHolder(@NonNull ConnectionViewHolder holder, int position, @NonNull ConnectionsViewDataModel model) {
+        Glide.with(view.getContext()).load(model.getProfile_url())
                 .apply(RequestOptions.circleCropTransform())
-                .into(holder.followerAvatarImageView);
+                .into(holder.connectionProfileImageView);
 
-        Log.i(TAG, "onBindViewHolder: followerName = " + followerViewData.getFollowerName());
-        holder.followerNameTextView.setText(followerViewData.getFollowerName());
-        holder.followerRequestButton.setVisibility(View.GONE);
-        holder.followerItemLinearLayout.setOnClickListener(new View.OnClickListener() {
+        Log.i(TAG, "onBindViewHolder: followerName = " + model.getFirst_name() + " " + model.getLast_name());
+        holder.connectionNameTextView.setText(model.getFirst_name() + " " + model.getLast_name());
+        holder.connectionRequest.setVisibility(View.GONE);
+
+        holder.connectionTitleTextView.setText(model.getTitle());
+
+        final String id = getSnapshots().getSnapshot(position).getReference().getId();
+        holder.connectionItemLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent partnerProfileIntent = new Intent(context, CurrentPartnerProfileActivity.class);
-
-                partnerProfileIntent.putExtra("CurrentPartnerId",
-                        followerViewData.getFollowerId());
-                partnerProfileIntent.putExtra("ClassName", "Follower");
-                Log.i("CurrentPartnerRecycler", "onClick: " + followerViewData.getFollowerId());
-                context.startActivity(partnerProfileIntent);
-                //((CurrentPartnersActivity)context).finish();
+                Intent connectionsProfileIntent = new Intent(view.getContext(), CurrentConnectionsProfileActivity.class);
+                //partnerProfileIntent.putExtra("CurrentPartnerIdIndex", position);
+                connectionsProfileIntent.putExtra(CURRENT_CONNECTIONS_ID,
+                        id);
+                Log.i(TAG, "onClick: connections_id = " + id);
+                view.getContext().startActivity(connectionsProfileIntent);
             }
         });
     }
 
+    @NonNull
     @Override
-    public int getItemCount() {
-        return followerViewDataList.size();
+    public ConnectionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.connections_item_layout,
+                parent, false);
+
+        return new ConnectionViewHolder(view);
     }
 }

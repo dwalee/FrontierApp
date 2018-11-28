@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/spaceFeedMenuItem"
+        android:title="@string/feed"
+        android:icon="@drawable/rss"
+        app:showAsAction="always"
+        android:visible="false"
+        />
+
+    <item
+        android:id="@+id/spaceProjectMenuItem"
+        android:title="@string/assignment_s"
+        android:icon="@drawable/folder_clock_outline"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/spaceMembersMenuItem"
+        android:title="@string/member_s"
+        android:icon="@drawable/account_group"
+        app:showAsAction="always"
+        />
+
+    <!--<item
+        android:id="@+id/spaceObjectivesMenuItem"
+        android:title="About"
+        android:icon="@drawable/information"
+        />-->
+
+</menu>

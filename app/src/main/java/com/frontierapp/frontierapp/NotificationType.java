@@ -4,7 +4,8 @@ public enum NotificationType {
     PARTNERSHIP_REQUEST("Partnership Request"),
     PARTNERSHIP_ACCEPTED("Partnership Accepted"),
     FOLLOW("Follow"),
-    IGNORE("IGNORE");
+    SPACE_INVITE("Space Invite"),
+    JOINED_SPACE("Joined Space");
 
     NotificationType(String value) {
         this.value = value;

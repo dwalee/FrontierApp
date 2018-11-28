@@ -75,13 +75,13 @@ public class ProfileSQLite implements ProfileDAO {
             profile.setFirst_name(first_name);
             profile.setLast_name(last_name);
             profile.setEmail(email);
-            profile.setUserTitle(title);
-            profile.setAboutMe(about_me);
+            profile.setTitle(title);
+            profile.setAbout_me(about_me);
             profile.setCity(city);
             profile.setState(state);
             profile.setGoal(goals);
-            profile.setProfileAvatarUrl(profileUrl);
-            profile.setProfileBackgroundUrl(backgroundUrl);
+            profile.setProfile_avatar(profileUrl);
+            profile.setProfile_background_image_url(backgroundUrl);
 
             cursor.close();
             database.close();
@@ -122,13 +122,13 @@ public class ProfileSQLite implements ProfileDAO {
             insertValues.put("first_name", profile.getFirst_name());
             insertValues.put("last_name", profile.getLast_name());
             insertValues.put("email", profile.getEmail());
-            insertValues.put("about_me", profile.getAboutMe());
+            insertValues.put("about_me", profile.getAbout_me());
             insertValues.put("city", profile.getCity());
             insertValues.put("state", profile.getState());
             insertValues.put("goal", profile.getGoal());
-            insertValues.put("profile_url", profile.getProfileAvatarUrl());
-            insertValues.put("profile_background_url", profile.getProfileBackgroundUrl());
-            insertValues.put("title", profile.getUserTitle());
+            insertValues.put("profile_url", profile.getProfile_avatar());
+            insertValues.put("profile_background_url", profile.getProfile_background_image_url());
+            insertValues.put("title", profile.getTitle());
 
             Log.i(TAG, "addProfile: insertValues = " + insertValues);
             userDatabase.insert("user_profile", null, insertValues);
@@ -159,13 +159,13 @@ public class ProfileSQLite implements ProfileDAO {
             updateValues.put("first_name", profile.getFirst_name());
             updateValues.put("last_name", profile.getLast_name());
             updateValues.put("email", profile.getEmail());
-            updateValues.put("about_me", profile.getAboutMe());
+            updateValues.put("about_me", profile.getAbout_me());
             updateValues.put("city", profile.getCity());
             updateValues.put("state", profile.getState());
             updateValues.put("goal", profile.getGoal());
-            updateValues.put("profile_url", profile.getProfileAvatarUrl());
-            updateValues.put("profile_background_url", profile.getProfileBackgroundUrl());
-            updateValues.put("title", profile.getUserTitle());
+            updateValues.put("profile_url", profile.getProfile_avatar());
+            updateValues.put("profile_background_url", profile.getProfile_background_image_url());
+            updateValues.put("title", profile.getTitle());
 
             String[] id = new String[1];
             id[0] = profile.getUid();

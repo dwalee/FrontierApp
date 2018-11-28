@@ -1,6 +1,5 @@
 package com.frontierapp.frontierapp;
 
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
@@ -19,8 +18,8 @@ public class PartnerViewHolder extends RecyclerView.ViewHolder {
     public PartnerViewHolder(final View itemView) {
         super(itemView);
 
-        partnerAvatarImageView = (ImageView) itemView.findViewById(R.id.partnerAvatarImageView);
-        partnerNameTextView = (TextView) itemView.findViewById(R.id.partnerNameTextView);
-        partnershipRequest = (ImageButton) itemView.findViewById(R.id.partnershipRequestButton);
+        partnerAvatarImageView = (ImageView) itemView.findViewById(R.id.connectionsProfileImageView);
+        partnerNameTextView = (TextView) itemView.findViewById(R.id.connectionsNameTextView);
+        partnershipRequest = (ImageButton) itemView.findViewById(R.id.connectionsRequestButton);
     }
 }

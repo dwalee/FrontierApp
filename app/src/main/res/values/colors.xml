@@ -15,5 +15,7 @@
     <color name="colorDenyButton">#F44336</color>
     <color name="colorSplashActivity">#00C853</color>
     <color name="colorProgressBar">#4CAF50</color>
+    <color name="colorNotificationItemUnRead">#B9F6CA</color>
+    <color name="colorNotificationItemRead">#FFF</color>
 
 </resources>

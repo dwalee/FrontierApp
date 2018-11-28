@@ -106,11 +106,10 @@ public class Partners extends Fragment{
 
                         user.setFirst_name(first_name);
                         user.setLast_name(last_name);
-                        user.setAvatar(profileUrl);
                         userList.add(user);
                     }
 
-                    for(int j=0;j<userList.size();j++){
+                    /*for(int j=0;j<userList.size();j++){
                         User user = userList.get(j);
                         PartnershipViewData partnershipViewData = new PartnershipViewData();
                         String full_name = user.getFirst_name() +
@@ -121,7 +120,7 @@ public class Partners extends Fragment{
                         partnershipViewDataList.add(partnershipViewData);
 
                         partnerItemRecyclerAdapter.notifyDataSetChanged();
-                    }
+                    }*/
 
                 }
             }

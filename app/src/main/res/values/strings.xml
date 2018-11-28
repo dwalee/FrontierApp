@@ -31,8 +31,13 @@
     <string name="Connect">Connect</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
-    <string name="circles">Circles</string>
+    <string name="circles">Circle</string>
     <string name="aboutMeText">Hard-working web developer with a flair for creating elegant solutions in the least amount of time. Developed an ecommerce webapp, customer web portal, documentary launch website, and donations webapp for a local charity. Passionate about software architecture and cloud computing. Regular attendee of web developer meetups and hackathons.</string>
+    <string name="spaces">Spaces</string>
+    <string name="feed">Feed</string>
+    <string name="assignment_s">Assignment(s)</string>
+    <string name="objective_s">Objective(s)</string>
+    <string name="member_s">Member(s)</string>
 
     <string name="quickstart_message">Click the SUBSCRIBE TO NEWS button below to subscribe to the
         news topic. Messages sent to the news topic will be received. The LOG TOKEN button logs the
