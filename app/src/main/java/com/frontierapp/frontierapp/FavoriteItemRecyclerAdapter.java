@@ -1,8 +1,7 @@
 package com.frontierapp.frontierapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,53 +9,56 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-import java.util.List;
-
-public class FavoriteItemRecyclerAdapter extends RecyclerView.Adapter<FavoriteViewHolder> {
-    private List<FavoriteViewData> favoriteViewDataList;
-    private Context context;
+public class FavoriteItemRecyclerAdapter extends FirestoreRecyclerAdapter<ConnectionsViewDataModel, ConnectionViewHolder> {
+    private static final String TAG = "FavoriteRecycler";
     private View view;
+    private final String CURRENT_CONNECTIONS_ID = "current_connections_id";
 
-    public FavoriteItemRecyclerAdapter(Context context, List<FavoriteViewData> favoriteViewDataList) {
-        this.context = context;
-        this.favoriteViewDataList = favoriteViewDataList;
+    /**
+     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
+     * FirestoreRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public FavoriteItemRecyclerAdapter(@NonNull FirestoreRecyclerOptions<ConnectionsViewDataModel> options) {
+        super(options);
     }
 
     @Override
-    public FavoriteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.partner_item_layout,
-        parent, false);
-
-        return new FavoriteViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(FavoriteViewHolder holder, int position) {
-        final FavoriteViewData favoriteViewData = favoriteViewDataList.get(position);
-        Glide.with(context).load(favoriteViewData.getFavoriteProfilePicUrl())
+    protected void onBindViewHolder(@NonNull ConnectionViewHolder holder, int position, @NonNull ConnectionsViewDataModel model) {
+        Glide.with(view.getContext()).load(model.getProfile_url())
                 .apply(RequestOptions.circleCropTransform())
-                .into(holder.favoriteAvatarImageView);
+                .into(holder.connectionProfileImageView);
 
-        holder.favoriteNameTextView.setText(favoriteViewData.getFavoriteName());
-        holder.favoriteRequestButton.setVisibility(View.GONE);
-        holder.favoriteItemLinearLayout.setOnClickListener(new View.OnClickListener() {
+        holder.connectionNameTextView.setText(model.getFirst_name() + " " + model.getLast_name());
+        holder.connectionRequest.setVisibility(View.GONE);
+
+        holder.connectionTitleTextView.setText(model.getTitle());
+
+        final String id = getSnapshots().getSnapshot(position).getReference().getId();
+        holder.connectionItemLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent partnerProfileIntent = new Intent(context, CurrentPartnerProfileActivity.class);
-
-                partnerProfileIntent.putExtra("CurrentPartnerId",
-                        favoriteViewData.getFavoriteId());
-                partnerProfileIntent.putExtra("ClassName", "Favorite");
-                Log.i("CurrentPartnerRecycler", "onClick: " + favoriteViewData.getFavoriteId());
-                context.startActivity(partnerProfileIntent);
-                //((CurrentPartnersActivity)context).finish();
+                Intent connectionsProfileIntent = new Intent(view.getContext(), CurrentConnectionsProfileActivity.class);
+                //partnerProfileIntent.putExtra("CurrentPartnerIdIndex", position);
+                connectionsProfileIntent.putExtra(CURRENT_CONNECTIONS_ID,
+                        id);
+                Log.i(TAG, "onClick: connections_id = " + id);
+                view.getContext().startActivity(connectionsProfileIntent);
             }
         });
     }
 
+    @NonNull
     @Override
-    public int getItemCount() {
-        return favoriteViewDataList.size();
+    public ConnectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.connections_item_layout,
+                parent, false);
+
+        return new ConnectionViewHolder(view);
     }
+
 }

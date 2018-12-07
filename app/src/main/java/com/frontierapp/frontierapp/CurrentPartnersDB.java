@@ -276,13 +276,13 @@ public class CurrentPartnersDB extends UserDB{
                 insertValues.put("first_name", user.getFirst_name());
                 insertValues.put("last_name", user.getLast_name());
                 insertValues.put("email", user.getEmail());
-                insertValues.put("about_me", profile.getAboutMe());
+                insertValues.put("about_me", profile.getAbout_me());
                 insertValues.put("city", profile.getCity());
                 insertValues.put("state", profile.getState());
                 insertValues.put("goal", profile.getGoal());
-                insertValues.put("profile_url", profile.getProfileAvatarUrl());
-                insertValues.put("profile_background_url", profile.getProfileBackgroundUrl());
-                insertValues.put("title", profile.getUserTitle());
+                insertValues.put("profile_url", profile.getProfile_avatar());
+                insertValues.put("profile_background_url", profile.getProfile_background_image_url());
+                insertValues.put("title", profile.getTitle());
 
                 userDatabase.insert("current_partners", null, insertValues);
                 Log.i(TAG, "addCurrentPartnersToSQLite: insert " + insertValues);
@@ -344,13 +344,13 @@ public class CurrentPartnersDB extends UserDB{
             insertValues.put("last_name", user.getLast_name());
             insertValues.put("email", user.getEmail());
             Log.i("PartnerEmail", "addCurrentPartnerToSQLite: " + user.getEmail());
-            insertValues.put("about_me", profile.getAboutMe());
+            insertValues.put("about_me", profile.getAbout_me());
             insertValues.put("city", profile.getCity());
             insertValues.put("state", profile.getState());
             insertValues.put("goal", profile.getGoal());
-            insertValues.put("profile_url", profile.getProfileAvatarUrl());
-            insertValues.put("profile_background_url", profile.getProfileBackgroundUrl());
-            insertValues.put("title", profile.getUserTitle());
+            insertValues.put("profile_url", profile.getProfile_avatar());
+            insertValues.put("profile_background_url", profile.getProfile_background_image_url());
+            insertValues.put("title", profile.getTitle());
 
             Log.i(TAG, "addCurrentPartnerToSQLite: insert values " + insertValues);
             userDatabase.insert("current_partners", null, insertValues);
@@ -412,13 +412,13 @@ public class CurrentPartnersDB extends UserDB{
             insertValues.put("last_name", user.getLast_name());
             insertValues.put("email", user.getEmail());
             Log.i("PartnerEmail", "addCurrentPartnerToSQLite: " + user.getEmail());
-            insertValues.put("about_me", profile.getAboutMe());
+            insertValues.put("about_me", profile.getAbout_me());
             insertValues.put("city", profile.getCity());
             insertValues.put("state", profile.getState());
             insertValues.put("goal", profile.getGoal());
-            insertValues.put("profile_url", profile.getProfileAvatarUrl());
-            insertValues.put("profile_background_url", profile.getProfileBackgroundUrl());
-            insertValues.put("title", profile.getUserTitle());
+            insertValues.put("profile_url", profile.getProfile_avatar());
+            insertValues.put("profile_background_url", profile.getProfile_background_image_url());
+            insertValues.put("title", profile.getTitle());
 
             Log.i(TAG, "addFavoriteToSQLite: insert values " + insertValues);
             userDatabase.insert("favorite", null, insertValues);
@@ -478,13 +478,13 @@ public class CurrentPartnersDB extends UserDB{
             insertValues.put("last_name", user.getLast_name());
             insertValues.put("email", user.getEmail());
             Log.i("PartnerEmail", "addCurrentPartnerToSQLite: " + user.getEmail());
-            insertValues.put("about_me", profile.getAboutMe());
+            insertValues.put("about_me", profile.getAbout_me());
             insertValues.put("city", profile.getCity());
             insertValues.put("state", profile.getState());
             insertValues.put("goal", profile.getGoal());
-            insertValues.put("profile_url", profile.getProfileAvatarUrl());
-            insertValues.put("profile_background_url", profile.getProfileBackgroundUrl());
-            insertValues.put("title", profile.getUserTitle());
+            insertValues.put("profile_url", profile.getProfile_avatar());
+            insertValues.put("profile_background_url", profile.getProfile_background_image_url());
+            insertValues.put("title", profile.getTitle());
 
             Log.i(TAG, "addFollowerToSQLite: insert values " + insertValues);
             userDatabase.insert("follower", null, insertValues);
@@ -1057,13 +1057,13 @@ public class CurrentPartnersDB extends UserDB{
             profileUrl = cursor.getString(avatarIndex);
             backgroundUrl = cursor.getString(backgroundIndex);
 
-            profile.setUserTitle(title);
-            profile.setAboutMe(about_me);
+            profile.setTitle(title);
+            profile.setAbout_me(about_me);
             profile.setCity(city);
             profile.setState(state);
             profile.setGoal(goals);
-            profile.setProfileAvatarUrl(profileUrl);
-            profile.setProfileBackgroundUrl(backgroundUrl);
+            profile.setProfile_avatar(profileUrl);
+            profile.setProfile_background_image_url(backgroundUrl);
 
             cursor.close();
             database.close();
@@ -1129,13 +1129,13 @@ public class CurrentPartnersDB extends UserDB{
                 profileUrl = cursor.getString(avatarIndex);
                 backgroundUrl = cursor.getString(backgroundIndex);
 
-                profile.setUserTitle(title);
-                profile.setAboutMe(about_me);
+                profile.setTitle(title);
+                profile.setAbout_me(about_me);
                 profile.setCity(city);
                 profile.setState(state);
                 profile.setGoal(goals);
-                profile.setProfileAvatarUrl(profileUrl);
-                profile.setProfileBackgroundUrl(backgroundUrl);
+                profile.setProfile_avatar(profileUrl);
+                profile.setProfile_background_image_url(backgroundUrl);
             }
 
             cursor.close();
@@ -1202,13 +1202,13 @@ public class CurrentPartnersDB extends UserDB{
                 profileUrl = cursor.getString(avatarIndex);
                 backgroundUrl = cursor.getString(backgroundIndex);
 
-                profile.setUserTitle(title);
-                profile.setAboutMe(about_me);
+                profile.setTitle(title);
+                profile.setAbout_me(about_me);
                 profile.setCity(city);
                 profile.setState(state);
                 profile.setGoal(goals);
-                profile.setProfileAvatarUrl(profileUrl);
-                profile.setProfileBackgroundUrl(backgroundUrl);
+                profile.setProfile_avatar(profileUrl);
+                profile.setProfile_background_image_url(backgroundUrl);
             }
 
             cursor.close();
@@ -1275,13 +1275,13 @@ public class CurrentPartnersDB extends UserDB{
                 profileUrl = cursor.getString(avatarIndex);
                 backgroundUrl = cursor.getString(backgroundIndex);
 
-                profile.setUserTitle(title);
-                profile.setAboutMe(about_me);
+                profile.setTitle(title);
+                profile.setAbout_me(about_me);
                 profile.setCity(city);
                 profile.setState(state);
                 profile.setGoal(goals);
-                profile.setProfileAvatarUrl(profileUrl);
-                profile.setProfileBackgroundUrl(backgroundUrl);
+                profile.setProfile_avatar(profileUrl);
+                profile.setProfile_background_image_url(backgroundUrl);
             }
 
             cursor.close();
@@ -1329,7 +1329,6 @@ public class CurrentPartnersDB extends UserDB{
                     user.setLast_name(cursor.getString(lastNameIndex));
                     user.setEmail(cursor.getString(emailIndex));
                     user.setGender("");
-                    user.setAvatar("");
                     user.setBirthdate(null);
                     user.setPassword("");
 
@@ -1374,7 +1373,7 @@ public class CurrentPartnersDB extends UserDB{
             if(cursor != null){
                 do {
                     Profile profile = new Profile();
-                    profile.setProfileAvatarUrl(cursor.getString(profileUrlIndex));
+                    profile.setProfile_avatar(cursor.getString(profileUrlIndex));
 
                     profiles.add(profile);
                 }while(cursor.moveToNext());
@@ -1426,7 +1425,6 @@ public class CurrentPartnersDB extends UserDB{
                     user.setLast_name(cursor.getString(lastNameIndex));
                     user.setEmail(cursor.getString(emailIndex));
                     user.setGender("");
-                    user.setAvatar("");
                     user.setBirthdate(null);
                     user.setPassword("");
 
@@ -1473,7 +1471,7 @@ public class CurrentPartnersDB extends UserDB{
                 do {
                     Profile profile = new Profile();
                     Log.i("FollowerID/ ", cursor.getString(1));
-                    profile.setProfileAvatarUrl(cursor.getString(profileUrlIndex));
+                    profile.setProfile_avatar(cursor.getString(profileUrlIndex));
 
                     profiles.add(profile);
 
@@ -1527,7 +1525,6 @@ public class CurrentPartnersDB extends UserDB{
                     user.setLast_name(cursor.getString(lastNameIndex));
                     user.setEmail(cursor.getString(emailIndex));
                     user.setGender("");
-                    user.setAvatar("");
                     user.setBirthdate(null);
                     user.setPassword("");
 
@@ -1573,7 +1570,7 @@ public class CurrentPartnersDB extends UserDB{
                     Profile profile = new Profile();
                     Log.i(TAG, "getFollowersProfileFromSQLite: profileUrl = "
                     + cursor.getString(profileUrlIndex));
-                    profile.setProfileAvatarUrl(cursor.getString(profileUrlIndex));
+                    profile.setProfile_avatar(cursor.getString(profileUrlIndex));
 
                     profiles.add(profile);
 

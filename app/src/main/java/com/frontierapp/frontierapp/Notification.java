@@ -10,6 +10,9 @@ public class Notification {
     String fullName;
     String profileUrl;
     String id;
+    String miscId;
+    String miscName;
+    Boolean ignore;
 
     public String getId() {
         return id;
@@ -65,5 +68,29 @@ public class Notification {
 
     public void setProfileUrl(String profileUrl) {
         this.profileUrl = profileUrl;
+    }
+
+    public String getMiscId() {
+        return miscId;
+    }
+
+    public void setMiscId(String miscId) {
+        this.miscId = miscId;
+    }
+
+    public String getMiscName() {
+        return miscName;
+    }
+
+    public void setMiscName(String miscName) {
+        this.miscName = miscName;
+    }
+
+    public Boolean isIgnored() {
+        return ignore;
+    }
+
+    public void setIgnore(Boolean ignore) {
+        this.ignore = ignore;
     }
 }

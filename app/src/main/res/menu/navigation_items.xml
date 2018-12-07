@@ -8,10 +8,10 @@
             android:id="@+id/profile"
             android:icon="@drawable/my_profile"/>
 
-        <item android:id="@+id/connections"
-            android:title="My Connections"
-            android:icon="@drawable/account_multiple_black"/>
-
+        <item
+            android:title="@string/Connect"
+            android:id="@+id/Connect"
+            android:icon="@drawable/account_network"/>
 
         <item
             android:id="@+id/navMessages"
@@ -22,18 +22,24 @@
             android:id="@+id/notifications"
             android:icon="@drawable/notification"/>
 
-        <item
-            android:title="@string/Connect"
-            android:id="@+id/Connect"
-            android:icon="@drawable/account_network"/>
-
-        <item
-            android:title="@string/circles"
-            android:id="@+id/Circles"
-            android:icon="@drawable/circles"/>
-
-
     </group>
+
+    <item
+        android:title="@string/circles">
+        <menu>
+
+            <item
+                android:title="@string/spaces"
+                android:id="@+id/Circles"
+                android:icon="@drawable/circles"/>
+
+            <item android:id="@+id/connections"
+                android:title="My Connections"
+                android:icon="@drawable/account_multiple_black"/>
+
+        </menu>
+
+    </item>
 
     <item
         android:title="Personal Options">

@@ -17,11 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -35,23 +38,24 @@ import java.util.List;
 public class FollowerFragment extends Fragment {
     private static final String TAG = "FollowerFragment";
     RecyclerView followerRecyclerView;
-    List<UserInformation> userInformationList;
-    SwipeRefreshLayout followerSwipeRefreshLayout;
-    FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    CurrentPartnersDB currentPartnersDB;
+
     Context context;
     View view;
     TextView defaultTextView;
 
-    private final List<User> userList = new ArrayList<>();
-    private final List<FollowerViewData> followerViewDataList = new ArrayList<>();
     private FollowerItemRecyclerAdapter followerItemRecyclerAdapter;
+
+    private final UserFirestore userFirestore = new UserFirestore();
+    private final DocumentReference userData = userFirestore.getUserData(userFirestore.getCurrentUserId());
+    private final CollectionReference userConnectionsDatabase = userData.collection(userFirestore.CONNECTIONS);
 
     public FollowerFragment() {
         // Required empty public constructor
     }
 
-    public FollowerFragment(Context context) {
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
         this.context = context;
     }
 
@@ -62,182 +66,51 @@ public class FollowerFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_follower, container, false);
         //startBackgroundService();
 
-        instantiateViews(view);
-        return view;
+        return instantiateViews(view);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getFollowerList();
+        followerItemRecyclerAdapter.startListening();
+        Log.i(TAG, "onStart: ");
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        followerItemRecyclerAdapter.stopListening();
+        Log.i(TAG, "onStop: ");
     }
 
     public View instantiateViews(View view){
         defaultTextView = (TextView) view.findViewById(R.id.followerDefaultTextView);
 
         followerRecyclerView = (RecyclerView) view.findViewById(R.id.followerRecyclerview);
-        userInformationList = new ArrayList<>();
 
         followerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         followerRecyclerView.setHasFixedSize(true);
-        followerItemRecyclerAdapter = new FollowerItemRecyclerAdapter(context, followerViewDataList);
-        followerRecyclerView.setAdapter(followerItemRecyclerAdapter);
-
-        followerSwipeRefreshLayout = (SwipeRefreshLayout)  view.findViewById(
-                R.id.followerSwipeRefreshLayout);
-        followerSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshFollowerList();
-            }
-        });
-
-        getFollowerList();
 
         return view;
     }
 
     //Get the list of users and apply it to the partners recyclerview
     public void getFollowerList(){
-        //Collect data all the User IDs(Doc ID) from the User collection
-        userList.clear();
-        followerViewDataList.clear();
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        Query query = userConnectionsDatabase
+                .whereEqualTo(userFirestore.FOLLOWER, true)
+                .orderBy(userFirestore.CONNECTIONS_FIRST_NAME)
+                .orderBy(userFirestore.CONNECTIONS_LAST_NAME);
 
-                currentPartnersDB = new CurrentPartnersDB(context);
+        FirestoreRecyclerOptions<ConnectionsViewDataModel> options =
+                new FirestoreRecyclerOptions.Builder<ConnectionsViewDataModel>()
+                        .setQuery(query, ConnectionsViewDataModel.class)
+                        .build();
 
-                Log.i(TAG, "run: before users = " +
-                        currentPartnersDB.getFollowersUserDataFromSQLite());
-                Users users = null;
-                Profiles profiles = null;
-                int timeout = 0;
+        followerItemRecyclerAdapter = new FollowerItemRecyclerAdapter(options);
+        followerRecyclerView.setAdapter(followerItemRecyclerAdapter);
 
-                do {
-                    users = currentPartnersDB.getFollowersUserDataFromSQLite();
-                    profiles = currentPartnersDB.getFollowersProfileFromSQLite();
-                    try {
-                        Thread.sleep(400);
-                    } catch (InterruptedException e) {
-                        Log.w(TAG, "run: ", e);
-                    }
-                    timeout++;
-                }while((users == (null) || profiles == (null)) && !(timeout >= 3));
-
-                Log.i(TAG, "run: users = " + users);
-                if(users.size() > 0 && profiles.size() > 0) {
-                    for (int i = 0; i < users.size(); i++) {
-                        User user = users.get(i);
-                        Log.i(TAG, "run: user.getFirst_name = " + user.getFirst_name());
-                        Profile profile = profiles.get(i);
-                        user.setAvatar(profile.getProfileAvatarUrl());
-                        userList.add(user);
-                    }
-
-
-                    for (int j = 0; j < userList.size(); j++) {
-                        User user = userList.get(j);
-                        Log.i(TAG, "run: user(userList) = " + user);
-                        FollowerViewData followerViewData = new FollowerViewData();
-                        String full_name = user.getFirst_name() +
-                                " " + user.getLast_name();
-                        Log.i(TAG, "run: full_name = " + full_name);
-                        followerViewData.setFollowerName(full_name);
-                        followerViewData.setFollowerProfilePicUrl(user.getAvatar());
-                        followerViewData.setFollowerId(user.getUid());
-
-                        followerViewDataList.add(followerViewData);
-
-                        followerItemRecyclerAdapter.notifyDataSetChanged();
-
-                        defaultTextView.setVisibility(View.GONE);
-                        followerRecyclerView.setVisibility(View.VISIBLE);
-                    }
-                }else if(followerViewDataList.size() == 0){
-                    defaultTextView.setVisibility(View.VISIBLE);
-                    followerRecyclerView.setVisibility(View.GONE);
-                }
-            }
-        }, 400);
     }
-
-    public void refreshFollowerList(){
-        followerSwipeRefreshLayout.setColorSchemeResources(R.color.colorLoadRefresh);
-        //Collect data all the User IDs(Doc ID) from the User collection
-        userList.clear();
-        followerViewDataList.clear();
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                currentPartnersDB = new CurrentPartnersDB(context);
-
-                Users users = null;
-                Profiles profiles = null;
-                int timeout = 0;
-
-                do {
-                    users = currentPartnersDB.getFollowersUserDataFromSQLite();
-                    profiles = currentPartnersDB.getFollowersProfileFromSQLite();
-                    try {
-                        Thread.sleep(400);
-                    } catch (InterruptedException e) {
-                        Log.w(TAG, "run: ", e);
-                    }
-                    timeout++;
-                } while ((users == (null) || profiles == (null)) && !(timeout >= 3));
-
-                if (users != (null) && profiles != (null)) {
-                    for (int j = 0; j < userList.size(); j++) {
-                        User user = userList.get(j);
-                        FollowerViewData followerViewData = new FollowerViewData();
-                        String full_name = user.getFirst_name() +
-                                " " + user.getLast_name();
-                        followerViewData.setFollowerName(full_name);
-                        followerViewData.setFollowerProfilePicUrl(user.getAvatar());
-                        followerViewData.setFollowerId(user.getUid());
-
-                        followerViewDataList.add(followerViewData);
-
-                        followerItemRecyclerAdapter.notifyDataSetChanged();
-                    }
-                    followerSwipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        }, 500);
-    }
-
-    /**
-     * This method starts the UserPartnerFirestoreBackgroundService and
-     * the UserFavFirestoreBackgrounService background services
-     */
-    public void startBackgroundService(){
-        Intent intent = new Intent(context, UserPartnersFirestoreBackgroundService.class);
-        intent.putExtra("UserId", firebaseuser.getUid());
-        context.startService(intent);
-
-        Intent favIntent = new Intent(context, UserFavFirestoreBackgroundService.class);
-        favIntent.putExtra("UserId", firebaseuser.getUid());
-        context.startService(favIntent);
-    }
-
-    /**
-     * This method stops the UserPartnerFirestoreBackgroundService and
-     * the UserFavFirestoreBackgrounService background services
-     */
-    public void stopBackgroundService(){
-        Intent intent = new Intent(context, UserPartnersFirestoreBackgroundService.class);
-        context.stopService(intent);
-
-        Intent favIntent = new Intent(context, UserFavFirestoreBackgroundService.class);
-        context.stopService(favIntent);
-    }
-
-    @Override
-    public void onDestroyView() {
-        //stopBackgroundService();
-        super.onDestroyView();
-    }
-
-    private final FirebaseUser firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
-
 }

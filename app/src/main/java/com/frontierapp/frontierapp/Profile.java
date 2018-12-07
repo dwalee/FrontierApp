@@ -1,42 +1,42 @@
 package com.frontierapp.frontierapp;
 
 public class Profile extends User {
-    String aboutMe;
-    String userTitle;
+    String about_me;
+    String title;
     String city;
     String state;
     String goal;
-    String profileAvatarUrl;
-    String profileBackgroundUrl;
+    String profile_avatar;
+    String profile_background_image_url;
 
     public Profile() {
     }
 
-    public Profile(String aboutMe, String userTitle, String city, String state,
-                   String goal, String profileAvatarUrl, String profileBackgroundUrl) {
-        this.aboutMe = aboutMe;
-        this.userTitle = userTitle;
+    public Profile(String about_me, String title, String city, String state,
+                   String goal, String profile_avatar, String profile_background_image_url) {
+        this.about_me = about_me;
+        this.title = title;
         this.city = city;
         this.state = state;
         this.goal = goal;
-        this.profileAvatarUrl = profileAvatarUrl;
-        this.profileBackgroundUrl = profileBackgroundUrl;
+        this.profile_avatar = profile_avatar;
+        this.profile_background_image_url = profile_background_image_url;
     }
 
-    public String getAboutMe() {
-        return aboutMe;
+    public String getAbout_me() {
+        return about_me;
     }
 
-    public void setAboutMe(String aboutMe) {
-        this.aboutMe = aboutMe;
+    public void setAbout_me(String about_me) {
+        this.about_me = about_me;
     }
 
-    public String getUserTitle() {
-        return userTitle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setUserTitle(String userTitle) {
-        this.userTitle = userTitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getCity() {
@@ -63,19 +63,19 @@ public class Profile extends User {
         this.goal = goal;
     }
 
-    public String getProfileAvatarUrl() {
-        return profileAvatarUrl;
+    public String getProfile_avatar() {
+        return profile_avatar;
     }
 
-    public void setProfileAvatarUrl(String profileAvatarUrl) {
-        this.profileAvatarUrl = profileAvatarUrl;
+    public void setProfile_avatar(String profile_avatar) {
+        this.profile_avatar = profile_avatar;
     }
 
-    public String getProfileBackgroundUrl() {
-        return profileBackgroundUrl;
+    public String getProfile_background_image_url() {
+        return profile_background_image_url;
     }
 
-    public void setProfileBackgroundUrl(String profileBackgroundUrl) {
-        this.profileBackgroundUrl = profileBackgroundUrl;
+    public void setProfile_background_image_url(String profile_background_image_url) {
+        this.profile_background_image_url = profile_background_image_url;
     }
 }

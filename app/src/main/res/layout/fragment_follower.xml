@@ -5,25 +5,19 @@
     android:layout_height="match_parent"
     tools:context=".FollowerFragment">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/followerRecyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/followerSwipeRefreshLayout">
+        android:layout_height="match_parent" />
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/followerRecyclerview"/>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/followerDefaultTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:visibility="gone"
-        android:text="No Followers Yet"/>
+        android:text="No Followers Yet"
+        android:visibility="gone" />
 
 
 </FrameLayout>

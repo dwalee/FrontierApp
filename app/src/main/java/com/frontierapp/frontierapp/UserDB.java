@@ -8,12 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -31,14 +27,11 @@ public class UserDB {
     protected static CollectionReference userInfo = firebaseFirestore.collection("UserInformation");
     protected static DocumentReference userData;
 
+    private final String TAG = "UserDB";
+
     public UserDB(Context context, User user, Profile profile) {
         this.user = user;
         this.profile = profile;
-        this.context = context;
-    }
-
-    public UserDB(Context context, User user) {
-        this.user = user;
         this.context = context;
     }
 
@@ -75,13 +68,13 @@ public class UserDB {
             insertValues.put("first_name", user.getFirst_name());
             insertValues.put("last_name", user.getLast_name());
             insertValues.put("email", user.getEmail());
-            insertValues.put("about_me", profile.getAboutMe());
+            insertValues.put("about_me", profile.getAbout_me());
             insertValues.put("city", profile.getCity());
             insertValues.put("state", profile.getState());
             insertValues.put("goal", profile.getGoal());
-            insertValues.put("profile_url", profile.getProfileAvatarUrl());
-            insertValues.put("profile_background_url", profile.getProfileBackgroundUrl());
-            insertValues.put("title", profile.getUserTitle());
+            insertValues.put("profile_url", profile.getProfile_avatar());
+            insertValues.put("profile_background_url", profile.getProfile_background_image_url());
+            insertValues.put("title", profile.getTitle());
 
             userDatabase.insert("user_profile", null, insertValues);
 
@@ -106,6 +99,24 @@ public class UserDB {
         return true;
     }
 
+    public Boolean removeUserData(){
+        try{
+            SQLiteDatabase userDatabase = SQLiteDatabase.openDatabase(
+                    context.getDatabasePath("User_Data").toString(),
+                    null, SQLiteDatabase.OPEN_READWRITE
+            );
+
+            userDatabase.delete("user_profile",null , null);
+            userDatabase.close();
+        }
+        catch(Exception e){
+            Log.w(TAG, "removeUserData: ", e);
+            return false;
+        }
+
+        return true;
+    }
+
     //Update only the profile columns in user_profile table
     @NonNull
     public Boolean updateProfileToSQLite(Profile profile){
@@ -116,11 +127,11 @@ public class UserDB {
             );
 
             ContentValues updateValues = new ContentValues();
-            updateValues.put("about_me", profile.aboutMe);
+            updateValues.put("about_me", profile.about_me);
             updateValues.put("city", profile.city);
             updateValues.put("state", profile.state);
             updateValues.put("goal", profile.goal);
-            updateValues.put("title", profile.userTitle);
+            updateValues.put("title", profile.title);
 
             userDatabase.update("user_profile",updateValues,null,null);
 
@@ -159,11 +170,11 @@ public class UserDB {
             );
 
             ContentValues updateValues = new ContentValues();
-            updateValues.put("about_me", profile.aboutMe);
+            updateValues.put("about_me", profile.about_me);
             updateValues.put("city", profile.city);
             updateValues.put("state", profile.state);
             updateValues.put("goal", profile.goal);
-            updateValues.put("title", profile.userTitle);
+            updateValues.put("title", profile.title);
 
             userDatabase.update("user_profile",updateValues,null,null);
 
@@ -282,13 +293,13 @@ public class UserDB {
             backgroundUrl = cursor.getString(backgroundIndex);
 
             //Log.i("Avatar_/", "getProfileDataFromSQLite: " + );
-            profile.setUserTitle(title);
-            profile.setAboutMe(about_me);
+            profile.setTitle(title);
+            profile.setAbout_me(about_me);
             profile.setCity(city);
             profile.setState(state);
             profile.setGoal(goals);
-            profile.setProfileAvatarUrl(profileUrl);
-            profile.setProfileBackgroundUrl(backgroundUrl);
+            profile.setProfile_avatar(profileUrl);
+            profile.setProfile_background_image_url(backgroundUrl);
 
             cursor.close();
             database.close();

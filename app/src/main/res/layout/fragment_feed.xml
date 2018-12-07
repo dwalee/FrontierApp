@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    sothree:umanoDragView="@+id/frameLayout"
+    sothree:umanoFadeColor="#80000000"
+    sothree:umanoOverlay="true"
+    sothree:umanoPanelHeight="500dp"
+    sothree:umanoParallaxOffset="100dp"
+    sothree:umanoScrollableView="@+id/feedRecyclerView"
+    sothree:umanoShadowHeight="8dp"
+    tools:context=".FeedFragment"
+    sothree:umanoAnchorPoint="1">
+
+    <include layout="@layout/space_info_layout" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="720dp"
+        android:clickable="true"
+        android:focusable="false"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/feedRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false" />
+
+    </FrameLayout>
+
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

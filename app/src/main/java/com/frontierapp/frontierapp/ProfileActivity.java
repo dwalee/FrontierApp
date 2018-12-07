@@ -1,9 +1,6 @@
 package com.frontierapp.frontierapp;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,23 +8,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements UserFirestore.UserFirestoreListener{
     CollapsingToolbarLayout profileCollapsingToolbar;
     Toolbar profileToolbar;
     ImageView profileBackgroundImageView, profilePicCircleImageView;
     TextView userTitleTextView, userAboutMeTextView, locationTextView, goalTextView;
-    FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    UserFirestore userFirestore;
-    UserDB userDB;
+
+    UserFirestore userFirestore = new UserFirestore(this, this);
     Profile profile;
     User user;
 
@@ -42,40 +36,27 @@ public class ProfileActivity extends AppCompatActivity {
         locationTextView = (TextView) findViewById(R.id.locationTextView);
         goalTextView = (TextView) findViewById(R.id.goalsTextView);
 
-
         profileCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.profileCollapsingToolbar);
 
         profileToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.profileToolbar);
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadProfileDataFromSQLite();
-            }
-        }, 300);
 
         setSupportActionBar(profileToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        userFirestore.retrieve();
     }
 
-    public void loadProfileDataFromSQLite(){
-        userDB = new UserDB(getApplicationContext());
-        profile = userDB.getProfileDataFromSQLite();
-        user = userDB.getUserDataFromSQLite();
-
-
-        String backgroundUrl = profile.getProfileBackgroundUrl();
-        String profileUrl = profile.getProfileAvatarUrl();
-        String title = profile.getUserTitle();
-        String about_me = profile.getAboutMe();
+    public void loadUserData(){
+        String backgroundUrl = profile.getProfile_background_image_url();
+        String profileUrl = profile.getProfile_avatar();
+        String title = profile.getTitle();
+        String about_me = profile.getAbout_me();
         String city = profile.getCity();
         String state = profile.getState();
         String location = city + ", " + state;
         String goals = profile.getGoal();
-        String first_name = user.getFirst_name();
-        String last_name = user.getLast_name();
+        String first_name = profile.getFirst_name();
+        String last_name = profile.getLast_name();
         String username = first_name + " " + last_name;
 
         profileCollapsingToolbar.setTitle(username);
@@ -97,13 +78,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    public void updateSQLiteFromFirestore(){
-        String userId = currentFirebaseUser.getUid();
-        userFirestore = new UserFirestore(getApplicationContext());
-        //Log.i("ProfileEditActivity/", "loadEditTextFromFireStore: " + userId);
-        userFirestore.getProfileDataFromFireStore(userId, UserDB.UPDATE);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.profile_menu,menu);
@@ -114,7 +88,7 @@ public class ProfileActivity extends AppCompatActivity {
         switch (view.getId()){
             case R.id.messagePic:
             case R.id.messageText:
-                Intent messagesIntent = new Intent(ProfileActivity.this, chat.class);
+                Intent messagesIntent = new Intent(ProfileActivity.this, ChatsActivity.class);
                 startActivity(messagesIntent);
             }
 
@@ -134,15 +108,12 @@ public class ProfileActivity extends AppCompatActivity {
                 break;
             case R.id.editMenu:
                 Intent profileEditIntent = new Intent(this, ProfileEditActivity.class);
-                updateSQLiteFromFirestore();
                 startActivity(profileEditIntent);
-                finish();
                 break;
             case R.id.partnersMenu:
                 Intent connectionsIntent = new Intent(this,
                         ConnectionsActivity.class);
                 startActivity(connectionsIntent);
-                //finish();
                 break;
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
@@ -157,4 +128,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void getProfile(Profile profile) {
+        this.profile = profile;
+        loadUserData();
+    }
 }
