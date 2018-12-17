@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="android.view.View"/>
         <variable
             name="message"
             type="com.frontierapp.frontierapp.model.Message"/>
+
+        <variable
+            name="profile"
+            type="com.frontierapp.frontierapp.model.Profile"/>
 
         <variable
             name="b"
@@ -13,22 +18,28 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:background = "@{b}">
+        >
+            <ImageView
+                android:id="@+id/senderImageView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:visibility="@{b ? View.GONE : View.VISIBLE}"
+                app:circle_image_url="@{profile.profile_url}"
+                />
 
-        <ImageView
-            android:id="@+id/senderImageView"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_margin="10dp"
-            />
+            <TextView
+                android:id="@+id/messageTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:padding="12dp"
+                android:text="@{message.message}"
+                app:format = "@{b}"
 
-        <TextView
-            android:id="@+id/messageTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_toRightOf="@id/senderImageView"
-            android:text="@{message.message}"/>
+
+                />
+
 
     </RelativeLayout>
 </layout>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#9E9E9E"
-    tools:context=".SpaceActivity">
+    tools:context=".view.SpaceActivity">
 
     <FrameLayout
         android:id="@+id/spaceFrameLayout"

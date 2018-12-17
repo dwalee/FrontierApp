@@ -4,6 +4,11 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:title="Home"
+            android:id="@+id/home"
+            android:icon="@drawable/my_profile"/>
+
+        <item
             android:title="My Profile"
             android:id="@+id/profile"
             android:icon="@drawable/my_profile"/>
@@ -22,24 +27,16 @@
             android:id="@+id/notifications"
             android:icon="@drawable/notification"/>
 
+        <item
+            android:title="@string/spaces"
+            android:id="@+id/spaces"
+            android:icon="@drawable/circles"/>
+
+        <item android:id="@+id/connections"
+            android:title="My Connections"
+            android:icon="@drawable/account_multiple_black"/>
+
     </group>
-
-    <item
-        android:title="@string/circles">
-        <menu>
-
-            <item
-                android:title="@string/spaces"
-                android:id="@+id/Circles"
-                android:icon="@drawable/circles"/>
-
-            <item android:id="@+id/connections"
-                android:title="My Connections"
-                android:icon="@drawable/account_multiple_black"/>
-
-        </menu>
-
-    </item>
 
     <item
         android:title="Personal Options">

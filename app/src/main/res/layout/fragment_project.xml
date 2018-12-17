@@ -13,7 +13,7 @@
     sothree:umanoScrollableView="@+id/feedRecyclerView"
     sothree:umanoShadowHeight="8dp"
     sothree:umanoAnchorPoint="1"
-    tools:context=".ProjectFragment"
+    tools:context=".view.ProjectFragment"
     >
 
     <include layout="@layout/space_info_layout" />

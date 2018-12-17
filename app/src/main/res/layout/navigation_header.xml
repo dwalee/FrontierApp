@@ -1,37 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="160dp"
-    android:padding="16dp"
-    android:gravity="bottom"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:background="@color/colorPrimary"
-    android:id="@+id/profileBackground">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="profile"
+            type="com.frontierapp.frontierapp.model.Profile"/>
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/profileBackground"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="@color/colorPrimary"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 
-    <ImageView
-        android:id="@+id/profilePic"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:src="@drawable/my_profile"
-        android:scaleType="centerCrop"
-        android:contentDescription="My profile pic"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="User"
-        android:id="@+id/userName"
-        android:paddingTop="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="example_gmail_com"
-        android:paddingTop="4dp"/>
+        <ImageView
+            android:id="@+id/profilePic"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:contentDescription="My profile pic"
+            android:scaleType="centerCrop"
+            android:src="@drawable/my_profile"
+            app:image_url="@{profile.profile_url}"/>
 
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="@{profile.first_name + ' ' + profile.last_name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:text="@{profile.email}" />
 
-</LinearLayout>
+    </LinearLayout>
+</layout>
