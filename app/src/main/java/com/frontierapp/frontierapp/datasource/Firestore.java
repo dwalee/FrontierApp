@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.frontierapp.frontierapp.listeners.OnSuccessCallback;
+import com.frontierapp.frontierapp.model.Profile;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -96,8 +97,15 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
                             return;
                         }
 
-                        if (documentSnapshot != null && documentSnapshot.exists())
-                            callback.OnSuccess(documentSnapshot.toObject(tClass));
+                        T t = null;
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                            t = documentSnapshot.toObject(tClass);
+                            if (t instanceof Profile)
+                                ((Profile) t).setThis_ref(documentSnapshot.getReference());
+                            callback.OnSuccess(t);
+                        }
+
+
 
                     }
                 });
@@ -137,8 +145,6 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
                                 Log.i(TAG, "removed = " + s.remove(o));
                                 break;
                         }
-
-
                     }
                     Log.i(TAG, "List size after = " + (s == null ? 0 : s.size()));
                     callback.OnSuccess(s);

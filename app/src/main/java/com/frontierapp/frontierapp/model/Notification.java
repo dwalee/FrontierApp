@@ -80,4 +80,32 @@ public class Notification {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+
+        if(!(obj instanceof Notification))
+            return false;
+
+        Notification notification = (Notification) obj;
+        String this_sender_path = this.sender.getPath();
+        String that_sender_path = notification.getSender().getPath();
+
+        String this_misc_path = "";
+        if(this.miscellaneous_ref != null)
+            this_misc_path = this.miscellaneous_ref.getPath();
+
+        String that_misc_path = "";
+        if(notification.getMiscellaneous_ref() != null)
+            that_misc_path = notification.getMiscellaneous_ref().getPath();
+
+        Boolean b = this_sender_path.equals(that_sender_path) &&
+        this_misc_path.equals(that_misc_path) &&
+        this.created.getTime() == notification.getCreated().getTime() &&
+        this.type.equals(notification.getType());
+
+        return b;
+    }
 }

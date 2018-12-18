@@ -18,16 +18,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.recyclerview.extensions.ListAdapter;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.frontierapp.frontierapp.databinding.ChatItemLayoutBinding;
 import com.frontierapp.frontierapp.databinding.FragmentChatsBinding;
+import com.frontierapp.frontierapp.model.Chat;
 import com.frontierapp.frontierapp.model.Chats;
 import com.frontierapp.frontierapp.model.Message;
+import com.frontierapp.frontierapp.model.Profile;
 import com.frontierapp.frontierapp.model.Profiles;
 import com.frontierapp.frontierapp.viewmodel.ChatsViewModel;
 
@@ -56,7 +61,13 @@ public class ChatsFragment extends Fragment {
         chatsViewModel.getChats().observe(getActivity(), new Observer<Chats>() {
             @Override
             public void onChanged(@Nullable Chats chats) {
-                adapter.setChats(chats);
+                for (Chat chat:chats){
+                    for (int i = 0; i < chats.size(); i++) {
+                        Log.d(TAG, "onChanged() called with: chats = [" + chat.getProfiles().get(i).getFirst_name() + "]");
+                    }
+
+                }
+                adapter.submitList(chats);
             }
         });
     }
@@ -65,55 +76,68 @@ public class ChatsFragment extends Fragment {
         recyclerView = chatsBinding.chatListRecyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        adapter = new ChatsRecyclerViewAdapter(getLayoutInflater());
+        adapter = new ChatsRecyclerViewAdapter();
         recyclerView.setAdapter(adapter);
 
     }
 
-    public class ChatsRecyclerViewAdapter extends RecyclerView.Adapter<ChatsViewHolder> {
+    private static final DiffUtil.ItemCallback<Chat> DIFF_CALLBACK = new DiffUtil.ItemCallback<Chat>() {
+        @Override
+        public boolean areItemsTheSame(Chat oldItem, Chat newItem) {
+            return oldItem.equals(newItem);
+        }
+
+        @Override
+        public boolean areContentsTheSame(Chat oldItem, Chat newItem) {
+            String old_first_name = oldItem.getProfiles().get(0).getFirst_name().toString();
+            String new_first_name = newItem.getProfiles().get(0).getFirst_name().toString();
+
+            Boolean b = new_first_name.equals(old_first_name);
+            Log.i(TAG, "areContentsTheSame: " + b + " new_first_name = " + new_first_name +
+                    " old_first_name = " + old_first_name);
+
+            String oldMessage = oldItem.getMessage().getMessage();
+            String newMessage = newItem.getMessage().getMessage();
+
+            Log.d(TAG, "areContentsTheSame() called with: oldItem = ["
+                    + oldItem.getMessage().getMessage() + "], newItem = ["
+                    + newItem.getMessage().getMessage() + "]");
+
+
+
+
+            return b && oldMessage.equals(newMessage);
+        }
+    };
+
+    public class ChatsRecyclerViewAdapter extends ListAdapter<Chat, ChatsViewHolder> {
         private static final String TAG = "ChatsRecyclerViewAdapte";
         private ChatItemLayoutBinding chatItemLayoutBinding;
-        private LayoutInflater inflater;
-        private Chats chats;
 
-        public ChatsRecyclerViewAdapter(LayoutInflater inflater) {
-            this.inflater = inflater;
+        public ChatsRecyclerViewAdapter() {
+            super(DIFF_CALLBACK);
         }
 
         @NonNull
         @Override
         public ChatsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            chatItemLayoutBinding = ChatItemLayoutBinding.inflate(inflater, parent, false);
+            chatItemLayoutBinding = ChatItemLayoutBinding.inflate(getLayoutInflater(), parent, false);
             return new ChatsViewHolder(chatItemLayoutBinding.getRoot());
         }
 
         @Override
         public void onBindViewHolder(@NonNull ChatsViewHolder holder, int position) {
             ChatItemLayoutBinding binding = DataBindingUtil.getBinding(holder.itemView);
-            Profiles profiles = chats.get(position).getProfiles();
-            Message message = chats.get(position).getMessage();
+            Profiles profiles = getItem(position).getProfiles();
+            Message message = getItem(position).getMessage();
 
-            if (chats != null) {
-                binding.setChat(chats.get(position));
-                binding.setMessage(message);
-                binding.setProfile(profiles.get(0));
-            }
+            binding.setChat(getItem(position));
+            binding.setMessage(message);
+            binding.setProfile(profiles.get(0));
 
             binding.setListener(new ChatOnClickListener(binding));
         }
 
-        @Override
-        public int getItemCount() {
-            if (chats == null)
-                return 0;
-
-            return chats.size();
-        }
-
-        public void setChats(Chats chats) {
-            this.chats = chats;
-            notifyDataSetChanged();
-        }
     }
 
     public class ChatsViewHolder extends RecyclerView.ViewHolder {

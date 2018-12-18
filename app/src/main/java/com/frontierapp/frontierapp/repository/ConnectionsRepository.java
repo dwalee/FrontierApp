@@ -59,7 +59,12 @@ public class ConnectionsRepository implements OnSuccessCallback<Connections> {
                                 @Override
                                 public void OnSuccess(Profile profile) {
                                     connection.setProfile(profile);
-                                    connectionList.add(connection);
+                                    if(connectionList.contains(connection)){
+                                        connectionList.set(connectionList.indexOf(connection), connection);
+                                    }else{
+                                        connectionList.add(connection);
+                                    }
+
 
                                     if(index == (connections.size() - 1) || connections.size() == 1)
                                         onSuccessCallbacks[0].OnSuccess(connectionList);

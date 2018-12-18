@@ -2,6 +2,7 @@ package com.frontierapp.frontierapp.model;
 
 import com.frontierapp.frontierapp.datasource.Firestore;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.ServerTimestamp;
 import com.google.gson.annotations.SerializedName;
 
 import java.sql.Timestamp;
@@ -35,6 +36,7 @@ public class Message {
         this.message = message;
     }
 
+    @ServerTimestamp
     public Date getSent() {
         return sent;
     }
@@ -51,6 +53,7 @@ public class Message {
         this.read = read;
     }
 
+    @ServerTimestamp
     public Date getEdited() {
         return edited;
     }

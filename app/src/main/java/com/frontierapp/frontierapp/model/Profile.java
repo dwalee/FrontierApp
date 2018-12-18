@@ -82,4 +82,5 @@ public class Profile extends User {
     public void setTitle(String title) {
         this.title = title;
     }
+
 }

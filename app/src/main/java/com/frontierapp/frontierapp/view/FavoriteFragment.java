@@ -45,11 +45,6 @@ public class FavoriteFragment extends Fragment {
     private final Query query = collectionReference.whereEqualTo(FirestoreConstants.FAVORITE, true);
     private ConnectionsRecyclerViewAdapter currentConnectionItemRecyclerAdapter;
 
-    public FavoriteFragment() {
-
-
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -75,7 +70,7 @@ public class FavoriteFragment extends Fragment {
         connectionsViewModel.getConnections().observe(getActivity(), new Observer<Connections>() {
             @Override
             public void onChanged(@Nullable Connections connections) {
-                currentConnectionItemRecyclerAdapter.setConnections(connections);
+                currentConnectionItemRecyclerAdapter.submitList(connections);
             }
         });
 
@@ -92,17 +87,13 @@ public class FavoriteFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
         connectionRecyclerView.setLayoutManager(gridLayoutManager);
         connectionRecyclerView.setHasFixedSize(true);
-        getCurrentFavoriteList();
-
-    }
-
-    //Get the list of users and apply it to the partners recyclerview
-    public void getCurrentFavoriteList(){
         currentConnectionItemRecyclerAdapter = new ConnectionsRecyclerViewAdapter(getLayoutInflater());
         int spacing = 5;
         boolean includeEdge = false;
 
         connectionRecyclerView.addItemDecoration(new SpacesItemDecoration(2, spacing, includeEdge));
         connectionRecyclerView.setAdapter(currentConnectionItemRecyclerAdapter);
+
     }
+
 }

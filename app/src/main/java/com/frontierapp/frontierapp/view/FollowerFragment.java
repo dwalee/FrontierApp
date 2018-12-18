@@ -69,7 +69,7 @@ public class FollowerFragment extends Fragment {
         connectionsViewModel.getConnections().observe(getActivity(), new Observer<Connections>() {
             @Override
             public void onChanged(@Nullable Connections connections) {
-                currentConnectionItemRecyclerAdapter.setConnections(connections);
+                currentConnectionItemRecyclerAdapter.submitList(connections);
             }
         });
     }
@@ -84,12 +84,6 @@ public class FollowerFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
         connectionRecyclerView.setLayoutManager(gridLayoutManager);
         connectionRecyclerView.setHasFixedSize(true);
-        getCurrentFollowerList();
-
-    }
-
-    //Get the list of users and apply it to the partners recyclerview
-    public void getCurrentFollowerList(){
 
         currentConnectionItemRecyclerAdapter = new ConnectionsRecyclerViewAdapter(getLayoutInflater());
         int spacing = 5;
@@ -97,5 +91,7 @@ public class FollowerFragment extends Fragment {
 
         connectionRecyclerView.addItemDecoration(new SpacesItemDecoration(2, spacing, includeEdge));
         connectionRecyclerView.setAdapter(currentConnectionItemRecyclerAdapter);
+
     }
+
 }

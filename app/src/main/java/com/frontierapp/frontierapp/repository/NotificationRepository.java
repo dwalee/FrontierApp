@@ -23,7 +23,7 @@ public class NotificationRepository implements OnSuccessCallback<Notifications> 
     private final CollectionReference collectionReference = FirestoreDBReference.userCollection
             .document(Firestore.currentUserId)
             .collection(FirestoreConstants.NOTIFICATIONS);
-    private final Query query = collectionReference.whereEqualTo(FirestoreConstants.IGNORE, false).orderBy("updated");
+    private final Query query = collectionReference.whereEqualTo(FirestoreConstants.IGNORE, false).orderBy("updated", Query.Direction.DESCENDING);
     private Context context;
     private ListenerRegistration listenerRegistration;
 
@@ -39,7 +39,7 @@ public class NotificationRepository implements OnSuccessCallback<Notifications> 
 
     @Override
     public void OnSuccess(Notifications notifications) {
-
+        notifications.reverseSort();
         notificationsMutableLiveData.setValue(notifications);
     }
 
@@ -63,8 +63,11 @@ public class NotificationRepository implements OnSuccessCallback<Notifications> 
                                 @Override
                                 public void OnSuccess(Profile profile) {
                                     notification.setProfile(profile);
-                                    notificationsList.add(notification);
-
+                                    if(notificationsList.contains(notification)){
+                                        notificationsList.set(notificationsList.indexOf(notification), notification);
+                                    }else{
+                                        notificationsList.add(notification);
+                                    }
 
                                     if(index == (notifications.size() - 1))
                                         onSuccessCallbacks[0].OnSuccess(notificationsList);

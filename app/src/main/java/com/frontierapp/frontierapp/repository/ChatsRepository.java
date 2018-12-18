@@ -22,6 +22,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChatsRepository implements OnSuccessCallback<Chats> {
     private static final String TAG = "ChatsRepository";
     private MutableLiveData<Chats> ChatsMutableLiveData = new MutableLiveData<>();
@@ -44,6 +47,12 @@ public class ChatsRepository implements OnSuccessCallback<Chats> {
     @Override
     public void OnSuccess(Chats chats) {
         Log.d(TAG, "OnSuccess() called with: Chats = [" + (chats == null ? 0 : chats.size()) + "]");
+        for (Chat chat : chats) {
+            Log.i(TAG, "Chat = " + chat.getMessage().getMessage() + " & " + chat.getProfiles().get(0).getFirst_name());
+            Profiles profiles = Profiles.moveToNew(chat.getProfiles());
+            chat.setProfiles(profiles);
+        }
+
 
         ChatsMutableLiveData.setValue(chats);
     }
@@ -71,27 +80,36 @@ public class ChatsRepository implements OnSuccessCallback<Chats> {
                             @Override
                             public void OnSuccess(final Members members) {
 
+                                List<String> userRefList = new ArrayList<>();
                                 final Profiles profiles = new Profiles();
-                                for (Member member : members) {
+                                for (final Member member : members) {
                                     Log.d(TAG, "OnSuccess() called with: members = [" + (members == null ? 0 : members.size()) + "]");
                                     final DocumentReference docRef = member.getMember();
-                                    String theId = docRef.getId().toString();
+
+                                    userRefList.add(docRef.getPath());
+                                    String theId = docRef.getId();
                                     String myId = Firestore.currentUserId;
                                     //Log.i(TAG, "theId = " + theId);
                                     //Log.i(TAG, "myId = " + myId);
 
-                                    index = 0;
+
                                     if (!myId.equals(theId)) {
                                         OnSuccessCallback<Profile> profileOnSuccessCallback = new OnSuccessCallback<Profile>() {
                                             @Override
                                             public void OnSuccess(Profile profile) {
-                                                Log.d(TAG, "OnSuccess() called with: profile = [" + (profile == null ? "" : profile.getFirst_name()) + "]");
-                                                profiles.add(profile);
+                                                //Log.d(TAG, "OnSuccess() called with: profile = [" + (profile == null ? "" : profile.getFirst_name()) +
+                                                //      " " + profile.getThis_ref().getPath() + " " + profiles.indexOf(profile) + " ]");
+                                                if (profiles.contains(profile)) {
+                                                    profiles.set(profiles.indexOf(profile), profile);
+                                                } else
+                                                    profiles.add(profile);
 
+                                                //Log.d(TAG, "OnSuccess() called with: profile = [" + (profile == null ? "" : profiles.get(profiles.indexOf(profile)).getFirst_name()) +
+                                                //       " " + profiles.get(profiles.indexOf(profile)).getThis_ref().getPath() + " " + profiles.indexOf(profile) + " ]");
 
-                                                if (index == (members.size() - 2)) {
+                                                Log.i(TAG, "OnSuccess: index increase is at " + index);
+                                                if (profiles.size() == (members.size() - 1)) {
                                                     thisChat.setProfiles(profiles);
-
                                                     OnSuccessCallback<Messages> messagesOnSuccessCallback = new OnSuccessCallback<Messages>() {
                                                         @Override
                                                         public void OnSuccess(Messages messages) {
@@ -101,6 +119,7 @@ public class ChatsRepository implements OnSuccessCallback<Chats> {
 
                                                             if (chatList.contains(thisChat)) {
                                                                 chatList.set(chatList.indexOf(thisChat), thisChat);
+
                                                             } else {
                                                                 chatList.add(thisChat);
                                                             }
@@ -113,7 +132,6 @@ public class ChatsRepository implements OnSuccessCallback<Chats> {
                                                     Firestore<Message> messagesFirestore = new Firestore<>(messageQuery);
                                                     messagesFirestore.retrieveList(messagesOnSuccessCallback, Message.class, new Messages());
                                                 }
-                                                index++;
 
                                                 /////////////////////////////////////////////////////////////////////////////////////////////
                                             }

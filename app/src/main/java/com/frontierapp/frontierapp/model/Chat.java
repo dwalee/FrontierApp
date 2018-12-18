@@ -3,6 +3,7 @@ package com.frontierapp.frontierapp.model;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Chat {
     private String name;
@@ -70,12 +71,20 @@ public class Chat {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        Chat chat = (Chat) obj;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Chat chat = (Chat) o;
 
-        String this_path = this.chat_ref.getPath();
+        String this_path = chat_ref.getPath();
         String that_path = chat.chat_ref.getPath();
 
-        return this_path.equals(that_path);
+        return Objects.equals(this_path, that_path);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(chat_ref);
     }
 }
