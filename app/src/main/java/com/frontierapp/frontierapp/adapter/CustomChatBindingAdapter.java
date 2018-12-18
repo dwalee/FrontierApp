@@ -27,9 +27,9 @@ public class CustomChatBindingAdapter {
         } else {
             params = (RelativeLayout.LayoutParams) view.getLayoutParams();
             view.setBackground(theirDrawable);
-            view.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+            //view.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
             params.addRule(RelativeLayout.RIGHT_OF, R.id.senderImageView);
-            params.setMargins(10,10,10,10);
+            params.setMargins(10,10,200,10);
             view.setLayoutParams(params);
         }
     }
