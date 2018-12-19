@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="profile"
+            type="com.frontierapp.frontierapp.model.Profile"/>
+        <variable
+            name="message"
+            type="com.frontierapp.frontierapp.model.Message"/>
+
+        <variable
+            name="chat"
+            type="com.frontierapp.frontierapp.model.Chat"/>
+
+
+        <variable
+            name="listener"
+            type="com.frontierapp.frontierapp.view.ChatsFragment.ChatOnClickListener"/>
+        
+    </data>
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".view.ChatsFragment"
+        android:onClick="@{listener}">
+
+        <LinearLayout
+            android:id="@+id/chatTextLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/userPic"
+            android:layout_marginStart="30dp"
+            android:layout_toRightOf="@+id/userPic"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{profile.first_name + ' ' + profile.last_name}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/userMessagePreview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/userName"
+                android:layout_below="@+id/userName"
+                android:text="@{message.message}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                />
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/userPic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:circle_image_url="@{profile.profile_url}"
+            />
+
+
+    </RelativeLayout>
+</layout>

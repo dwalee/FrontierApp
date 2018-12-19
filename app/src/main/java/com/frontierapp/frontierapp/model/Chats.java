@@ -1,5 +1,7 @@
 package com.frontierapp.frontierapp.model;
 
-public class Chats {
+import java.util.ArrayList;
+
+public class Chats extends ArrayList<Chat> {
 
 }

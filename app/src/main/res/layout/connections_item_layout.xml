@@ -1,29 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/connectionsItemLayout"
-    android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:orientation="vertical">
+<layout >
+    <data>
+        <variable
+            name="profile"
+            type="com.frontierapp.frontierapp.model.Profile"/>
+        <variable
+            name="connection"
+            type="com.frontierapp.frontierapp.model.Connection"/>
+        <variable
+            name="listener"
+            type="com.frontierapp.frontierapp.listeners.ConnectionsClickListener"/>
+    </data>
 
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/connectionsItemLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:onClick="@{listener}">
 
         <ImageView
             android:id="@+id/connectionsProfileImageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="10dp" />
-
-        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="15dp">
+            android:layout_height="200dp"
+            android:scaleType="matrix"
+            app:image_url="@{profile.profile_url}"/>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            app:cardBackgroundColor="#FFEB3B"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="matrix"
+                app:image_url="@{profile.profile_background_url}"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="matrix"
+                android:background="#85000000"/>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="75dp"
+                android:paddingLeft="15dp"
+                >
 
                 <TextView
                     android:id="@+id/statTextView"
@@ -36,7 +63,8 @@
                     android:padding="5dp"
                     android:textSize="12sp"
                     android:textStyle="bold"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/connectionsNameTextView"
@@ -45,7 +73,9 @@
                     android:layout_below="@+id/statTextView"
                     android:layout_marginTop="10dp"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:text="@{profile.first_name + ' ' +  profile.last_name}"/>
 
 
                 <ImageButton
@@ -54,28 +84,27 @@
                     android:layout_height="52dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="3dp"
                     android:background="@android:color/transparent"
                     android:foregroundGravity="right"
-                    android:src="@drawable/account_plus" />
+                    android:src="@drawable/account_plus"
+                    />
 
                 <TextView
                     android:id="@+id/connectionsTitleTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
                     android:layout_below="@+id/connectionsNameTextView"
-                    android:text="Title Goes Here" />
+                    android:layout_alignParentStart="true"
+                    android:textColor="#FFFFFF"
+                    android:text="@{profile.title}" />
 
             </RelativeLayout>
 
 
-        </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height=".25dp"
-        android:background="#000" />
-
-</LinearLayout>
+</layout>

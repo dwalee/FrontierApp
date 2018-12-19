@@ -12,7 +12,7 @@
     sothree:umanoParallaxOffset="100dp"
     sothree:umanoScrollableView="@+id/feedRecyclerView"
     sothree:umanoShadowHeight="8dp"
-    tools:context=".FeedFragment"
+    tools:context=".view.FeedFragment"
     sothree:umanoAnchorPoint="1">
 
     <include layout="@layout/space_info_layout" />

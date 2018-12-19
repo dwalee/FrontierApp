@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,40 +29,32 @@
         </activity>
         <!-- Firebase InstanceId Service -->
 
-        <activity android:name=".RegisterActivity" />
+        <activity android:name=".view.RegisterActivity" />
         <activity android:name=".Register" />
-        <activity android:name=".FrontierSplashActivity" />
-        <activity android:name=".SkillsInformationActivity" />
-        <activity android:name=".ResetPasswordActivity" />
-        <activity android:name=".Home"
+        <activity android:name=".view.FrontierSplashActivity" />
+        <activity android:name=".view.SkillsInformationActivity" />
+        <activity android:name=".view.ResetPasswordActivity" />
+        <activity android:name=".view.MainAppActivity"
             />
-        <activity android:name=".ChatsActivity" />
+        <activity android:name=".view.ChatsFragment" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".ImageViewer" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".RegisterProfilePicActivity" />
-        <activity android:name=".ProfileEditActivity" />
-        <activity android:name=".CurrentPartnersActivity" />
+        <activity android:name=".view.ImageViewerActivity" />
+        <activity android:name=".view.ProfileActivity" />
+        <activity android:name=".view.RegisterProfilePicActivity" />
+        <activity android:name=".view.ProfileEditActivity" />
 
-        <activity android:name=".CurrentConnectionsProfileActivity" />
+        <activity android:name=".view.ConnectionsProfileActivity" />
 
-        <service
-            android:name=".MyFirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
-        <activity android:name=".ConnectionsActivity" />
-        <activity android:name=".NotificationActivity" />
-        <activity android:name=".SpaceActivity"></activity>
-        <activity android:name=".SpacesActivity"></activity>
-        <activity android:name=".CreateSpaceActivity"></activity>
-        <activity android:name=".AddSpaceMembersActivity"></activity>
+        <activity android:name=".view.ConnectionsActivity" />
+        <activity android:name=".view.NotificationFragment" />
+        <activity android:name=".view.SpaceActivity"></activity>
+        <activity android:name=".view.SpacesFragment"></activity>
+        <activity android:name=".view.CreateSpaceActivity"></activity>
+        <activity android:name=".view.AddSpaceMembersActivity"></activity>
 
         <!--
      Set custom default icon. This is used when no icon is set for incoming notification messages.
@@ -80,7 +72,7 @@
             android:resource="@color/colorAccent" />
 
         <activity android:name=".view.ChatActivity"
-            android:parentActivityName=".ChatsActivity"
+            android:parentActivityName=".view.ChatsFragment"
             >
         </activity>
     </application>
