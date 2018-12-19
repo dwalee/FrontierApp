@@ -16,26 +16,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.frontierapp.frontierapp.NotificationType;
 import com.frontierapp.frontierapp.databinding.FragmentNotificationBinding;
 import com.frontierapp.frontierapp.databinding.NotificationItemLayoutBinding;
-import com.frontierapp.frontierapp.datasource.Firestore;
-import com.frontierapp.frontierapp.datasource.FirestoreConstants;
-import com.frontierapp.frontierapp.datasource.FirestoreDBReference;
 import com.frontierapp.frontierapp.listeners.NotificationClickListener;
 import com.frontierapp.frontierapp.model.Notification;
 import com.frontierapp.frontierapp.model.Notifications;
 import com.frontierapp.frontierapp.model.Profile;
-import com.frontierapp.frontierapp.viewmodel.NotificationViewModel;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.Query;
+import com.frontierapp.frontierapp.viewmodel.NotificationsViewModel;
 
 
 public class NotificationFragment extends Fragment {
     private static final String TAG = "NotificationFragment";
     private FragmentNotificationBinding fragmentNotificationBinding;
     private RecyclerView recyclerView;
-    private NotificationViewModel notificationViewModel;
+    private NotificationsViewModel notificationsViewModel;
     private NotificationRecyclerViewAdapter adapter;
 
     @Nullable
@@ -58,9 +52,9 @@ public class NotificationFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        notificationViewModel = ViewModelProviders.of(getActivity()).get(NotificationViewModel.class);
-        notificationViewModel.retrieveNotifications();
-        notificationViewModel.getNotifications().observe(getActivity(), new Observer<Notifications>() {
+        notificationsViewModel = ViewModelProviders.of(getActivity()).get(NotificationsViewModel.class);
+        notificationsViewModel.retrieveNotifications();
+        notificationsViewModel.getNotifications().observe(getViewLifecycleOwner(), new Observer<Notifications>() {
             @Override
             public void onChanged(@Nullable Notifications notifications) {
                 adapter.submitList(notifications);

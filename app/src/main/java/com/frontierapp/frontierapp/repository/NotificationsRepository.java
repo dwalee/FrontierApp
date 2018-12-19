@@ -16,10 +16,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 
-public class NotificationRepository implements OnSuccessCallback<Notifications> {
+public class NotificationsRepository implements OnSuccessCallback<Notifications> {
     private MutableLiveData<Notifications> notificationsMutableLiveData = new MutableLiveData<>();
     private Firestore<Notification> notificationFirestore;
-    private NotificationRepository.NotificationAsyncTask notificationAsyncTask;
+    private NotificationsRepository.NotificationAsyncTask notificationAsyncTask;
     private final CollectionReference collectionReference = FirestoreDBReference.userCollection
             .document(Firestore.currentUserId)
             .collection(FirestoreConstants.NOTIFICATIONS);
@@ -28,7 +28,7 @@ public class NotificationRepository implements OnSuccessCallback<Notifications> 
     private ListenerRegistration listenerRegistration;
 
     public void retrieveNotifications() {
-        notificationAsyncTask = new NotificationRepository.NotificationAsyncTask();
+        notificationAsyncTask = new NotificationsRepository.NotificationAsyncTask();
         notificationFirestore = new Firestore(query);
         notificationAsyncTask.execute(this);
     }

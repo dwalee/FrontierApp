@@ -67,7 +67,7 @@ public class PartnerFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         connectionsViewModel = ViewModelProviders.of(getActivity()).get(PartnerViewModel.class);
         getConnections();
-        connectionsViewModel.getConnections().observe(getActivity(), new Observer<Connections>() {
+        connectionsViewModel.getConnections().observe(getViewLifecycleOwner(), new Observer<Connections>() {
             @Override
             public void onChanged(@Nullable Connections connections) {
                 currentConnectionItemRecyclerAdapter.submitList(connections);

@@ -16,6 +16,11 @@ public class FollowerViewModel extends ViewModel {
         connectionsMutableLiveData = connectionsRepository.getConnections();
     }
 
+    public void cancel(){
+        connectionsRepository.cancel();
+    }
+
+
     public MutableLiveData<Connections> getConnections(){
         return connectionsMutableLiveData;
     }

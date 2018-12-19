@@ -54,9 +54,12 @@ public interface FirestoreConstants {
     String MISC_NAME = "misc_name";
     String IGNORE = "ignore";
 
-    //Collection title
+    //user Collection title
     String NOTIFICATIONS = "Notifications";
     String CHAT_REFERENCES = "Chat_References";
+    String SPACE_REFERENCES = "Space_References";
+
+
 
     //Space attributes
     String SPACE_NAME = "space_name";
@@ -74,6 +77,7 @@ public interface FirestoreConstants {
     String PENDING = "Pending";
     String MEMBERS = "Members";
     String FEED = "Feed";
+    String PROJECTS = "Projects";
 
     //Chat
     String CHATS = "CHATS";
