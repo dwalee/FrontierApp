@@ -64,14 +64,24 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
     public void add(String id, T t) {
         collectionReference
                 .document(id)
-                .set(t);
+                .set(t).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        });
     }
 
     @Override
     public void update(String docId, HashMap<String, Object> map) {
         collectionReference
                 .document(docId)
-                .update(map);
+                .update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        });
     }
 
     @Override

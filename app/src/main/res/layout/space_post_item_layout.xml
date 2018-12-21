@@ -8,6 +8,11 @@
         <variable
             name="profile"
             type="com.frontierapp.frontierapp.model.Profile"/>
+
+        <variable
+            name="listener"
+            type="com.frontierapp.frontierapp.view.FeedFragment.ClickListener"/>
+
         <import type="com.frontierapp.frontierapp.util.DateUtil" alias="dateUtil"/>
     </data>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -50,7 +55,8 @@
                     <android.support.v4.view.ViewPager
                         android:id="@+id/mediaViewPager"
                         android:layout_width="match_parent"
-                        android:layout_height="220dp" />
+                        android:layout_height="220dp"
+                        android:onClick="@{listener}"/>
 
                     <me.relex.circleindicator.CircleIndicator
                         android:id="@+id/mediaCircleIndicator"
@@ -73,7 +79,8 @@
                         android:layout_height="35dp"
                         android:layout_margin="10dp"
                         android:scaleType="centerInside"
-                        app:circle_image_url="@{profile.profile_url}"/>
+                        app:circle_image_url="@{profile.profile_url}"
+                        android:onClick="@{listener}"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
