@@ -4,7 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.frontierapp.frontierapp.listeners.OnSuccessCallback;
+import com.frontierapp.frontierapp.model.Post;
 import com.frontierapp.frontierapp.model.Profile;
+import com.frontierapp.frontierapp.model.Space;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -62,14 +64,24 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
     public void add(String id, T t) {
         collectionReference
                 .document(id)
-                .set(t);
+                .set(t).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        });
     }
 
     @Override
     public void update(String docId, HashMap<String, Object> map) {
         collectionReference
                 .document(docId)
-                .update(map);
+                .update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        });
     }
 
     @Override
@@ -100,8 +112,14 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
                         T t = null;
                         if (documentSnapshot != null && documentSnapshot.exists()) {
                             t = documentSnapshot.toObject(tClass);
+                            DocumentReference reference = documentSnapshot.getReference();
                             if (t instanceof Profile)
-                                ((Profile) t).setThis_ref(documentSnapshot.getReference());
+                                ((Profile) t).setThis_ref(reference);
+                            else if (t instanceof Space)
+                                ((Space) t).setSpace_ref(reference);
+                            else if(t instanceof Post)
+                                ((Post) t).setPost_ref(reference);
+
                             callback.OnSuccess(t);
                         }
 
@@ -129,7 +147,12 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
                     for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
                         T o = null;
                         QueryDocumentSnapshot documentSnapshot = documentChange.getDocument();
+                        DocumentReference reference = documentSnapshot.getReference();
                         o = documentSnapshot.toObject(tClass);
+
+                        if(o instanceof Post)
+                            ((Post) o).setPost_ref(reference);
+
                         switch (documentChange.getType()) {
                             case MODIFIED:
                                 Log.i(TAG, "DocumentModified = " + documentChange.getDocument().getString("message"));

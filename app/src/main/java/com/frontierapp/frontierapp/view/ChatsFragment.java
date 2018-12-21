@@ -32,7 +32,6 @@ import com.frontierapp.frontierapp.databinding.FragmentChatsBinding;
 import com.frontierapp.frontierapp.model.Chat;
 import com.frontierapp.frontierapp.model.Chats;
 import com.frontierapp.frontierapp.model.Message;
-import com.frontierapp.frontierapp.model.Profile;
 import com.frontierapp.frontierapp.model.Profiles;
 import com.frontierapp.frontierapp.viewmodel.ChatsViewModel;
 
@@ -58,12 +57,12 @@ public class ChatsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         chatsViewModel = ViewModelProviders.of(getActivity()).get(ChatsViewModel.class);
         chatsViewModel.retrieveChats();
-        chatsViewModel.getChats().observe(getActivity(), new Observer<Chats>() {
+        chatsViewModel.getChats().observe(getViewLifecycleOwner(), new Observer<Chats>() {
             @Override
             public void onChanged(@Nullable Chats chats) {
                 for (Chat chat:chats){
                     for (int i = 0; i < chats.size(); i++) {
-                        Log.d(TAG, "onChanged() called with: chats = [" + chat.getProfiles().get(i).getFirst_name() + "]");
+                        Log.d(TAG, "onChanged() called wit: chat = [" + chat.getProfiles().get(i).getFirst_name() + "]");
                     }
 
                 }
@@ -102,9 +101,6 @@ public class ChatsFragment extends Fragment {
             Log.d(TAG, "areContentsTheSame() called with: oldItem = ["
                     + oldItem.getMessage().getMessage() + "], newItem = ["
                     + newItem.getMessage().getMessage() + "]");
-
-
-
 
             return b && oldMessage.equals(newMessage);
         }

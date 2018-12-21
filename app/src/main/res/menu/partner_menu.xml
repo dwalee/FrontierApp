@@ -4,8 +4,7 @@
 
     <item
         android:title=""
-        android:id="@+id/addMenu"
-        android:icon="@drawable/account_plus_white"
+        android:id="@+id/addOrRemoveMenu"
         app:showAsAction="always"/>
 
     <item
@@ -19,7 +18,6 @@
     <item
         android:title=""
         android:id="@+id/favoriteMenu"
-        android:icon="@drawable/star"
         app:showAsAction="always"/>
 
 </menu>

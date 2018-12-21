@@ -27,6 +27,10 @@ public class ConnectionsRepository implements OnSuccessCallback<Connections> {
         connectionsAsyncTask.execute(this);
     }
 
+    public void cancel(){
+        connectionsAsyncTask.cancel(true);
+    }
+
     public MutableLiveData<Connections> getConnections() {
         return connectionsMutableLiveData;
     }

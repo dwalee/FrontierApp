@@ -1,5 +1,10 @@
 package com.frontierapp.frontierapp.view;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.graphics.Color;
@@ -10,27 +15,54 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.frontierapp.frontierapp.R;
-import com.frontierapp.frontierapp.view.FeedFragment;
-import com.frontierapp.frontierapp.view.PartnerFragment;
-import com.frontierapp.frontierapp.view.ProjectFragment;
+import com.frontierapp.frontierapp.databinding.ActivitySpaceBinding;
+import com.frontierapp.frontierapp.datasource.Firestore;
+import com.frontierapp.frontierapp.model.Space;
+import com.frontierapp.frontierapp.viewmodel.FeedViewModel;
+import com.frontierapp.frontierapp.viewmodel.SpaceViewModel;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.Query;
 
 public class SpaceActivity extends AppCompatActivity {
-    //BottomNavigationView spaceBottomNavigationView;
-    Toolbar spaceToolbar;
+    private ActivitySpaceBinding spaceBinding;
+    private Toolbar spaceToolbar;
+    private FeedViewModel feedViewModel;
+    private SpaceViewModel spaceViewModel;
+    private Query feedQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_space);
-        instantiateViews();
+        spaceBinding = DataBindingUtil.setContentView(this, R.layout.activity_space);
+
+
+        Intent intent = getIntent();
+        String path = intent.getStringExtra("PATH");
+
+        DocumentReference spaceReference = Firestore.myFirestore.document(path);
+
+        spaceViewModel = ViewModelProviders.of(this).get(SpaceViewModel.class);
+        spaceViewModel.retrieveSpace(spaceReference);
+
+        feedQuery = spaceReference.collection(Firestore.FEED).orderBy("created", Query.Direction.DESCENDING);
+        feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
+        feedViewModel.retrieveFeed(feedQuery);
+
+        init();
+
     }
 
-    public void instantiateViews(){
-        //spaceBottomNavigationView = (BottomNavigationView) findViewById(R.id.spaceBottomNavigation);
-        spaceToolbar = (Toolbar) findViewById(R.id.spaceToolbar);
-        spaceToolbar.setTitle("Space");
-        spaceToolbar.setTitleTextColor(Color.WHITE);
-        setSupportActionBar(spaceToolbar);
+    public void init(){
+        spaceViewModel.getSpace().observe(this, new Observer<Space>() {
+            @Override
+            public void onChanged(@Nullable Space space) {
+                spaceToolbar = spaceBinding.spaceToolbar;
+                spaceToolbar.setTitle(space.getName());
+                spaceToolbar.setTitleTextColor(Color.WHITE);
+                setSupportActionBar(spaceToolbar);
+            }
+        });
+
 
         setFragment(new FeedFragment());
     }
@@ -72,7 +104,7 @@ public class SpaceActivity extends AppCompatActivity {
 
     private void setFragment(Fragment fragment){
          FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-         fragmentTransaction.replace(R.id.spaceFrameLayout, fragment);
+         fragmentTransaction.replace(spaceBinding.spaceFrameLayout.getId(), fragment);
          fragmentTransaction.commit();
     }
 

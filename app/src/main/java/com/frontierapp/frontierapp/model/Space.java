@@ -3,27 +3,19 @@ package com.frontierapp.frontierapp.model;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Space {
+    private DocumentReference space_ref;
     private String name;
     private String purpose;
     private Boolean is_private;
     private Date created;
     private int number_of_members;
     private DocumentReference creator;
-    private Profile profile;
-
-    public Space() {
-    }
-
-    public Space(String name, String purpose, Boolean is_private, Date created, int number_of_members, DocumentReference creator) {
-        this.name = name;
-        this.purpose = purpose;
-        this.is_private = is_private;
-        this.created = created;
-        this.number_of_members = number_of_members;
-        this.creator = creator;
-    }
+    private String background;
+    private int member_count;
+    private int project_count;
 
     public String getName() {
         return name;
@@ -41,12 +33,12 @@ public class Space {
         this.purpose = purpose;
     }
 
-    public Boolean getPrivate() {
+    public Boolean getIs_private() {
         return is_private;
     }
 
-    public void setPrivate(Boolean aPrivate) {
-        is_private = aPrivate;
+    public void setIs_private(Boolean is_private) {
+        this.is_private = is_private;
     }
 
     public Date getCreated() {
@@ -55,14 +47,6 @@ public class Space {
 
     public void setCreated(Date created) {
         this.created = created;
-    }
-
-    public Boolean getIs_private() {
-        return is_private;
-    }
-
-    public void setIs_private(Boolean is_private) {
-        this.is_private = is_private;
     }
 
     public int getNumber_of_members() {
@@ -81,11 +65,53 @@ public class Space {
         this.creator = creator;
     }
 
-    public Profile getProfile() {
-        return profile;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Space space = (Space) o;
+
+        String this_path = this.space_ref.getPath();
+        String that_path = space.space_ref.getPath();
+
+        return Objects.equals(this_path, that_path);
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public DocumentReference getSpace_ref() {
+        return space_ref;
+    }
+
+    public String getBackground() {
+        return background;
+    }
+
+    public void setBackground(String background) {
+        this.background = background;
+    }
+
+    public void setSpace_ref(DocumentReference space_ref) {
+        this.space_ref = space_ref;
+    }
+
+    public int getMember_count() {
+        return member_count;
+    }
+
+    public void setMember_count(int member_count) {
+        this.member_count = member_count;
+    }
+
+    public int getProject_count() {
+        return project_count;
+    }
+
+    public void setProject_count(int project_count) {
+        this.project_count = project_count;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(space_ref);
     }
 }

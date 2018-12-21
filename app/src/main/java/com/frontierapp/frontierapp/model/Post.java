@@ -5,6 +5,7 @@ import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Post {
     private String post_title;
@@ -16,7 +17,8 @@ public class Post {
     private int positive_count;
     private int negative_count;
     private int comment_count;
-    private DocumentReference user_ref;
+    private DocumentReference post_ref;
+    private Profile profile;
 
     public Post() {
 
@@ -117,5 +119,60 @@ public class Post {
 
     public void setComment_count(int comment_count) {
         this.comment_count = comment_count;
+    }
+
+    public DocumentReference getPost_ref() {
+        return post_ref;
+    }
+
+    public void setPost_ref(DocumentReference post_ref) {
+        this.post_ref = post_ref;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+
+        String this_path = this.post_ref.getPath();
+        String that_path = post.post_ref.getPath();
+
+        return Objects.equals(this_path, that_path);
+    }
+
+    public boolean sameContent(Post post){
+        if(!(this.equals(post)))
+            return false;
+
+        if(this == null || post == null)
+            return false;
+
+        return this.post_title.equals(post.post_title) &&
+        this.post_desc.equals(post.post_desc) &&
+        this.created.getTime() == post.created.getTime() &&
+        this.updated.getTime() == post.updated.getTime() &&
+        this.image_urls.equals(post.image_urls) &&
+        this.type.equals(post.type) &&
+        this.posted_by.getPath().equals(post.posted_by.getPath()) &&
+        this.positive_count == post.positive_count &&
+        this.negative_count == post.negative_count &&
+        this.comment_count == post.comment_count &&
+        this.post_ref.getPath().equals(post.post_ref.getPath())&&
+        this.profile.equals(post.profile);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(post_ref);
     }
 }

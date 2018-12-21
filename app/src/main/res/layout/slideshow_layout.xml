@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="url"
+            type="String"/>
 
-    <ImageView
-        android:id="@+id/postImageView"
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:scaleType="centerCrop"
-        android:contentDescription="feed images"/>
+        <variable
+            name="listener"
+            type="com.frontierapp.frontierapp.adapter.SlideShowAdapter.ClickListener"/>
 
-</LinearLayout>
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/postImageView"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="feed images"
+            app:image_url="@{url}"
+            android:onClick="@{listener}"
+            />
+
+    </LinearLayout>
+</layout>

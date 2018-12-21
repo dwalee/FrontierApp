@@ -5,16 +5,15 @@ import android.arch.lifecycle.ViewModel;
 
 
 import com.frontierapp.frontierapp.model.Notifications;
-import com.frontierapp.frontierapp.repository.NotificationRepository;
-import com.google.firebase.firestore.Query;
+import com.frontierapp.frontierapp.repository.NotificationsRepository;
 
-public class NotificationViewModel extends ViewModel {
+public class NotificationsViewModel extends ViewModel {
     private MutableLiveData<Notifications> notificationsMutableLiveData;
-    private NotificationRepository notificationRepository = new NotificationRepository();
+    private NotificationsRepository notificationsRepository = new NotificationsRepository();
 
     public void retrieveNotifications(){
-        notificationRepository.retrieveNotifications();
-        notificationsMutableLiveData = notificationRepository.getNotifications();
+        notificationsRepository.retrieveNotifications();
+        notificationsMutableLiveData = notificationsRepository.getNotifications();
     }
 
     public MutableLiveData<Notifications> getNotifications(){
