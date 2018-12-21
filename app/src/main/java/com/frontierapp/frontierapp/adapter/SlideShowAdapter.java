@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.frontierapp.frontierapp.R;
@@ -49,7 +50,7 @@ public class SlideShowAdapter extends PagerAdapter {
 
         View view = slideshowBinding.getRoot();
         slideshowBinding.setUrl(image_urls.get(position));
-        //slideshowBinding.setListener(new ClickListener(slideshowBinding));
+        slideshowBinding.setListener(new ClickListener(slideshowBinding));
         container.addView(view);
 
         return view;
@@ -60,6 +61,8 @@ public class SlideShowAdapter extends PagerAdapter {
         container.removeView((LinearLayout)object);
     }
 
+
+
     public class ClickListener implements View.OnClickListener{
         SlideshowLayoutBinding binding;
 
@@ -68,12 +71,13 @@ public class SlideShowAdapter extends PagerAdapter {
         }
 
         @Override
-        public void onClick(View view) {
-            ArrayList<String> urls = new ArrayList<>();
-            urls.add(binding.getUrl());
-            Intent intent = new Intent(context, ImageViewerActivity.class);
-            intent.putExtra("URL", urls);
-            context.startActivity(intent);
+        public void onClick(View v) {
+            Intent imageViewIntent = new Intent(context, ImageViewerActivity.class);
+
+            ArrayList<String> stringArrayList = (ArrayList<String>) image_urls;
+            imageViewIntent.putStringArrayListExtra("URL", stringArrayList);
+            imageViewIntent.putExtra("INDEX_URL", binding.getUrl());
+            context.startActivity(imageViewIntent);
         }
     }
 }

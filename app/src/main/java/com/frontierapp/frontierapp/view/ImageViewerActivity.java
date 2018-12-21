@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.frontierapp.frontierapp.R;
 import com.frontierapp.frontierapp.adapter.SlideShowAdapter;
+import com.frontierapp.frontierapp.adapter.SlideshowImageViewAdapter;
 import com.frontierapp.frontierapp.databinding.ActivityImageViewerBinding;
 import com.frontierapp.frontierapp.databinding.ActivitySpaceBinding;
 
@@ -23,6 +24,10 @@ public class ImageViewerActivity extends AppCompatActivity {
 
         intent = getIntent();
         List<String> urls = intent.getStringArrayListExtra("URL");
-        imageViewerBinding.mediaViewPager.setAdapter(new SlideShowAdapter(this,urls));
+        String url = intent.getStringExtra("INDEX_URL");
+        int index = urls.indexOf(url);
+        SlideshowImageViewAdapter adapter = new SlideshowImageViewAdapter(this,urls);
+        imageViewerBinding.mediaViewPager.setAdapter(adapter);
+        imageViewerBinding.mediaViewPager.setCurrentItem(index);
     }
 }

@@ -56,7 +56,8 @@
                         android:id="@+id/mediaViewPager"
                         android:layout_width="match_parent"
                         android:layout_height="220dp"
-                        android:onClick="@{listener}"/>
+                        android:onClick="@{listener}"
+                        android:clickable="true"/>
 
                     <me.relex.circleindicator.CircleIndicator
                         android:id="@+id/mediaCircleIndicator"

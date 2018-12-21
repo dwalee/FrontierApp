@@ -137,19 +137,17 @@ public class FeedFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Intent imageViewIntent = new Intent(getActivity(), ImageViewerActivity.class);
-            SlideShowAdapter slideShowAdapter = (SlideShowAdapter) binding.mediaViewPager.getAdapter();
-            Log.i(TAG, "onClick: " + view + " " + view.toString() + " " + view.getId());
 
-            if(view.getId() == binding.profileImageView.getId()) {
-                ArrayList<String> stringArrayList = new ArrayList<>();
+            ArrayList<String> stringArrayList;
+            if (view.getId() == binding.profileImageView.getId()) {
+                stringArrayList = new ArrayList<>();
                 stringArrayList.add(binding.getProfile().getProfile_url());
-                imageViewIntent.putStringArrayListExtra("URL",  stringArrayList);
+                imageViewIntent.putStringArrayListExtra("URL", stringArrayList);
                 getActivity().startActivity(imageViewIntent);
+                return;
 
-            }else if(view.getId() == slideShowAdapter.slideshowBinding.postImageView.getId()){
-                imageViewIntent.putStringArrayListExtra("URL", (ArrayList<String>) binding.getPost().getImage_urls());
-                getActivity().startActivity(imageViewIntent);
             }
+
         }
     }
 }
