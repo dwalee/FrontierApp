@@ -19,7 +19,7 @@ import com.google.firebase.firestore.Query;
 public class NotificationsRepository implements OnSuccessCallback<Notifications> {
     private MutableLiveData<Notifications> notificationsMutableLiveData = new MutableLiveData<>();
     private Firestore<Notification> notificationFirestore;
-    private NotificationsRepository.NotificationAsyncTask notificationAsyncTask;
+    private NotificationAsyncTask notificationAsyncTask;
     private final CollectionReference collectionReference = FirestoreDBReference.userCollection
             .document(Firestore.currentUserId)
             .collection(FirestoreConstants.NOTIFICATIONS);
@@ -28,7 +28,7 @@ public class NotificationsRepository implements OnSuccessCallback<Notifications>
     private ListenerRegistration listenerRegistration;
 
     public void retrieveNotifications() {
-        notificationAsyncTask = new NotificationsRepository.NotificationAsyncTask();
+        notificationAsyncTask = new NotificationAsyncTask();
         notificationFirestore = new Firestore(query);
         notificationAsyncTask.execute(this);
     }

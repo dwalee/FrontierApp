@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable
+            name="listener"
+            type="com.frontierapp.frontierapp.view.SpacesFragment.SpaceOnClickListener"/>
+    </data>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -29,7 +34,8 @@
             android:layout_margin="16dp"
             android:elevation="24dp"
             android:src="@drawable/shape_circle_plus"
-            app:fabSize="normal" />
+            app:fabSize="normal"
+            android:onClick="@{listener}"/>
 
     </RelativeLayout>
 </layout>

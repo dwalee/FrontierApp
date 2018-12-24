@@ -11,12 +11,13 @@ import com.google.firebase.firestore.DocumentReference;
 public class ProfileRepository implements OnSuccessCallback<Profile> {
     private MutableLiveData<Profile> profileMutableLiveData = new MutableLiveData<>();
     private Firestore profileFirestore;
-    private ProfileAsyncTask profileAsyncTask = new ProfileAsyncTask();
+    private ProfileAsyncTask profileAsyncTask;
 
     public ProfileRepository() {
     }
 
     public void retrieveProfile(DocumentReference profileDocumentReference){
+        profileAsyncTask = new ProfileAsyncTask();
         profileFirestore = new Firestore(profileDocumentReference);
         profileAsyncTask.execute(this);
     }

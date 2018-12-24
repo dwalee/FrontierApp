@@ -17,7 +17,7 @@ import java.util.List;
 public class SlideshowImageViewAdapter extends PagerAdapter {
     private Context context;
     private LayoutInflater inflater;
-    public SlideshowImageviewLayoutBinding slideshowBinding;
+    private SlideshowImageviewLayoutBinding slideshowBinding;
     private List<String> image_urls;
 
     public SlideshowImageViewAdapter(Context context, List<String> image_urls) {

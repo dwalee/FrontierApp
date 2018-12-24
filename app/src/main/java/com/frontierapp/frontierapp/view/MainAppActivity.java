@@ -1,5 +1,7 @@
 package com.frontierapp.frontierapp.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.arch.lifecycle.Observer;
@@ -51,6 +53,28 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
 
         init();
+        initFragment();
+    }
+
+    public void initFragment(){
+        SharedPreferences sharedPreferences = getSharedPreferences("FragPrefs", Context.MODE_PRIVATE);
+        String current_fragment = sharedPreferences.getString("Fragment", "Home");
+
+        switch (current_fragment){
+            case "Home":
+                replaceFragment(new HomeFragment(), "Home");
+                break;
+            case "Notifications":
+                replaceFragment(new NotificationFragment(), "Notifications");
+                break;
+            case "Chats":
+                replaceFragment(new ChatsFragment(), "Chats");
+                break;
+            case "Spaces":
+                replaceFragment(new SpacesFragment(), "Spaces");
+                break;
+        }
+
     }
 
     public void init(){
@@ -75,7 +99,7 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        initFragment();
+
     }
 
     public void initNavheader(View view){
@@ -91,17 +115,15 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
 
     }
 
-    public void initFragment(){
-        HomeFragment homeFragment = new HomeFragment();
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(mainappBinding.mainActivityFrameLayout.getId(), homeFragment, "homeFragment");
-        transaction.commit();
-    }
-
     public void replaceFragment(Fragment fragment, String fragmentTag){
+        SharedPreferences sharedPreferences = getSharedPreferences("FragPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("Fragment", fragmentTag);
+        editor.commit();
+
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
+        toolbar.setTitle(fragmentTag);
         transaction.replace(mainappBinding.mainActivityFrameLayout.getId(), fragment, fragmentTag);
         transaction.commit();
     }
@@ -139,28 +161,24 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
 
         switch(id){
             case R.id.home:
-                replaceFragment(new HomeFragment(), "homeFragment");
-                toolbar.setTitle("Home");
+                replaceFragment(new HomeFragment(), "Home");
                 break;
             case R.id.profile:
                 Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(profileScreen);
                 break;
             case R.id.navMessages:
-                replaceFragment(new ChatsFragment(), "chatsFragment");
-                toolbar.setTitle("Chat");
+                replaceFragment(new ChatsFragment(), "Chats");
                 break;
             case R.id.connections:
                 Intent connectsIntent = new Intent(this, ConnectionsActivity.class);
                 startActivity(connectsIntent);
                 break;
             case R.id.notifications:
-                replaceFragment(new NotificationFragment(), "notificationFragment");
-                toolbar.setTitle("Notifications");
+                replaceFragment(new NotificationFragment(), "Notifications");
                 break;
             case R.id.spaces:
-                replaceFragment(new SpacesFragment(), "spaceFragment");
-                toolbar.setTitle("Spaces");
+                replaceFragment(new SpacesFragment(), "Spaces");
                 break;
 
             case R.id.vbc:

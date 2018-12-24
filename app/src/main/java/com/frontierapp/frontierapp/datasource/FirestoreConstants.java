@@ -80,11 +80,11 @@ public interface FirestoreConstants {
     String PROJECTS = "Projects";
 
     //Chat
-    String CHATS = "CHATS";
-    String CHAT = "CHAT";
+    String CHATS = "Chats";
+    String CHAT = "Chat";
 
-    String SPACES = "SPACES";
-    String SPACE = "SPACE";
+    String SPACES = "Spaces";
+    String SPACE = "Space";
 
 
 }

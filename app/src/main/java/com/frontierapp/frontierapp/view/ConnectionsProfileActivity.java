@@ -16,19 +16,23 @@ import com.frontierapp.frontierapp.databinding.ActivityProfileBinding;
 import com.frontierapp.frontierapp.datasource.Firestore;
 import com.frontierapp.frontierapp.model.Connection;
 import com.frontierapp.frontierapp.model.Profile;
-import com.frontierapp.frontierapp.viewmodel.ProfileViewModel;
+import com.frontierapp.frontierapp.viewmodel.ConnectionViewModel;
 import com.google.firebase.firestore.DocumentReference;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ConnectionsProfileActivity extends AppCompatActivity {
     private static final String TAG = "CurrentConnectionsProfi";
     private ActivityProfileBinding binding;
-    private ProfileViewModel profileViewModel;
+    private ConnectionViewModel connectionViewModel;
     private DocumentReference profileDocumentReference;
     private DocumentReference connectionDocumentReference;
     private Toolbar toolbar;
     private boolean isFavorite = false;
     private boolean isPartner = false;
     private Menu menu;
+    private Map<String, Object> connectionData = new HashMap<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,13 +42,14 @@ public class ConnectionsProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
         profileDocumentReference = Firestore.myFirestore.document(intent.getStringExtra("PATH"));
         connectionDocumentReference = Firestore.userCollection.document(Firestore.currentUserId)
-                .collection(Firestore.CONNECTIONS).document(profileDocumentReference.getId());
+                .collection(Firestore.CONNECTIONS)
+                .document(profileDocumentReference.getId());
 
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
-        profileViewModel.retrieveProfile(profileDocumentReference);
-        profileViewModel.retrieveConnection(connectionDocumentReference);
+        connectionViewModel = ViewModelProviders.of(this).get(ConnectionViewModel.class);
+        connectionViewModel.retrieveProfile(profileDocumentReference);
+        connectionViewModel.retrieveConnection(connectionDocumentReference);
 
-        profileViewModel.getProfile().observe(this, new Observer<Profile>() {
+        connectionViewModel.getProfile().observe(this, new Observer<Profile>() {
             @Override
             public void onChanged(@Nullable Profile profile) {
                 binding.setProfile(profile);
@@ -55,10 +60,6 @@ public class ConnectionsProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-
-
-
     }
 
 
@@ -68,7 +69,7 @@ public class ConnectionsProfileActivity extends AppCompatActivity {
 
         getMenuInflater().inflate(R.menu.partner_menu, menu);
 
-        profileViewModel.getConnection().observe(this, new Observer<Connection>() {
+        connectionViewModel.getConnection().observe(this, new Observer<Connection>() {
             @Override
             public void onChanged(@Nullable Connection connection) {
                 isFavorite = connection.isFavorite();
@@ -102,6 +103,10 @@ public class ConnectionsProfileActivity extends AppCompatActivity {
             case android.R.id.home:
                 //go back
                 finish();
+                break;
+            case R.id.favoriteMenu:
+                connectionData.put(Firestore.FAVORITE, !(isFavorite));
+                connectionViewModel.update(Firestore.FAVORITE, profileDocumentReference, connectionData);
                 break;
             default:
 

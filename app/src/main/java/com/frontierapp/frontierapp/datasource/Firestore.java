@@ -8,6 +8,7 @@ import com.frontierapp.frontierapp.model.Post;
 import com.frontierapp.frontierapp.model.Profile;
 import com.frontierapp.frontierapp.model.Space;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -54,47 +56,30 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
     }
 
     @Override
-    public void add(T t) {
-        collectionReference
-                .document()
+    public Task<Void> add(T t) {
+        documentReference = collectionReference.document();
+        return documentReference
                 .set(t);
     }
 
     @Override
-    public void add(String id, T t) {
-        collectionReference
-                .document(id)
-                .set(t).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-
-            }
-        });
+    public Task<Void> add(String id, T t) {
+        documentReference = collectionReference.document(id);
+        return documentReference
+                .set(t);
     }
 
     @Override
-    public void update(String docId, HashMap<String, Object> map) {
-        collectionReference
-                .document(docId)
-                .update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-
-            }
-        });
+    public Task<Void> update(String docId, Map<String, Object> map) {
+        documentReference = collectionReference.document(docId);
+        return documentReference.update(map);
     }
 
     @Override
-    public void remove(String docId) {
-        collectionReference
+    public Task<Void> remove(String docId) {
+        return collectionReference
                 .document(docId)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-
-                    }
-                });
+                .delete();
     }
 
 
@@ -180,5 +165,19 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
 
     }
 
+    public DocumentReference getDocumentReference() {
+        return documentReference;
+    }
 
+    public void setDocumentReference(DocumentReference documentReference) {
+        this.documentReference = documentReference;
+    }
+
+    public CollectionReference getCollectionReference() {
+        return collectionReference;
+    }
+
+    public void setCollectionReference(CollectionReference collectionReference) {
+        this.collectionReference = collectionReference;
+    }
 }

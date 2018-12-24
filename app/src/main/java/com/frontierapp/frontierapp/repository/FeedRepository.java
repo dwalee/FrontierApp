@@ -20,10 +20,10 @@ import com.google.firebase.firestore.Query;
 public class FeedRepository  implements OnSuccessCallback<Feed> {
     private MutableLiveData<Feed> feedMutableLiveData = new MutableLiveData<>();
     private Firestore<Post> postFirestore;
-    private FeedRepository.PostAsyncTask postAsyncTask;
+    private PostAsyncTask postAsyncTask;
 
     public void retrieveFeed(Query query) {
-        postAsyncTask = new FeedRepository.PostAsyncTask();
+        postAsyncTask = new PostAsyncTask();
         postFirestore = new Firestore(query);
         postAsyncTask.execute(this);
     }
