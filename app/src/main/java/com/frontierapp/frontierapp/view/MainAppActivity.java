@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -46,7 +45,6 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,6 +164,9 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
             case R.id.profile:
                 Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(profileScreen);
+                break;
+            case R.id.connect:
+                replaceFragment(new ConnectFragment(), "Connect");
                 break;
             case R.id.navMessages:
                 replaceFragment(new ChatsFragment(), "Chats");

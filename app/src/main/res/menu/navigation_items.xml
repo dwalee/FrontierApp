@@ -15,7 +15,7 @@
 
         <item
             android:title="@string/Connect"
-            android:id="@+id/Connect"
+            android:id="@+id/connect"
             android:icon="@drawable/account_network"/>
 
         <item

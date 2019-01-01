@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+
         <variable
             name="post"
-            type="com.frontierapp.frontierapp.model.Post"/>
+            type="com.frontierapp.frontierapp.model.Post" />
 
         <variable
             name="profile"
-            type="com.frontierapp.frontierapp.model.Profile"/>
+            type="com.frontierapp.frontierapp.model.Profile" />
 
         <variable
             name="listener"
-            type="com.frontierapp.frontierapp.view.FeedFragment.ClickListener"/>
+            type="com.frontierapp.frontierapp.view.FeedFragment.ClickListener" />
 
-        <import type="com.frontierapp.frontierapp.util.DateUtil" alias="dateUtil"/>
+        <import
+            alias="dateUtil"
+            type="com.frontierapp.frontierapp.util.DateUtil" />
     </data>
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#BDBDBD">
 
         <LinearLayout
+            android:id="@+id/postItemLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@color/colorWhite">
+            android:background="@color/colorWhite"
+            android:onClick="@{listener}"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,17 +41,17 @@
                 <!--User's Post-->
                 <TextView
                     android:id="@+id/postDescTextView"
+                    style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical"
+                    android:padding="5dp"
                     android:text="@{post.post_desc}"
                     android:textColor="@color/colorBlack"
-                    android:textSize="16sp"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:padding="5dp"/>
+                    android:textSize="16sp" />
 
                 <!--Media Post goes here-->
                 <RelativeLayout
@@ -56,8 +63,8 @@
                         android:id="@+id/mediaViewPager"
                         android:layout_width="match_parent"
                         android:layout_height="220dp"
-                        android:onClick="@{listener}"
-                        android:clickable="true"/>
+                        android:clickable="true"
+                        android:onClick="@{listener}" />
 
                     <me.relex.circleindicator.CircleIndicator
                         android:id="@+id/mediaCircleIndicator"
@@ -79,9 +86,9 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_margin="10dp"
+                        android:onClick="@{listener}"
                         android:scaleType="centerInside"
-                        app:circle_image_url="@{profile.profile_url}"
-                        android:onClick="@{listener}"/>
+                        app:circle_image_url="@{profile.profile_url}" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -92,13 +99,13 @@
                             android:id="@+id/postTitleTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@{post.post_title}"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"
                             android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="2dp"/>
+                            android:textStyle="bold" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -147,99 +154,133 @@
                     android:orientation="horizontal"
                     android:paddingStart="40dp">
 
-                    <!-- upvote button-->
-                    <ImageView
-                        android:id="@+id/upvoteIconImageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".3"
-                        android:gravity="center"
-                        android:src="@drawable/upvote"
-                        android:text="upvote" />
-
-                    <!-- vote value-->
-                    <TextView
-                        android:id="@+id/voteValueTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="@{String.valueOf(post.positive_count)}"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="16sp" />
-
-                    <!-- downvote button -->
-                    <ImageView
-                        android:id="@+id/downvoteIconImageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="30dp"
-                        android:layout_weight=".3"
-                        android:gravity="center"
-                        android:src="@drawable/downvote"
-                        android:text="upvote" />
-
-
-                    <ImageView
-                        android:id="@+id/likeIconImageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".20"
-                        android:gravity="center"
-                        android:src="@drawable/heart_outline_black"
-                        android:text="Like"
-                        android:visibility="gone" />
-
-                    <!-- Heart count -->
-                    <TextView
-                        android:id="@+id/heartValueTextView"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:text="10"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="16sp"
-                        android:visibility="gone" />
-
-                    <ImageView
-                        android:id="@+id/commentIconImageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".20"
                         android:gravity="center"
-                        android:src="@drawable/comment_outline"
-                        android:text="Comment" />
+                        android:orientation="horizontal">
+                        <!-- upvote button-->
+                        <ImageView
+                            android:id="@+id/upvoteIconImageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".3"
+                            android:gravity="center"
+                            android:onClick="@{listener}"
+                            android:src="@drawable/upvote"
+                            android:text="upvote" />
 
-                    <!-- Heart count -->
-                    <TextView
-                        android:id="@+id/commentValueTextView"
+                        <!-- vote value-->
+                        <TextView
+                            android:id="@+id/voteValueTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@{String.valueOf(post.positive_count + post.negative_count)}"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="16sp" />
+
+                        <!-- downvote button -->
+                        <ImageView
+                            android:id="@+id/downvoteIconImageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="30dp"
+                            android:layout_weight=".3"
+                            android:gravity="center"
+                            android:onClick="@{listener}"
+                            android:src="@drawable/downvote"
+                            android:text="downvote" />
+
+
+                        <ImageView
+                            android:id="@+id/likeIconImageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".20"
+                            android:gravity="center"
+                            android:src="@drawable/heart_outline_black"
+                            android:text="Like"
+                            android:visibility="gone" />
+
+                        <!-- Heart count -->
+                        <TextView
+                            android:id="@+id/heartValueTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="10"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="16sp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/commentLinearLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:text="@{String.valueOf(post.comment_count)}"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:id="@+id/shareIconImageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".20"
                         android:gravity="center"
-                        android:src="@drawable/share"
-                        android:text="Share" />
+                        android:orientation="horizontal"
+                        android:onClick="@{listener}">
 
-                    <!-- Heart count -->
-                    <TextView
-                        android:id="@+id/shareTextView"
+                        <ImageView
+                            android:id="@+id/commentIconImageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".2"
+
+                            android:src="@drawable/comment_outline"
+                            android:text="Comment" />
+
+                        <TextView
+                            android:id="@+id/commentValueTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@{String.valueOf(post.comment_count)}"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/shareLinearLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:text="Share"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="16sp" />
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:onClick="@{listener}">
+
+                        <ImageView
+                            android:id="@+id/shareIconImageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".20"
+                            android:gravity="center"
+                            android:src="@drawable/share"
+                            android:text="Share" />
+
+                        <!-- Heart count -->
+                        <TextView
+                            android:id="@+id/shareTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="Share"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

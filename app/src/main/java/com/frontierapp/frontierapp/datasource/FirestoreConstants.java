@@ -86,5 +86,7 @@ public interface FirestoreConstants {
     String SPACES = "Spaces";
     String SPACE = "Space";
 
-
+    //FEED
+    String POSITIVE_COUNT = "positive_count";
+    String NEGATIVE_COUNT = "negative_count";
 }
