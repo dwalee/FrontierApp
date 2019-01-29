@@ -87,7 +87,7 @@ public class PartnerFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
         connectionRecyclerView.setLayoutManager(gridLayoutManager);
         connectionRecyclerView.setHasFixedSize(true);
-        currentConnectionItemRecyclerAdapter = new ConnectionsRecyclerViewAdapter(getLayoutInflater());
+        currentConnectionItemRecyclerAdapter = new ConnectionsRecyclerViewAdapter(getLayoutInflater(), getActivity());
         int spacing = 5;
         boolean includeEdge = false;
 

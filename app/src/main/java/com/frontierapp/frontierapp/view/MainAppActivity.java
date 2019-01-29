@@ -45,6 +45,7 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
+    private static boolean hasStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
         SharedPreferences sharedPreferences = getSharedPreferences("FragPrefs", Context.MODE_PRIVATE);
         String current_fragment = sharedPreferences.getString("Fragment", "Home");
 
+        if(hasStarted){
         switch (current_fragment){
             case "Home":
                 replaceFragment(new HomeFragment(), "Home");
@@ -68,9 +70,15 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
             case "Chats":
                 replaceFragment(new ChatsFragment(), "Chats");
                 break;
+            case "Connect":
+                replaceFragment(new ConnectFragment(), "Connect");
+                break;
             case "Spaces":
                 replaceFragment(new SpacesFragment(), "Spaces");
                 break;
+        }
+        }else{
+            replaceFragment(new HomeFragment(), "Home");
         }
 
     }

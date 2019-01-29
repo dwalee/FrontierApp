@@ -24,8 +24,6 @@ public class NotificationsRepository implements OnSuccessCallback<Notifications>
             .document(Firestore.currentUserId)
             .collection(FirestoreConstants.NOTIFICATIONS);
     private final Query query = collectionReference.whereEqualTo(FirestoreConstants.IGNORE, false).orderBy("updated", Query.Direction.DESCENDING);
-    private Context context;
-    private ListenerRegistration listenerRegistration;
 
     public void retrieveNotifications() {
         notificationAsyncTask = new NotificationAsyncTask();

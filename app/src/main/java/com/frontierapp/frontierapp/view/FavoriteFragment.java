@@ -38,8 +38,6 @@ public class FavoriteFragment extends Fragment {
             .document(Firestore.currentUserId)
             .collection(FirestoreConstants.CONNECTIONS);
     private FavoriteViewModel connectionsViewModel;
-
-
     Context context;
 
     private final Query query = collectionReference.whereEqualTo(FirestoreConstants.FAVORITE, true);
@@ -87,7 +85,7 @@ public class FavoriteFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
         connectionRecyclerView.setLayoutManager(gridLayoutManager);
         connectionRecyclerView.setHasFixedSize(true);
-        currentConnectionItemRecyclerAdapter = new ConnectionsRecyclerViewAdapter(getLayoutInflater());
+        currentConnectionItemRecyclerAdapter = new ConnectionsRecyclerViewAdapter(getLayoutInflater(), getActivity());
         int spacing = 5;
         boolean includeEdge = false;
 

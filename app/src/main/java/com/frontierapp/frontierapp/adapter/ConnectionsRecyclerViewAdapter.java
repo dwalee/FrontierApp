@@ -1,7 +1,9 @@
 package com.frontierapp.frontierapp.adapter;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.recyclerview.extensions.ListAdapter;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
@@ -19,11 +21,14 @@ public class ConnectionsRecyclerViewAdapter extends ListAdapter<Connection,Conne
     private static final String TAG = "ConnectionsRecyclerView";
     private ConnectionsItemLayoutBinding connectionsItemLayoutBinding;
     private LayoutInflater layoutInflater;
+    private FragmentActivity fragmentActivity;
 
-    public ConnectionsRecyclerViewAdapter(LayoutInflater layoutInflater) {
+    public ConnectionsRecyclerViewAdapter(LayoutInflater layoutInflater, FragmentActivity fragmentActivity) {
         super(DIFF_CALLBACK);
         this.layoutInflater = layoutInflater;
+        this.fragmentActivity = fragmentActivity;
     }
+
 
     private static final DiffUtil.ItemCallback<Connection> DIFF_CALLBACK = new DiffUtil.ItemCallback<Connection>() {
         @Override
@@ -56,7 +61,7 @@ public class ConnectionsRecyclerViewAdapter extends ListAdapter<Connection,Conne
     @Override
     public void onBindViewHolder(@NonNull ConnectionsViewHolder holder, int position) {
         ConnectionsItemLayoutBinding binding = DataBindingUtil.getBinding(holder.itemView);
-        binding.setListener(new ConnectionsClickListener(connectionsItemLayoutBinding));
+        binding.setListener(new ConnectionsClickListener(connectionsItemLayoutBinding, fragmentActivity));
         binding.connectionsRequestButton.setVisibility(View.GONE);
         binding.setProfile(getItem(position).getProfile());
         binding.setConnection(getItem(position));

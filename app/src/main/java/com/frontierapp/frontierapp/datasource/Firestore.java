@@ -7,7 +7,6 @@ import com.frontierapp.frontierapp.listeners.OnSuccessCallback;
 import com.frontierapp.frontierapp.model.Post;
 import com.frontierapp.frontierapp.model.Profile;
 import com.frontierapp.frontierapp.model.Space;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,7 +23,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -94,12 +92,12 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
                             return;
                         }
 
-                        T t = null;
+                        T t;
                         if (documentSnapshot != null && documentSnapshot.exists()) {
                             t = documentSnapshot.toObject(tClass);
                             DocumentReference reference = documentSnapshot.getReference();
                             if (t instanceof Profile)
-                                ((Profile) t).setThis_ref(reference);
+                                ((Profile) t).setUser_ref(reference);
                             else if (t instanceof Space)
                                 ((Space) t).setSpace_ref(reference);
                             else if(t instanceof Post)
@@ -128,15 +126,23 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
 
                 if (queryDocumentSnapshots != null) {
                     Log.i(TAG, "List size before = " + (s == null ? 0 : s.size()));
-                    int loop_count = 0;
+
                     for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
-                        T o = null;
+                        T o;
                         QueryDocumentSnapshot documentSnapshot = documentChange.getDocument();
                         DocumentReference reference = documentSnapshot.getReference();
                         o = documentSnapshot.toObject(tClass);
 
                         if(o instanceof Post)
                             ((Post) o).setPost_ref(reference);
+                        else if (o instanceof Profile) {
+                            String path_id = reference.getId();
+                            String id = Firestore.currentUserId;
+                            Log.i(TAG, "id and path = " + id + " " + path_id);
+                            if(id.equals(path_id))
+                                continue;
+                            ((Profile) o).setUser_ref(reference);
+                        }
 
                         switch (documentChange.getType()) {
                             case MODIFIED:

@@ -75,24 +75,24 @@ public class ConnectionsProfileActivity extends AppCompatActivity {
                 isFavorite = connection.isFavorite();
                 isPartner = connection.isPartner();
 
-                MenuItem favoriteMenuItem  = menu.findItem(R.id.favoriteMenu);
-                if(isFavorite){
-
-                    favoriteMenuItem.setIcon(R.drawable.heart);
-                }else{
-                    favoriteMenuItem = menu.findItem(R.id.favoriteMenu);
-                    favoriteMenuItem.setIcon(R.drawable.heart_outline);
-                }
-
-                MenuItem partnerMenuItem = menu.findItem(R.id.addOrRemoveMenu);
-                if(isPartner){
-                    partnerMenuItem.setIcon(R.drawable.account_check);
-                }else{
-                    partnerMenuItem.setIcon(R.drawable.account_plus_white);
-                }
-
             }
         });
+
+        MenuItem favoriteMenuItem  = menu.findItem(R.id.favoriteMenu);
+        if(isFavorite){
+
+            favoriteMenuItem.setIcon(R.drawable.heart);
+        }else{
+            favoriteMenuItem = menu.findItem(R.id.favoriteMenu);
+            favoriteMenuItem.setIcon(R.drawable.heart_outline);
+        }
+
+        MenuItem partnerMenuItem = menu.findItem(R.id.addOrRemoveMenu);
+        if(isPartner){
+            partnerMenuItem.setIcon(R.drawable.account_check);
+        }else{
+            partnerMenuItem.setIcon(R.drawable.account_plus_white);
+        }
         return true;
     }
 

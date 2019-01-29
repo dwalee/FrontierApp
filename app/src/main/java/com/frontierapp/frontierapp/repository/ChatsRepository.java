@@ -47,13 +47,6 @@ public class ChatsRepository implements OnSuccessCallback<Chats> {
     @Override
     public void OnSuccess(Chats chats) {
         Log.d(TAG, "OnSuccess() called with: Chats = [" + (chats == null ? 0 : chats.size()) + "]");
-        for (Chat chat : chats) {
-            Log.i(TAG, "Chat = " + chat.getMessage().getMessage() + " & " + chat.getProfiles().get(0).getFirst_name());
-            Profiles profiles = Profiles.moveToNew(chat.getProfiles());
-            chat.setProfiles(profiles);
-        }
-
-
         ChatsMutableLiveData.setValue(chats);
     }
 
@@ -98,14 +91,14 @@ public class ChatsRepository implements OnSuccessCallback<Chats> {
                                             @Override
                                             public void OnSuccess(Profile profile) {
                                                 //Log.d(TAG, "OnSuccess() called with: profile = [" + (profile == null ? "" : profile.getFirst_name()) +
-                                                //      " " + profile.getThis_ref().getPath() + " " + profiles.indexOf(profile) + " ]");
+                                                //      " " + profile.getUser_ref().getPath() + " " + profiles.indexOf(profile) + " ]");
                                                 if (profiles.contains(profile)) {
                                                     profiles.set(profiles.indexOf(profile), profile);
                                                 } else
                                                     profiles.add(profile);
 
                                                 //Log.d(TAG, "OnSuccess() called with: profile = [" + (profile == null ? "" : profiles.get(profiles.indexOf(profile)).getFirst_name()) +
-                                                //       " " + profiles.get(profiles.indexOf(profile)).getThis_ref().getPath() + " " + profiles.indexOf(profile) + " ]");
+                                                //       " " + profiles.get(profiles.indexOf(profile)).getUser_ref().getPath() + " " + profiles.indexOf(profile) + " ]");
 
                                                 Log.i(TAG, "OnSuccess: index increase is at " + index);
                                                 if (profiles.size() == (members.size() - 1)) {
