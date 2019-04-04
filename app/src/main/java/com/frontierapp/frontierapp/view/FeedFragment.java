@@ -13,6 +13,7 @@ import android.support.v7.recyclerview.extensions.ListAdapter;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +27,11 @@ import com.frontierapp.frontierapp.datasource.Firestore;
 import com.frontierapp.frontierapp.model.Feed;
 import com.frontierapp.frontierapp.model.Post;
 import com.frontierapp.frontierapp.model.Space;
+import com.frontierapp.frontierapp.model.Voter;
 import com.frontierapp.frontierapp.viewmodel.FeedViewModel;
 import com.frontierapp.frontierapp.viewmodel.PostViewModel;
 import com.frontierapp.frontierapp.viewmodel.SpaceViewModel;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +74,7 @@ public class FeedFragment extends Fragment {
         viewModel.getFeed().observe(getViewLifecycleOwner(), new Observer<Feed>() {
             @Override
             public void onChanged(@Nullable Feed posts) {
+                Log.i(TAG, "Voter upvote = " + posts.get(0).isUpvote());
                 adapter.submitList(posts);
             }
         });
@@ -147,13 +151,30 @@ public class FeedFragment extends Fragment {
                 return;
 
             }else if(view.getId() == binding.upvoteIconImageView.getId()){
-                Map<String, Object> upvote = new HashMap<>();
+                /*Map<String, Object> upvote = new HashMap<>();
                 upvote.put(Firestore.POSITIVE_COUNT, (binding.getPost().getPositive_count() + 1));
-                postViewModel.update(binding.getPost().getPost_ref(), upvote);
+                postViewModel.update(binding.getPost().getPost_ref(), upvote);*/
+
+                if(!binding.getPost().isUpvote()) {
+                    DocumentReference voterReference = binding.getPost().getPost_ref().collection("Voters").document(Firestore.currentUserId);
+                    Voter voter = new Voter();
+                    voter.setDown_vote(false);
+                    voter.setUp_vote(true);
+                    voterReference.set(voter);
+                }
+
             }else if(view.getId() == binding.downvoteIconImageView.getId()){
-                Map<String, Object> upvote = new HashMap<>();
+                /*Map<String, Object> upvote = new HashMap<>();
                 upvote.put(Firestore.NEGATIVE_COUNT, (binding.getPost().getNegative_count() - 1));
-                postViewModel.update(binding.getPost().getPost_ref(), upvote);
+                postViewModel.update(binding.getPost().getPost_ref(), upvote);*/
+
+                if(!binding.getPost().isDownvote()) {
+                    DocumentReference voterReference = binding.getPost().getPost_ref().collection("Voters").document(Firestore.currentUserId);
+                    Voter voter = new Voter();
+                    voter.setDown_vote(true);
+                    voter.setUp_vote(false);
+                    voterReference.set(voter);
+                }
             }else if(view.getId() == binding.commentLinearLayout.getId()){
                 Toast.makeText(getActivity(), "Comment pressed!", Toast.LENGTH_SHORT).show();
             }else if(view.getId() == binding.shareLinearLayout.getId()){

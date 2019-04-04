@@ -18,6 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+        <service
+            android:name=".service.NotificationService"
+            />
+
         <activity
             android:name=".view.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -26,9 +30,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- Firebase InstanceId Service -->
-
+        </activity> <!-- Firebase InstanceId Service -->
         <activity android:name=".view.RegisterActivity" />
         <activity android:name=".Register" />
         <activity android:name=".view.FrontierSplashActivity" />
@@ -52,7 +54,6 @@
         <activity android:name=".view.SpacesFragment" />
         <activity android:name=".view.CreateSpaceActivity" />
         <activity android:name=".view.AddSpaceMembersActivity" />
-
         <!--
      Set custom default icon. This is used when no icon is set for incoming notification messages.
      See README(https://goo.gl/l4GJaQ) for more.
@@ -70,7 +71,7 @@
 
         <activity
             android:name=".view.ChatActivity"
-            android:parentActivityName=".view.ChatsFragment"></activity>
+            android:parentActivityName=".view.ChatsFragment" />
     </application>
 
 </manifest>

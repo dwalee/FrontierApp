@@ -1,6 +1,8 @@
 package com.frontierapp.frontierapp.model;
 
+
 import java.util.Date;
+
 
 public class Profile extends User {
     private String about_me;

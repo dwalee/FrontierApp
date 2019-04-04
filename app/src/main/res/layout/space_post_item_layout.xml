@@ -169,7 +169,7 @@
                             android:layout_weight=".3"
                             android:gravity="center"
                             android:onClick="@{listener}"
-                            android:src="@drawable/upvote"
+                            android:src="@{post.upvote ? @drawable/upvote_green : @drawable/upvote}"
                             android:text="upvote" />
 
                         <!-- vote value-->
@@ -191,7 +191,7 @@
                             android:layout_weight=".3"
                             android:gravity="center"
                             android:onClick="@{listener}"
-                            android:src="@drawable/downvote"
+                            android:src="@{post.downvote ? @drawable/down_vote_red : @drawable/downvote}"
                             android:text="downvote" />
 
 

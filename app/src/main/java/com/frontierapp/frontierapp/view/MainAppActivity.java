@@ -32,6 +32,7 @@ import com.frontierapp.frontierapp.datasource.Firestore;
 
 import com.frontierapp.frontierapp.datasource.FirestoreDBReference;
 import com.frontierapp.frontierapp.model.Profile;
+import com.frontierapp.frontierapp.service.NotificationService;
 import com.frontierapp.frontierapp.viewmodel.ProfileViewModel;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -50,7 +51,7 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        startNotificationService();
         init();
         initFragment();
     }
@@ -132,6 +133,11 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
         toolbar.setTitle(fragmentTag);
         transaction.replace(mainappBinding.mainActivityFrameLayout.getId(), fragment, fragmentTag);
         transaction.commit();
+    }
+
+    public void startNotificationService(){
+        Intent intent = new Intent(MainAppActivity.this, NotificationService.class);
+        startService(intent);
     }
 
     @Override

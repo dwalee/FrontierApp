@@ -1,5 +1,6 @@
 package com.frontierapp.frontierapp.model;
 
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.ServerTimestamp;
 

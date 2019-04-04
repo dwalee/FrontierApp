@@ -25,7 +25,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="200dp">
 
             <ImageView
                 android:id="@+id/connectionsProfileImageView"
@@ -34,81 +34,86 @@
                 android:scaleType="matrix"
                 app:image_url="@{profile.profile_url}"/>
 
+            <ImageButton
+                android:id="@+id/connectionsRequestButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="3dp"
+                android:background="@android:color/transparent"
+                android:foregroundGravity="right"
+                android:src="@drawable/account_plus_white"
+                />
 
             <ImageButton
                 android:id="@+id/followButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
+                android:layout_toLeftOf="@+id/connectionsRequestButton"
                 android:background="@android:color/transparent"
                 android:foregroundGravity="right"
-                android:src="@{connection.favorite ? @drawable/heart : @drawable/heart_outline}"
                 android:onClick="@{listener}"
-
+                android:src="@{connection.favorite ? @drawable/heart : @drawable/heart_outline}"
                 />
 
-            <android.support.v7.widget.CardView
+        </RelativeLayout>
+
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            app:cardBackgroundColor="#78909C"
+            >
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:layout_alignParentBottom="true"
+                android:layout_height="75dp"
+                android:paddingLeft="15dp"
                 >
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingStart="15dp"
-                    >
+                <TextView
+                    android:id="@+id/statTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/status_textview_border"
+                    android:lines="1"
+                    android:padding="5dp"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    />
 
-                    <TextView
-                        android:id="@+id/statTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:layout_toLeftOf="@+id/connectionsRequestButton"
-                        android:background="@drawable/status_textview_border"
-                        android:lines="1"
-                        android:padding="5dp"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:visibility="gone"
-                        />
-
-                    <TextView
-                        android:id="@+id/connectionsNameTextView"
-                        android:layout_width="197dp"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/statTextView"
-                        android:layout_marginTop="5dp"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#FFFFFF"
-                        android:text="@{profile.first_name + ' ' +  profile.last_name}"/>
+                <TextView
+                    android:id="@+id/connectionsNameTextView"
+                    android:layout_width="197dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/statTextView"
+                    android:layout_marginTop="10dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:text="@{profile.first_name + ' ' +  profile.last_name}"/>
 
 
-                    <ImageButton
-                        android:id="@+id/connectionsRequestButton"
-                        android:layout_width="59dp"
-                        android:layout_height="52dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="3dp"
-                        android:background="@android:color/transparent"
-                        android:foregroundGravity="right"
-                        android:src="@drawable/account_plus_white"
-                        />
 
-                    <TextView
-                        android:id="@+id/connectionsTitleTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/connectionsNameTextView"
-                        android:layout_alignParentStart="true"
-                        android:textColor="#FFFFFF"
-                        android:text="@{profile.title}" />
 
-                </RelativeLayout>
+                <TextView
+                    android:id="@+id/connectionsTitleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/connectionsNameTextView"
+                    android:layout_alignParentStart="true"
+                    android:textColor="#FFFFFF"
+                    android:text="@{profile.title}" />
 
-            </android.support.v7.widget.CardView>
-        </RelativeLayout>
+            </RelativeLayout>
+
+
+
+
+        </android.support.v7.widget.CardView>
+
     </LinearLayout>
 </layout>

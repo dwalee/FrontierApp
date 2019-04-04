@@ -53,7 +53,7 @@ public class NotificationFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         notificationsViewModel = ViewModelProviders.of(getActivity()).get(NotificationsViewModel.class);
-        notificationsViewModel.retrieveNotifications();
+        notificationsViewModel.retrieveNotifications(getActivity().getApplication());
         notificationsViewModel.getNotifications().observe(getViewLifecycleOwner(), new Observer<Notifications>() {
             @Override
             public void onChanged(@Nullable Notifications notifications) {
