@@ -24,7 +24,7 @@
         <item name="backgroundTint">@color/colorRaisedButton</item>
         <item name="android:textColor">@color/colorRaisedButtonText</item>
     </style>
-    
+
     <style name="FlatButton" parent="Widget.AppCompat.Button.Borderless">
 
 
@@ -41,9 +41,6 @@
         <item name="android:colorPrimary">@color/colorPrimary</item>
 
     </style>
-
-
-
 
 
 </resources>

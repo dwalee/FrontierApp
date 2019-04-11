@@ -1,106 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.frontierapp.frontierapp.view.RegisterActivity">
 
-    <EditText
-        android:id="@+id/firstNameEditText"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="94dp"
-        android:ems="10"
-        android:hint="First Name"
-        android:inputType="textPersonName" />
+        android:layout_height="match_parent"/>
 
-    <EditText
-        android:id="@+id/lastNameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="Last Name"
-        android:inputType="textPersonName"
-        android:layout_below="@id/firstNameEditText"/>
 
-    <EditText
-        android:id="@+id/userEmailEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/lastNameEditText"
-        android:ems="10"
-        android:hint="Email Address"
-        android:inputType="textEmailAddress|textPersonName" />
-
-    <EditText
-        android:id="@+id/userPasswordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/userEmailEditText"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword" />
-
-    <EditText
-        android:id="@+id/conPasswordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/userPasswordEditText"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="Confirm Password"
-        android:inputType="textPassword" />
-
-    <CheckBox
-        android:id="@+id/manGenderCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Man"
-        android:layout_below="@+id/dateOfBirthEditText"
-        android:layout_alignStart="@+id/registForFrontierTextView" />
-
-    <CheckBox
-        android:id="@+id/womanGenderCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/manGenderCheckBox"
-        android:layout_alignBottom="@+id/manGenderCheckBox"
-        android:layout_marginStart="28dp"
-        android:layout_toEndOf="@+id/manGenderCheckBox"
-        android:text="Woman" />
-
-    <EditText
-        android:id="@+id/dateOfBirthEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/conPasswordEditText"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="D.O.B. (MM/DD/YYYY)"
-        android:inputType="datetime|date|time" />
-
-    <Button
-        android:id="@+id/nextButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/manGenderCheckBox"
-        android:layout_centerHorizontal="true"
-        android:text="Next"
-        android:onClick="onClick"/>
-
-    <TextView
-        android:id="@+id/registForFrontierTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:text="Register for Frontier"
-        android:textSize="20sp" />
 </RelativeLayout>
+</layout>

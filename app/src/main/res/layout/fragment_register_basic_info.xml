@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".viewmodel.RegisterBasicInfoFragment">
+
+
+    <TextView
+        android:id="@+id/slide_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="156dp"
+        android:text="Register for Waves" />
+
+    <ImageView
+        android:id="@+id/slide_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/slide_heading"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="-156dp"
+        android:src="@android:drawable/sym_def_app_icon" />
+
+    <EditText
+    android:id="@+id/firstNameEditText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="193dp"
+    android:ems="10"
+    android:hint="First Name"
+    android:inputType="textCapWords|textPersonName" />
+
+    <EditText
+        android:id="@+id/lastNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/firstNameEditText"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textCapWords|textPersonName" />
+
+    <EditText
+        android:id="@+id/userEmailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/lastNameEditText"
+        android:ems="10"
+        android:hint="Email Address"
+        android:inputType="textCapWords|textEmailAddress" />
+
+    <EditText
+        android:id="@+id/userBirthday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/userEmailEditText"
+        android:ems="10"
+        android:hint="Birthday(MM/DD/YYYY)"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/userPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/userBirthday"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textWebPassword" />
+
+    <EditText
+        android:id="@+id/userConPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/userPassword"
+        android:ems="10"
+        android:hint="Confirm Password"
+        android:inputType="textWebPassword" />
+
+    <CheckBox
+        android:id="@+id/manGenderCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="86dp"
+        android:text="Man" />
+
+    <CheckBox
+        android:id="@+id/womanGenderCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="61dp"
+        android:text="Woman" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:text="Swipe Right to Fully Register" />
+
+</RelativeLayout>

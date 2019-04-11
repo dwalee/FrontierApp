@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/skillRelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <EditText
+        android:id="@+id/skillEditText"
+        android:layout_width="287dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="145dp"
+        android:ems="10"
+        android:hint="Name of Skill"
+        android:inputType="textCapWords|textPersonName" />
+
+    <ImageButton
+        android:id="@+id/addSkill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/skillEditText"
+        android:layout_toEndOf="@+id/skillEditText"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_add_circle_black_24dp" />
+</RelativeLayout>

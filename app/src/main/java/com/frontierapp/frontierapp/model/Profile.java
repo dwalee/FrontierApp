@@ -17,7 +17,7 @@ public class Profile extends User {
     public Profile(String id, String first_name, String last_name, Date joined, Date birthdate, String email,
                    String gender, String password, String about_me, String goal, String profile_url, String profile_background_url,
                    String city, String state, String title) {
-        super(id, first_name, last_name, joined, birthdate, email, gender, password);
+        super(first_name, last_name, joined, birthdate, email, gender, password);
         this.about_me = about_me;
         this.goal = goal;
         this.profile_url = profile_url;

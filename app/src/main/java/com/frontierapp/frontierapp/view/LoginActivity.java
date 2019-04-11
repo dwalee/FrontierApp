@@ -2,10 +2,9 @@ package com.frontierapp.frontierapp.view;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Looper;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -67,7 +66,7 @@ public class LoginActivity extends AppCompatActivity{
         registerText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent register = new Intent(LoginActivity.this, RegisterActivity.class);
+                Intent register = new Intent(LoginActivity.this, MainActivityRegister.class);
                 startActivity(register);
             }
         });

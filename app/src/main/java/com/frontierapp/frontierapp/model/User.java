@@ -15,12 +15,13 @@ public class User {
     private String email;
     private String gender;
     private String password;
+    private String info;
 
-    public User() {
+    public User(){
     }
 
-    public User(String id, String first_name, String last_name, Date joined, Date birthdate, String email, String gender, String password) {
-        this.id = id;
+
+    public User(String first_name, String last_name, Date joined, Date birthdate, String email, String gender, String password) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.joined = joined;

@@ -29,13 +29,10 @@
         </activity>
         <!-- Firebase InstanceId Service -->
 
-        <activity android:name=".view.RegisterActivity" />
-        <activity android:name=".Register" />
         <activity android:name=".view.FrontierSplashActivity" />
         <activity android:name=".view.SkillsInformationActivity" />
         <activity android:name=".view.ResetPasswordActivity" />
-        <activity android:name=".view.MainAppActivity"
-            />
+        <activity android:name=".view.MainAppActivity" />
         <activity android:name=".view.ChatsFragment" />
 
         <meta-data
@@ -46,15 +43,13 @@
         <activity android:name=".view.ProfileActivity" />
         <activity android:name=".view.RegisterProfilePicActivity" />
         <activity android:name=".view.ProfileEditActivity" />
-
         <activity android:name=".view.ConnectionsProfileActivity" />
-
         <activity android:name=".view.ConnectionsActivity" />
         <activity android:name=".view.NotificationFragment" />
-        <activity android:name=".view.SpaceActivity"></activity>
-        <activity android:name=".view.SpacesFragment"></activity>
-        <activity android:name=".view.CreateSpaceActivity"></activity>
-        <activity android:name=".view.AddSpaceMembersActivity"></activity>
+        <activity android:name=".view.SpaceActivity" />
+        <activity android:name=".view.SpacesFragment" />
+        <activity android:name=".view.CreateSpaceActivity" />
+        <activity android:name=".view.AddSpaceMembersActivity" />
 
         <!--
      Set custom default icon. This is used when no icon is set for incoming notification messages.
@@ -71,10 +66,11 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <activity android:name=".view.ChatActivity"
-            android:parentActivityName=".view.ChatsFragment"
-            >
-        </activity>
+        <activity
+            android:name=".view.ChatActivity"
+            android:parentActivityName=".view.ChatsFragment" />
+        <activity android:name=".view.MainActivityRegister" />
+        <activity android:name=".view.MainActivitySkillsRecycler"></activity>
     </application>
 
 </manifest>
