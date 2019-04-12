@@ -15,13 +15,14 @@ import com.google.firebase.firestore.Query;
 public class MessageRepository implements OnSuccessCallback<Messages> {
     private static final String TAG = "MessageRepository";
     private final MutableLiveData<Messages> messagesMutableLiveData = new MutableLiveData<>();
-    private MessagesAsyncTask messagesAsyncTask = new MessagesAsyncTask();
+    private MessagesAsyncTask messagesAsyncTask;
     private Firestore messageFirestore;
 
     public MessageRepository() {
     }
 
     public void retrieveMessages(Query query) {
+        messagesAsyncTask = new MessagesAsyncTask();
         messageFirestore = new Firestore(query);
         messagesAsyncTask.execute(this);
     }

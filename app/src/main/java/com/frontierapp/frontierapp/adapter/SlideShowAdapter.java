@@ -23,7 +23,7 @@ import java.util.List;
 public class SlideShowAdapter extends PagerAdapter {
     private Context context;
     private LayoutInflater inflater;
-    public SlideshowLayoutBinding slideshowBinding;
+    private SlideshowLayoutBinding slideshowBinding;
     private List<String> image_urls;
 
     public SlideShowAdapter(Context context, List<String> image_urls) {

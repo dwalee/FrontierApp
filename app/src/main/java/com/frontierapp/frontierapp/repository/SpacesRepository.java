@@ -19,7 +19,7 @@ public class SpacesRepository implements OnSuccessCallback<Spaces> {
     private static final String TAG = "SpacesRepository";
     private MutableLiveData<Spaces> spacesMutableLiveData = new MutableLiveData<>();
     private Firestore<Space> spacesFirestore;
-    private SpacesRepository.SpaceAsyncTask spaceAsyncTask;
+    private SpaceAsyncTask spaceAsyncTask;
     private final CollectionReference collectionReference = FirestoreDBReference.userCollection
             .document(Firestore.currentUserId)
             .collection(Firestore.SPACE_REFERENCES);
@@ -28,7 +28,7 @@ public class SpacesRepository implements OnSuccessCallback<Spaces> {
     private ListenerRegistration listenerRegistration;
 
     public void retrieveSpaces() {
-        spaceAsyncTask = new SpacesRepository.SpaceAsyncTask();
+        spaceAsyncTask = new SpaceAsyncTask();
         spacesFirestore = new Firestore(query);
         spaceAsyncTask.execute(this);
     }

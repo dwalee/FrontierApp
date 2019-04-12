@@ -1,6 +1,9 @@
 package com.frontierapp.frontierapp.model;
 
+import com.frontierapp.frontierapp.datasource.Firestore;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
 import java.util.Objects;
@@ -14,8 +17,21 @@ public class Space {
     private int number_of_members;
     private DocumentReference creator;
     private String background;
-    private int member_count;
     private int project_count;
+
+    public Space() {
+    }
+
+    //Use constructor when creating a new space
+    public Space(String name, String purpose, Boolean is_private, String background) {
+        this.name = name;
+        this.purpose = purpose;
+        this.is_private = is_private;
+        this.background = background;
+        this.creator = Firestore.userCollection.document(Firestore.currentUserId);
+        this.number_of_members = 1;
+        this.project_count = 0;
+    }
 
     public String getName() {
         return name;
@@ -41,6 +57,7 @@ public class Space {
         this.is_private = is_private;
     }
 
+    @ServerTimestamp
     public Date getCreated() {
         return created;
     }
@@ -91,14 +108,6 @@ public class Space {
 
     public void setSpace_ref(DocumentReference space_ref) {
         this.space_ref = space_ref;
-    }
-
-    public int getMember_count() {
-        return member_count;
-    }
-
-    public void setMember_count(int member_count) {
-        this.member_count = member_count;
     }
 
     public int getProject_count() {

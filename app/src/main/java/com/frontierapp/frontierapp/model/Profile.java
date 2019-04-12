@@ -1,6 +1,8 @@
 package com.frontierapp.frontierapp.model;
 
+
 import java.util.Date;
+
 
 public class Profile extends User {
     private String about_me;
@@ -83,4 +85,20 @@ public class Profile extends User {
         this.title = title;
     }
 
+    public boolean sameContent(Profile profile){
+        if(!(this.equals(profile)))
+            return false;
+
+        if(this == null || profile == null)
+            return false;
+
+        return super.sameContent(this) &&
+                about_me.equals(profile.about_me) &&
+                goal.equals(profile.goal) &&
+                profile_url.equals(profile.profile_url) &&
+                profile_background_url.equals(profile.profile_background_url) &&
+                city.equals(profile.city) &&
+                state.equals(profile.state) &&
+                title.equals(profile.title);
+    }
 }

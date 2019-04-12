@@ -11,9 +11,10 @@ import com.google.firebase.firestore.DocumentReference;
 public class SpaceRepository implements OnSuccessCallback<Space> {
     private MutableLiveData<Space> spaceMutableLiveData = new MutableLiveData<>();
     private Firestore spaceFirestore;
-    private SpaceAsyncTask spaceAsyncTask = new SpaceAsyncTask();
+    private SpaceAsyncTask spaceAsyncTask;
 
     public void retrieveSpace(DocumentReference spaceDocumentReference){
+        spaceAsyncTask = new SpaceAsyncTask();
         spaceFirestore = new Firestore(spaceDocumentReference);
         spaceAsyncTask.execute(this);
     }

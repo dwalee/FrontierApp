@@ -56,6 +56,7 @@ public class SpacesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
+        spacesBinding.setListener(new SpaceOnClickListener(spacesBinding));
     }
 
     private static final DiffUtil.ItemCallback<Space> DIFF_CALLBACK = new DiffUtil.ItemCallback<Space>() {
@@ -74,13 +75,13 @@ public class SpacesFragment extends Fragment {
 
             int old_number_of_members = oldItem.getNumber_of_members();
             int new_number_of_members = newItem.getNumber_of_members();
-            Log.i(TAG, "areContentsTheSame: oldName = "+ oldName + " newName = " + newName + " " + oldName.equals(newName) );
+            Log.i(TAG, "areContentsTheSame: oldName = " + oldName + " newName = " + newName + " " + oldName.equals(newName));
             return oldName.equals(newName) && oldPurpose.equals(newPurpose) &&
                     old_number_of_members == new_number_of_members;
         }
     };
 
-    private class SpaceRecyclerViewAdapter extends ListAdapter<Space, SpaceViewHolder>{
+    private class SpaceRecyclerViewAdapter extends ListAdapter<Space, SpaceViewHolder> {
         private static final String TAG = "SpaceRecyclerViewAdapte";
         private SpacesItemLayoutBinding spacesItemLayoutBinding;
 
@@ -103,15 +104,20 @@ public class SpacesFragment extends Fragment {
         }
     }
 
-    private class SpaceViewHolder extends RecyclerView.ViewHolder{
+    private class SpaceViewHolder extends RecyclerView.ViewHolder {
 
         public SpaceViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }
 
-    public class SpaceOnClickListener implements View.OnClickListener{
+    public class SpaceOnClickListener implements View.OnClickListener {
         SpacesItemLayoutBinding binding;
+        FragmentSpacesBinding spacesBinding;
+
+        public SpaceOnClickListener(FragmentSpacesBinding spacesBinding) {
+            this.spacesBinding = spacesBinding;
+        }
 
         public SpaceOnClickListener(SpacesItemLayoutBinding binding) {
             this.binding = binding;
@@ -119,9 +125,22 @@ public class SpacesFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(getActivity(), SpaceActivity.class);
-            intent.putExtra("PATH", binding.getSpace().getSpace_ref().getPath());
-            startActivity(intent);
+            Intent intent;
+            if (binding != null) {
+                if (view.getId() == binding.spacesLinearLayout.getId()) {
+                    intent = new Intent(getActivity(), SpaceActivity.class);
+                    intent.putExtra("PATH", binding.getSpace().getSpace_ref().getPath());
+                    startActivity(intent);
+                }
+            }
+
+            if (spacesBinding != null) {
+                if (view.getId() == spacesBinding.addSpaceFloatingActionButton.getId()) {
+                    intent = new Intent(getActivity(), CreateSpaceActivity.class);
+                    startActivity(intent);
+                }
+            }
+
         }
     }
 }

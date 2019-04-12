@@ -1,8 +1,10 @@
-package com.frontierapp.frontierapp.repository;
+package com.frontierapp.frontierapp.service;
 
-import android.app.Application;
-import android.arch.lifecycle.MutableLiveData;
+import android.app.Service;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.IBinder;
+import android.util.Log;
 
 import com.frontierapp.frontierapp.datasource.Firestore;
 import com.frontierapp.frontierapp.datasource.FirestoreConstants;
@@ -15,41 +17,51 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.Query;
 
-public class NotificationsRepository implements OnSuccessCallback<Notifications>{
-    private MutableLiveData<Notifications> notificationsMutableLiveData = new MutableLiveData<>();
-    private Firestore<Notification> notificationFirestore;
-    private NotificationAsyncTask notificationAsyncTask;
+public class NotificationService extends Service {
+    private static final String TAG = "NotificationService";
     private final CollectionReference collectionReference = FirestoreDBReference.userCollection
             .document(Firestore.currentUserId)
             .collection(FirestoreConstants.NOTIFICATIONS);
-    private final Query query = collectionReference.whereEqualTo(FirestoreConstants.IGNORE, false).orderBy("updated", Query.Direction.DESCENDING);
+    private final Query query = collectionReference
+            .whereEqualTo(FirestoreConstants.IGNORE, false)
+            .orderBy("updated", Query.Direction.DESCENDING);
+    private Firestore<Notification> notificationFirestore = new Firestore<>(query);
 
-    public NotificationsRepository(Application application) {
-        retrieveNotifications();
-    }
+    private NotificationFirestoreAsyncTask nfat;
 
-    public void retrieveNotifications() {
-        notificationAsyncTask = new NotificationAsyncTask();
-        notificationFirestore = new Firestore(query);
-        notificationAsyncTask.execute(this);
-    }
-
-    public MutableLiveData<Notifications> getNotifications() {
-        return notificationsMutableLiveData;
+    public NotificationService() {
+        Log.i(TAG, "NotificationService: called");
     }
 
     @Override
-    public void OnSuccess(Notifications notifications) {
-        notifications.reverseSort();
-        notificationsMutableLiveData.setValue(notifications);
+    public void onCreate() {
+        super.onCreate();
+
     }
 
-    private class NotificationAsyncTask extends AsyncTask<OnSuccessCallback<Notifications>, Void, Void> {
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+
+        Log.i(TAG, "onStartCommand: started");
+        nfat = new NotificationFirestoreAsyncTask();
+        return START_REDELIVER_INTENT;
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+
+
+    private class NotificationFirestoreAsyncTask extends AsyncTask<OnSuccessCallback<Notifications>, Void, Void> {
         private static final String TAG = "NotificationAsyncTask";
         private int index = 0;
 
         @Override
         protected Void doInBackground(final OnSuccessCallback<Notifications>... onSuccessCallbacks) {
+
             OnSuccessCallback<Notifications> notificationsOnSuccessCallback = new OnSuccessCallback<Notifications>() {
                 @Override
                 public void OnSuccess(final Notifications notifications) {
@@ -86,7 +98,11 @@ public class NotificationsRepository implements OnSuccessCallback<Notifications>
                 }
             };
             notificationFirestore.retrieveList(notificationsOnSuccessCallback, Notification.class, new Notifications());
+
+
             return null;
         }
     }
+
+
 }

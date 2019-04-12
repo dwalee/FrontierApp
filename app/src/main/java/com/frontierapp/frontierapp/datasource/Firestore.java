@@ -4,10 +4,11 @@ import android.content.Context;
 import android.util.Log;
 
 import com.frontierapp.frontierapp.listeners.OnSuccessCallback;
+import com.frontierapp.frontierapp.model.Notification;
 import com.frontierapp.frontierapp.model.Post;
 import com.frontierapp.frontierapp.model.Profile;
 import com.frontierapp.frontierapp.model.Space;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -23,7 +24,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -33,6 +34,7 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
     public static FirebaseUser currentFirebaseUser;
     public static String currentUserId;
     private Context context;
+    private int count;
 
     protected DocumentReference documentReference;
     protected CollectionReference collectionReference;
@@ -54,47 +56,30 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
     }
 
     @Override
-    public void add(T t) {
-        collectionReference
-                .document()
+    public Task<Void> add(T t) {
+        documentReference = collectionReference.document();
+        return documentReference
                 .set(t);
     }
 
     @Override
-    public void add(String id, T t) {
-        collectionReference
-                .document(id)
-                .set(t).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-
-            }
-        });
+    public Task<Void> add(String id, T t) {
+        documentReference = collectionReference.document(id);
+        return documentReference
+                .set(t);
     }
 
     @Override
-    public void update(String docId, HashMap<String, Object> map) {
-        collectionReference
-                .document(docId)
-                .update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-
-            }
-        });
+    public Task<Void> update(String docId, Map<String, Object> map) {
+        documentReference = collectionReference.document(docId);
+        return documentReference.update(map);
     }
 
     @Override
-    public void remove(String docId) {
-        collectionReference
+    public Task<Void> remove(String docId) {
+        return collectionReference
                 .document(docId)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-
-                    }
-                });
+                .delete();
     }
 
 
@@ -109,20 +94,19 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
                             return;
                         }
 
-                        T t = null;
+                        T t;
                         if (documentSnapshot != null && documentSnapshot.exists()) {
                             t = documentSnapshot.toObject(tClass);
                             DocumentReference reference = documentSnapshot.getReference();
                             if (t instanceof Profile)
-                                ((Profile) t).setThis_ref(reference);
+                                ((Profile) t).setUser_ref(reference);
                             else if (t instanceof Space)
                                 ((Space) t).setSpace_ref(reference);
-                            else if(t instanceof Post)
+                            else if (t instanceof Post)
                                 ((Post) t).setPost_ref(reference);
 
                             callback.OnSuccess(t);
                         }
-
 
 
                     }
@@ -143,21 +127,34 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
 
                 if (queryDocumentSnapshots != null) {
                     Log.i(TAG, "List size before = " + (s == null ? 0 : s.size()));
-                    int loop_count = 0;
+
+                    count = queryDocumentSnapshots.size();
+
                     for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
-                        T o = null;
+                        T o;
                         QueryDocumentSnapshot documentSnapshot = documentChange.getDocument();
                         DocumentReference reference = documentSnapshot.getReference();
                         o = documentSnapshot.toObject(tClass);
 
-                        if(o instanceof Post)
+                        if (o instanceof Post)
                             ((Post) o).setPost_ref(reference);
+                        else if (o instanceof Profile) {
+                            String path_id = reference.getId();
+                            String id = Firestore.currentUserId;
+                            Log.i(TAG, "id and path = " + id + " " + path_id);
+                            if (id.equals(path_id))
+                                continue;
+                            ((Profile) o).setUser_ref(reference);
+                        } else if (o instanceof Notification) {
+                            ((Notification) o).setNotification_ref(reference);
+                        }
 
                         switch (documentChange.getType()) {
                             case MODIFIED:
                                 Log.i(TAG, "DocumentModified = " + documentChange.getDocument().getString("message"));
                                 Log.i(TAG, "contains new item = " + s.contains(o));
-                                s.set(s.indexOf(o), o);
+                                if(s.contains(o))
+                                    s.set(s.indexOf(o), o);
                                 break;
                             case ADDED:
                                 Log.i(TAG, "DocumentAdded = " + documentChange.getDocument().getId());
@@ -180,5 +177,23 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
 
     }
 
+    public int count() {
+        return count;
+    }
 
+    public DocumentReference getDocumentReference() {
+        return documentReference;
+    }
+
+    public void setDocumentReference(DocumentReference documentReference) {
+        this.documentReference = documentReference;
+    }
+
+    public CollectionReference getCollectionReference() {
+        return collectionReference;
+    }
+
+    public void setCollectionReference(CollectionReference collectionReference) {
+        this.collectionReference = collectionReference;
+    }
 }

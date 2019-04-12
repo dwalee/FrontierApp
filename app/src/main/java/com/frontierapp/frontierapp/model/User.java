@@ -1,13 +1,15 @@
 package com.frontierapp.frontierapp.model;
 
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class User {
     private String id;
-    protected DocumentReference this_ref;
+    protected DocumentReference user_ref;
     private String first_name;
     private String last_name;
     private Date joined;
@@ -97,27 +99,48 @@ public class User {
         this.password = password;
     }
 
-    public DocumentReference getThis_ref() {
-        return this_ref;
+    public DocumentReference getUser_ref() {
+        return user_ref;
     }
 
-    public void setThis_ref(DocumentReference this_ref) {
-        this.this_ref = this_ref;
+    public void setUser_ref(DocumentReference user_ref) {
+        this.user_ref = user_ref;
+    }
+
+    public boolean sameContent(User user) {
+        if (!(this.equals(user)))
+            return false;
+
+        if (user == null)
+            return false;
+
+        return  first_name.equals(user.first_name) &&
+                last_name.equals(user.last_name) &&
+                birthdate.equals(user.birthdate) &&
+                email.equals(user.email) &&
+                gender.equals(user.gender) &&
+                password.equals(user.password);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == this)
+        if (obj == this)
             return true;
 
-        if(!(obj instanceof User))
+        if (!(obj instanceof User))
             return false;
 
         User user = (User) obj;
 
-        String this_path = this.this_ref.getPath();
-        String that_path = user.this_ref.getPath();
+        String this_path = this.user_ref.getPath();
+        String that_path = user.user_ref.getPath();
 
         return this_path.equals(that_path);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(user_ref);
     }
 }

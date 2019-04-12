@@ -1,11 +1,12 @@
 package com.frontierapp.frontierapp.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,6 +32,7 @@ import com.frontierapp.frontierapp.datasource.Firestore;
 
 import com.frontierapp.frontierapp.datasource.FirestoreDBReference;
 import com.frontierapp.frontierapp.model.Profile;
+import com.frontierapp.frontierapp.service.NotificationService;
 import com.frontierapp.frontierapp.viewmodel.ProfileViewModel;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -44,13 +46,42 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
-
+    private static boolean hasStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        startNotificationService();
         init();
+        initFragment();
+    }
+
+    public void initFragment(){
+        SharedPreferences sharedPreferences = getSharedPreferences("FragPrefs", Context.MODE_PRIVATE);
+        String current_fragment = sharedPreferences.getString("Fragment", "Home");
+
+        if(hasStarted){
+        switch (current_fragment){
+            case "Home":
+                replaceFragment(new HomeFragment(), "Home");
+                break;
+            case "Notifications":
+                replaceFragment(new NotificationFragment(), "Notifications");
+                break;
+            case "Chats":
+                replaceFragment(new ChatsFragment(), "Chats");
+                break;
+            case "Connect":
+                replaceFragment(new ConnectFragment(), "Connect");
+                break;
+            case "Spaces":
+                replaceFragment(new SpacesFragment(), "Spaces");
+                break;
+        }
+        }else{
+            replaceFragment(new HomeFragment(), "Home");
+        }
+
     }
 
     public void init(){
@@ -75,7 +106,7 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        initFragment();
+
     }
 
     public void initNavheader(View view){
@@ -91,19 +122,22 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
 
     }
 
-    public void initFragment(){
-        HomeFragment homeFragment = new HomeFragment();
+    public void replaceFragment(Fragment fragment, String fragmentTag){
+        SharedPreferences sharedPreferences = getSharedPreferences("FragPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("Fragment", fragmentTag);
+        editor.commit();
+
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(mainappBinding.mainActivityFrameLayout.getId(), homeFragment, "homeFragment");
+        toolbar.setTitle(fragmentTag);
+        transaction.replace(mainappBinding.mainActivityFrameLayout.getId(), fragment, fragmentTag);
         transaction.commit();
     }
 
-    public void replaceFragment(Fragment fragment, String fragmentTag){
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(mainappBinding.mainActivityFrameLayout.getId(), fragment, fragmentTag);
-        transaction.commit();
+    public void startNotificationService(){
+        Intent intent = new Intent(MainAppActivity.this, NotificationService.class);
+        startService(intent);
     }
 
     @Override
@@ -139,28 +173,27 @@ public class MainAppActivity extends AppCompatActivity implements NavigationView
 
         switch(id){
             case R.id.home:
-                replaceFragment(new HomeFragment(), "homeFragment");
-                toolbar.setTitle("Home");
+                replaceFragment(new HomeFragment(), "Home");
                 break;
             case R.id.profile:
                 Intent profileScreen = new Intent(getApplicationContext(), ProfileActivity.class);
                 startActivity(profileScreen);
                 break;
+            case R.id.connect:
+                replaceFragment(new ConnectFragment(), "Connect");
+                break;
             case R.id.navMessages:
-                replaceFragment(new ChatsFragment(), "chatsFragment");
-                toolbar.setTitle("Chat");
+                replaceFragment(new ChatsFragment(), "Chats");
                 break;
             case R.id.connections:
                 Intent connectsIntent = new Intent(this, ConnectionsActivity.class);
                 startActivity(connectsIntent);
                 break;
             case R.id.notifications:
-                replaceFragment(new NotificationFragment(), "notificationFragment");
-                toolbar.setTitle("Notifications");
+                replaceFragment(new NotificationFragment(), "Notifications");
                 break;
             case R.id.spaces:
-                replaceFragment(new SpacesFragment(), "spaceFragment");
-                toolbar.setTitle("Spaces");
+                replaceFragment(new SpacesFragment(), "Spaces");
                 break;
 
             case R.id.vbc:

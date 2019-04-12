@@ -5,7 +5,6 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,14 +23,18 @@ import com.frontierapp.frontierapp.adapter.SlideShowAdapter;
 import com.frontierapp.frontierapp.databinding.FragmentFeedBinding;
 import com.frontierapp.frontierapp.databinding.SpaceInfoLayoutBinding;
 import com.frontierapp.frontierapp.databinding.SpacePostItemLayoutBinding;
+import com.frontierapp.frontierapp.datasource.Firestore;
 import com.frontierapp.frontierapp.model.Feed;
 import com.frontierapp.frontierapp.model.Post;
 import com.frontierapp.frontierapp.model.Space;
+import com.frontierapp.frontierapp.model.Voter;
 import com.frontierapp.frontierapp.viewmodel.FeedViewModel;
+import com.frontierapp.frontierapp.viewmodel.PostViewModel;
 import com.frontierapp.frontierapp.viewmodel.SpaceViewModel;
+import com.google.firebase.firestore.DocumentReference;
 
-import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
 
 public class FeedFragment extends Fragment {
     private static final String TAG = "FeedFragment";
@@ -40,6 +43,7 @@ public class FeedFragment extends Fragment {
     private RecyclerView recyclerView;
     private FeedRecyclerViewAdapter adapter;
     private FeedViewModel viewModel;
+    private PostViewModel postViewModel;
     private SpaceViewModel spaceViewModel;
 
     @Nullable
@@ -65,10 +69,12 @@ public class FeedFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         viewModel = ViewModelProviders.of(getActivity()).get(FeedViewModel.class);
         spaceViewModel = ViewModelProviders.of(getActivity()).get(SpaceViewModel.class);
+        postViewModel = ViewModelProviders.of(getActivity()).get(PostViewModel.class);
 
         viewModel.getFeed().observe(getViewLifecycleOwner(), new Observer<Feed>() {
             @Override
             public void onChanged(@Nullable Feed posts) {
+                Log.i(TAG, "Voter upvote = " + posts.get(0).isUpvote());
                 adapter.submitList(posts);
             }
         });
@@ -128,7 +134,7 @@ public class FeedFragment extends Fragment {
 
     public class ClickListener implements View.OnClickListener {
         private static final String TAG = "ClickListener";
-        SpacePostItemLayoutBinding binding;
+        private SpacePostItemLayoutBinding binding;
 
         public ClickListener(SpacePostItemLayoutBinding binding) {
             this.binding = binding;
@@ -136,16 +142,45 @@ public class FeedFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Intent imageViewIntent = new Intent(getActivity(), ImageViewerActivity.class);
+            Intent intent;
 
-            ArrayList<String> stringArrayList;
             if (view.getId() == binding.profileImageView.getId()) {
-                stringArrayList = new ArrayList<>();
-                stringArrayList.add(binding.getProfile().getProfile_url());
-                imageViewIntent.putStringArrayListExtra("URL", stringArrayList);
-                getActivity().startActivity(imageViewIntent);
+                intent = new Intent(getActivity(), ConnectionsProfileActivity.class);
+                intent.putExtra("PATH", binding.getPost().getPosted_by().getPath());
+                getActivity().startActivity(intent);
                 return;
 
+            }else if(view.getId() == binding.upvoteIconImageView.getId()){
+                /*Map<String, Object> upvote = new HashMap<>();
+                upvote.put(Firestore.POSITIVE_COUNT, (binding.getPost().getPositive_count() + 1));
+                postViewModel.update(binding.getPost().getPost_ref(), upvote);*/
+
+                if(!binding.getPost().isUpvote()) {
+                    DocumentReference voterReference = binding.getPost().getPost_ref().collection("Voters").document(Firestore.currentUserId);
+                    Voter voter = new Voter();
+                    voter.setDown_vote(false);
+                    voter.setUp_vote(true);
+                    voterReference.set(voter);
+                }
+
+            }else if(view.getId() == binding.downvoteIconImageView.getId()){
+                /*Map<String, Object> upvote = new HashMap<>();
+                upvote.put(Firestore.NEGATIVE_COUNT, (binding.getPost().getNegative_count() - 1));
+                postViewModel.update(binding.getPost().getPost_ref(), upvote);*/
+
+                if(!binding.getPost().isDownvote()) {
+                    DocumentReference voterReference = binding.getPost().getPost_ref().collection("Voters").document(Firestore.currentUserId);
+                    Voter voter = new Voter();
+                    voter.setDown_vote(true);
+                    voter.setUp_vote(false);
+                    voterReference.set(voter);
+                }
+            }else if(view.getId() == binding.commentLinearLayout.getId()){
+                Toast.makeText(getActivity(), "Comment pressed!", Toast.LENGTH_SHORT).show();
+            }else if(view.getId() == binding.shareLinearLayout.getId()){
+                Toast.makeText(getActivity(), "Share pressed!", Toast.LENGTH_SHORT).show();
+            }else if(view.getId() == binding.postItemLinearLayout.getId()){
+                Toast.makeText(getActivity(), "Post pressed!", Toast.LENGTH_SHORT).show();
             }
 
         }

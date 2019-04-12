@@ -14,6 +14,33 @@ public class Notification {
    private boolean ignore;
    private Date updated;
    private Profile profile;
+   private DocumentReference notification_ref;
+
+
+    public Notification() {
+    }
+
+    public Notification(boolean read, DocumentReference sender, Date created, String type,
+                        DocumentReference miscellaneous_ref, boolean ignore, Date updated,
+                        Profile profile, DocumentReference notification_ref) {
+        this.read = read;
+        this.sender = sender;
+        this.created = created;
+        this.type = type;
+        this.miscellaneous_ref = miscellaneous_ref;
+        this.ignore = ignore;
+        this.updated = updated;
+        this.profile = profile;
+        this.notification_ref = notification_ref;
+    }
+
+    public DocumentReference getNotification_ref() {
+        return notification_ref;
+    }
+
+    public void setNotification_ref(DocumentReference notification_ref) {
+        this.notification_ref = notification_ref;
+    }
 
     public boolean isRead() {
         return read;

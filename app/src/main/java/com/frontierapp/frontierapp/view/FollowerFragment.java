@@ -85,7 +85,7 @@ public class FollowerFragment extends Fragment {
         connectionRecyclerView.setLayoutManager(gridLayoutManager);
         connectionRecyclerView.setHasFixedSize(true);
 
-        currentConnectionItemRecyclerAdapter = new ConnectionsRecyclerViewAdapter(getLayoutInflater());
+        currentConnectionItemRecyclerAdapter = new ConnectionsRecyclerViewAdapter(getLayoutInflater(), getActivity());
         int spacing = 5;
         boolean includeEdge = false;
 

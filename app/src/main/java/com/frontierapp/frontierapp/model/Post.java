@@ -17,6 +17,7 @@ public class Post {
     private int positive_count;
     private int negative_count;
     private int comment_count;
+    private boolean upvote, downvote;
     private DocumentReference post_ref;
     private Profile profile;
 
@@ -129,6 +130,22 @@ public class Post {
         this.post_ref = post_ref;
     }
 
+    public boolean isUpvote() {
+        return upvote;
+    }
+
+    public void setUpvote(boolean upvote) {
+        this.upvote = upvote;
+    }
+
+    public boolean isDownvote() {
+        return downvote;
+    }
+
+    public void setDownvote(boolean downvote) {
+        this.downvote = downvote;
+    }
+
     public Profile getProfile() {
         return profile;
     }
@@ -136,6 +153,8 @@ public class Post {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -167,7 +186,8 @@ public class Post {
         this.negative_count == post.negative_count &&
         this.comment_count == post.comment_count &&
         this.post_ref.getPath().equals(post.post_ref.getPath())&&
-        this.profile.equals(post.profile);
+        this.profile.equals(post.profile) && (this.isDownvote() == post.isDownvote())
+        && (this.isUpvote() == post.isUpvote());
     }
 
     @Override

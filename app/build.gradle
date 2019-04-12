@@ -11,8 +11,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -24,6 +22,7 @@ android {
     dataBinding {
         enabled = true
     }
+
 }
 
 dependencies {
@@ -33,6 +32,7 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version" // use kapt for Kotlin
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     //noinspection GradleCompatible
     implementation 'com.android.support:support-v4:27.1.1'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -80,8 +80,6 @@ dependencies {
         mavenCentral()
     }
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
-
-
 }
 
 apply plugin: 'com.google.gms.google-services'

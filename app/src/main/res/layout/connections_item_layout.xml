@@ -8,6 +8,9 @@
             name="connection"
             type="com.frontierapp.frontierapp.model.Connection"/>
         <variable
+            name="b"
+            type="Boolean"/>
+        <variable
             name="listener"
             type="com.frontierapp.frontierapp.listeners.ConnectionsClickListener"/>
     </data>
@@ -20,31 +23,48 @@
         android:orientation="vertical"
         android:onClick="@{listener}">
 
-        <ImageView
-            android:id="@+id/connectionsProfileImageView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="matrix"
-            app:image_url="@{profile.profile_url}"/>
+            android:layout_height="200dp">
+
+            <ImageView
+                android:id="@+id/connectionsProfileImageView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="matrix"
+                app:image_url="@{profile.profile_url}"/>
+
+            <ImageButton
+                android:id="@+id/connectionsRequestButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="3dp"
+                android:background="@android:color/transparent"
+                android:foregroundGravity="right"
+                android:src="@drawable/account_plus_white"
+                />
+
+            <ImageButton
+                android:id="@+id/followButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_toLeftOf="@+id/connectionsRequestButton"
+                android:background="@android:color/transparent"
+                android:foregroundGravity="right"
+                android:onClick="@{listener}"
+                android:src="@{connection.favorite ? @drawable/heart : @drawable/heart_outline}"
+                />
+
+        </RelativeLayout>
+
+
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="75dp"
-            app:cardBackgroundColor="#FFEB3B"
+            app:cardBackgroundColor="#78909C"
             >
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="matrix"
-                app:image_url="@{profile.profile_background_url}"/>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="matrix"
-                android:background="#85000000"/>
-
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -57,7 +77,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:layout_toLeftOf="@+id/connectionsRequestButton"
                     android:background="@drawable/status_textview_border"
                     android:lines="1"
                     android:padding="5dp"
@@ -78,17 +97,7 @@
                     android:text="@{profile.first_name + ' ' +  profile.last_name}"/>
 
 
-                <ImageButton
-                    android:id="@+id/connectionsRequestButton"
-                    android:layout_width="59dp"
-                    android:layout_height="52dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="3dp"
-                    android:background="@android:color/transparent"
-                    android:foregroundGravity="right"
-                    android:src="@drawable/account_plus"
-                    />
+
 
                 <TextView
                     android:id="@+id/connectionsTitleTextView"
