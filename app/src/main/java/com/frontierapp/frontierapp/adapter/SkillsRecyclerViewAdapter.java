@@ -58,7 +58,7 @@ public class SkillsRecyclerViewAdapter extends RecyclerView.Adapter<SkillsRecycl
 
     @Override
     public int getItemCount() {
-        return 4;
+        return addSkillClicked;
 
     }
 
