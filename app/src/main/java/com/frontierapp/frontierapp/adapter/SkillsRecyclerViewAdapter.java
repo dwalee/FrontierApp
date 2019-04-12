@@ -19,10 +19,11 @@ public class SkillsRecyclerViewAdapter extends RecyclerView.Adapter<SkillsRecycl
 
     ArrayList<String> mSkillsEditText = new ArrayList<>();
     ArrayList<String> mAddSkillsButton = new ArrayList<>();
+    int addSkillClicked;
 
     Context mContext;
 
-    public SkillsRecyclerViewAdapter(ArrayList<String> mSkillsEditText, ArrayList<String> mAddSkillsButton, Context mContext) {
+    public SkillsRecyclerViewAdapter(Context mContext, ArrayList<String> mSkillsEditText, ArrayList<String> mAddSkillsButton) {
         this.mSkillsEditText = mSkillsEditText;
         this.mAddSkillsButton = mAddSkillsButton;
         this.mContext = mContext;
@@ -38,15 +39,27 @@ public class SkillsRecyclerViewAdapter extends RecyclerView.Adapter<SkillsRecycl
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Log.d(TAG, "Creating ViewHolder");
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
+        //Lets us know where it failed calling a view into the recyclerView
+        Log.d(TAG, "onBindViewHolder: called, ");
+
+        viewHolder.addSkillButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                 addSkillClicked =+1;
+                 Log.d(TAG, "Add Skills button clicked");
+
+            }
+        });
+
 
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return 4;
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -9,11 +9,13 @@ import com.frontierapp.frontierapp.model.User;
 import com.frontierapp.frontierapp.register_image_upload;
 import com.frontierapp.frontierapp.register_skills;
 import com.frontierapp.frontierapp.view.register_fragment;
+import com.frontierapp.frontierapp.viewmodel.RegisterBasicInfoFragment;
 
 public class SwipePageAdapter extends FragmentStatePagerAdapter {
     Fragment pageFragment;
     User userInfo;
     Skill skill;
+    RegisterBasicInfoFragment registerBasicInfo;
 
 
     public SwipePageAdapter(FragmentManager fm) {
@@ -27,6 +29,8 @@ public class SwipePageAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case 0:
                 pageFragment = new register_fragment();
+
+                //if(pageFragment)
                 break;
 
             case 1:
