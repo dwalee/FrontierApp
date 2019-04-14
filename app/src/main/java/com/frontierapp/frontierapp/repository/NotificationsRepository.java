@@ -3,6 +3,7 @@ package com.frontierapp.frontierapp.repository;
 import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.frontierapp.frontierapp.datasource.Firestore;
 import com.frontierapp.frontierapp.datasource.FirestoreConstants;
@@ -16,6 +17,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.Query;
 
 public class NotificationsRepository implements OnSuccessCallback<Notifications>{
+    private static final String TAG = "NotificationsRepository";
     private MutableLiveData<Notifications> notificationsMutableLiveData = new MutableLiveData<>();
     private Firestore<Notification> notificationFirestore;
     private NotificationAsyncTask notificationAsyncTask;
@@ -41,6 +43,7 @@ public class NotificationsRepository implements OnSuccessCallback<Notifications>
     @Override
     public void OnSuccess(Notifications notifications) {
         notifications.reverseSort();
+        Log.i(TAG, "OnSuccess: oldNot vs newNot " + notifications.get(0).getType());
         notificationsMutableLiveData.setValue(notifications);
     }
 
@@ -58,6 +61,7 @@ public class NotificationsRepository implements OnSuccessCallback<Notifications>
 
                         index = 0;
                         for (final Notification notification : notifications) {
+                            Log.i(TAG, "OnSuccess: OUTER old vs new " + notification.getType());
                             DocumentReference documentReference = notification.getSender();
 
                             OnSuccessCallback<Profile> callback = new OnSuccessCallback<Profile>() {
@@ -70,6 +74,7 @@ public class NotificationsRepository implements OnSuccessCallback<Notifications>
                                         notificationsList.add(notification);
                                     }
 
+                                    Log.i(TAG, "OnSuccess: INNER old vs new " + notification.getType());
                                     if(index == (notifications.size() - 1))
                                         onSuccessCallbacks[0].OnSuccess(notificationsList);
 

@@ -38,6 +38,8 @@ public class FeedRepository  implements OnSuccessCallback<Feed> {
     @Override
     public void OnSuccess(Feed feed) {
         Log.i(TAG, "Voter upvote = " + feed.get(0).isUpvote());
+        Log.i(TAG, "upvote count: " + feed.get(0).getPositive_count());
+        Log.i(TAG, "downvote count: " + feed.get(0).getNegative_count());
         feed.sort();
         feedMutableLiveData.setValue(feed);
     }
@@ -76,38 +78,43 @@ public class FeedRepository  implements OnSuccessCallback<Feed> {
                                                 Log.i(TAG, "Voter upvote = " + voter.isUp_vote());
                                                 post.setDownvote(voter.isDown_vote());
                                                 post.setUpvote(voter.isUp_vote());
-
-                                                OnSuccessCallback<Voters> upVoteCountCallback = new OnSuccessCallback<Voters>() {
-                                                    @Override
-                                                    public void OnSuccess(Voters upVoters) {
-                                                        if(upVoters != null)
-                                                            post.setPositive_count(upVoters.size());
-                                                        else
-                                                            post.setPositive_count(0);
-                                                    }
-                                                };
-
-                                                Query q = post.getPost_ref().collection("Voters").whereEqualTo("up_vote", true);
-                                                Firestore<Voter> upVoterCountFirestore = new Firestore<>(q);
-                                                upVoterCountFirestore.retrieveList(upVoteCountCallback, Voter.class, new Voters());
-
-                                                OnSuccessCallback<Voters> downVoteCountCallback = new OnSuccessCallback<Voters>() {
-                                                    @Override
-                                                    public void OnSuccess(Voters upVoters) {
-                                                        if(upVoters != null)
-                                                            post.setNegative_count(upVoters.size());
-                                                        else
-                                                            post.setNegative_count(0);
-                                                    }
-                                                };
-
-                                                Query q2 = post.getPost_ref().collection("Voters").whereEqualTo("down_vote", true);
-                                                Firestore<Voter> downVoterCountFirestore = new Firestore<>(q2);
-                                                downVoterCountFirestore.retrieveList(downVoteCountCallback, Voter.class, new Voters());
                                             }
 
-                                            if(feedList.size() == size)
-                                                onSuccessCallbacks[0].OnSuccess(feedList);
+
+
+                                            OnSuccessCallback<Voters> upVoteCountCallback = new OnSuccessCallback<Voters>() {
+                                                @Override
+                                                public void OnSuccess(Voters upVoters) {
+                                                    if(upVoters != null)
+                                                        post.setPositive_count(upVoters.size());
+                                                    else
+                                                        post.setPositive_count(0);
+
+                                                    OnSuccessCallback<Voters> downVoteCountCallback = new OnSuccessCallback<Voters>() {
+                                                        @Override
+                                                        public void OnSuccess(Voters upVoters) {
+                                                            if(upVoters != null)
+                                                                post.setNegative_count(upVoters.size());
+                                                            else
+                                                                post.setNegative_count(0);
+
+                                                            if(feedList.size() == size)
+                                                                onSuccessCallbacks[0].OnSuccess(feedList);
+
+                                                        }
+                                                    };
+
+                                                    Query q2 = post.getPost_ref().collection("Voters").whereEqualTo("down_vote", true);
+                                                    Firestore<Voter> downVoterCountFirestore = new Firestore<>(q2);
+                                                    downVoterCountFirestore.retrieveList(downVoteCountCallback, Voter.class, new Voters());
+                                                }
+                                            };
+
+                                            Query q = post.getPost_ref().collection("Voters").whereEqualTo("up_vote", true);
+                                            Firestore<Voter> upVoterCountFirestore = new Firestore<>(q);
+                                            upVoterCountFirestore.retrieveList(upVoteCountCallback, Voter.class, new Voters());
+
+
                                         }
                                     };
 
@@ -115,9 +122,6 @@ public class FeedRepository  implements OnSuccessCallback<Feed> {
 
                                     Firestore<Voter> voterFirestore = new Firestore<>(reference);
                                     voterFirestore.retrieve(voterOnSuccessCallback, Voter.class);
-
-
-
                                 }
                             };
 

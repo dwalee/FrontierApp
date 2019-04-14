@@ -37,7 +37,7 @@ public interface FirestoreConstants {
 
     //Notification types
     String PARTNERSHIP_REQUEST = "wants to partner with you.";
-    String PARTNERSHIP_ACCEPTED = "agreed to a partnership.";
+    String PARTNERSHIP_ACCEPTED = "agreed to a partnership";
     String FOLLOWED = "followed you.";
     String SPACE_INVITE = "invited you to join his space";
     String JOINED_SPACE = "has joined your space";
@@ -58,8 +58,6 @@ public interface FirestoreConstants {
     String NOTIFICATIONS = "Notifications";
     String CHAT_REFERENCES = "Chat_References";
     String SPACE_REFERENCES = "Space_References";
-
-
 
     //Space attributes
     String SPACE_NAME = "space_name";

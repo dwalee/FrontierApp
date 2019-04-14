@@ -5,6 +5,9 @@
             name="listener"
             type="com.frontierapp.frontierapp.listeners.NotificationClickListener"/>
         <variable
+            name="buttonListener"
+            type="com.frontierapp.frontierapp.view.NotificationFragment.ButtonClickListener"/>
+        <variable
             name="notification"
             type="com.frontierapp.frontierapp.model.Notification"/>
         <variable
@@ -61,7 +64,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="10dp"
-                            android:text="@{profile.first_name + ' ' + profile.last_name + ' ' + notifU.getTypeString(notification.type)}"
+                            android:text="@{notifU.getTypeString(notification.type, profile.first_name, profile.last_name)}"
                             android:textSize="18sp" />
 
                     </LinearLayout>
@@ -93,7 +96,6 @@
                         android:layout_marginTop="7dp"
                         android:orientation="horizontal"
                         android:layout_weight="1"
-
                         >
 
                         <android.support.v7.widget.AppCompatButton
@@ -104,6 +106,7 @@
                             android:layout_weight="1"
                             android:background="@color/colorAcceptButton"
                             app:positive_button="@{notification.type}"
+                            android:onClick="@{buttonListener}"
                             android:visibility="gone"/>
 
                         <android.support.v7.widget.AppCompatButton
@@ -114,6 +117,7 @@
                             android:layout_weight="1"
                             android:background="@color/colorDenyButton"
                             app:negative_button="@{notification.type}"
+                            android:onClick="@{buttonListener}"
                             android:visibility="gone"/>
 
                     </LinearLayout>
@@ -124,7 +128,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
 
         <View
             android:layout_width="match_parent"

@@ -1,5 +1,7 @@
 package com.frontierapp.frontierapp.model;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.ServerTimestamp;
 
@@ -8,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Post {
+    private static final String TAG = "Post";
     private String post_title;
     private String post_desc;
     private Date created, updated;
@@ -175,19 +178,24 @@ public class Post {
         if(this == null || post == null)
             return false;
 
-        return this.post_title.equals(post.post_title) &&
-        this.post_desc.equals(post.post_desc) &&
-        this.created.getTime() == post.created.getTime() &&
-        this.updated.getTime() == post.updated.getTime() &&
-        this.image_urls.equals(post.image_urls) &&
-        this.type.equals(post.type) &&
-        this.posted_by.getPath().equals(post.posted_by.getPath()) &&
-        this.positive_count == post.positive_count &&
-        this.negative_count == post.negative_count &&
-        this.comment_count == post.comment_count &&
-        this.post_ref.getPath().equals(post.post_ref.getPath())&&
-        this.profile.equals(post.profile) && (this.isDownvote() == post.isDownvote())
-        && (this.isUpvote() == post.isUpvote());
+        Log.i(TAG, "upvote "  + post.isUpvote());
+
+        Log.i(TAG, "downvote " + post.isDownvote());
+        boolean bool = this.post_title.equals(post.post_title) &&
+                this.post_desc.equals(post.post_desc) &&
+                this.created.getTime() == post.created.getTime() &&
+                this.updated.getTime() == post.updated.getTime() &&
+                this.image_urls.equals(post.image_urls) &&
+                this.type.equals(post.type) &&
+                this.posted_by.getPath().equals(post.posted_by.getPath()) &&
+                this.positive_count == post.positive_count &&
+                this.negative_count == post.negative_count &&
+                this.comment_count == post.comment_count &&
+                this.post_ref.getPath().equals(post.post_ref.getPath())&&
+                this.profile.equals(post.profile) && post.isUpvote() && post.isDownvote();
+
+        Log.i(TAG, "sameContent: bool = " + bool);
+        return bool;
     }
 
     @Override

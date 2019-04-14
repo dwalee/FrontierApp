@@ -1,6 +1,9 @@
 package com.frontierapp.frontierapp.model;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
 import java.util.List;
@@ -38,6 +41,7 @@ public class Connection {
         this.partner = partner;
     }
 
+    @ServerTimestamp
     public Date getCreated() {
         return created;
     }
@@ -46,6 +50,7 @@ public class Connection {
         this.created = created;
     }
 
+    @Exclude
     public DocumentReference getUser_ref() {
         return user_ref;
     }
@@ -54,9 +59,11 @@ public class Connection {
         this.user_ref = user_ref;
     }
 
+    @Exclude
     public Profile getProfile() {
         return profile;
     }
+
 
     public void setProfile(Profile profile) {
         this.profile = profile;

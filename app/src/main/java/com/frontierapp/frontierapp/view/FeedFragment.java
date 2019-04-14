@@ -90,11 +90,13 @@ public class FeedFragment extends Fragment {
     DiffUtil.ItemCallback<Post> DIFF_CALLBACK = new DiffUtil.ItemCallback<Post>() {
         @Override
         public boolean areItemsTheSame(@NonNull Post oldItem, @NonNull Post newItem) {
+            Log.i(TAG, "areItemsTheSame: ");
             return oldItem.equals(newItem);
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull Post oldItem, @NonNull Post newItem) {
+            Log.i(TAG, "areContentsTheSame: ");
             return oldItem.sameContent(newItem);
         }
     };
@@ -151,29 +153,29 @@ public class FeedFragment extends Fragment {
                 return;
 
             }else if(view.getId() == binding.upvoteIconImageView.getId()){
-                /*Map<String, Object> upvote = new HashMap<>();
+                Map<String, Object> upvote = new HashMap<>();
                 upvote.put(Firestore.POSITIVE_COUNT, (binding.getPost().getPositive_count() + 1));
-                postViewModel.update(binding.getPost().getPost_ref(), upvote);*/
+                postViewModel.update(binding.getPost().getPost_ref(), upvote);
 
                 if(!binding.getPost().isUpvote()) {
                     DocumentReference voterReference = binding.getPost().getPost_ref().collection("Voters").document(Firestore.currentUserId);
                     Voter voter = new Voter();
                     voter.setDown_vote(false);
                     voter.setUp_vote(true);
-                    voterReference.set(voter);
+                    voterReference.update("down_vote", voter.isDown_vote(), "up_vote", voter.isUp_vote());
                 }
 
             }else if(view.getId() == binding.downvoteIconImageView.getId()){
-                /*Map<String, Object> upvote = new HashMap<>();
+                Map<String, Object> upvote = new HashMap<>();
                 upvote.put(Firestore.NEGATIVE_COUNT, (binding.getPost().getNegative_count() - 1));
-                postViewModel.update(binding.getPost().getPost_ref(), upvote);*/
+                postViewModel.update(binding.getPost().getPost_ref(), upvote);
 
                 if(!binding.getPost().isDownvote()) {
                     DocumentReference voterReference = binding.getPost().getPost_ref().collection("Voters").document(Firestore.currentUserId);
                     Voter voter = new Voter();
                     voter.setDown_vote(true);
                     voter.setUp_vote(false);
-                    voterReference.set(voter);
+                    voterReference.update("down_vote", voter.isDown_vote(), "up_vote", voter.isUp_vote());
                 }
             }else if(view.getId() == binding.commentLinearLayout.getId()){
                 Toast.makeText(getActivity(), "Comment pressed!", Toast.LENGTH_SHORT).show();
