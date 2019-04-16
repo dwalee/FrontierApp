@@ -62,6 +62,7 @@ public class NotificationFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
+    //
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
