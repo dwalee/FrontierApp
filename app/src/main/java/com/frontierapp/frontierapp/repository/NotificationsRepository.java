@@ -16,7 +16,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.Query;
 
-public class NotificationsRepository implements OnSuccessCallback<Notifications>{
+public class NotificationsRepository implements OnSuccessCallback<Notifications> {
     private static final String TAG = "NotificationsRepository";
     private MutableLiveData<Notifications> notificationsMutableLiveData = new MutableLiveData<>();
     private Firestore<Notification> notificationFirestore;
@@ -57,7 +57,6 @@ public class NotificationsRepository implements OnSuccessCallback<Notifications>
                 @Override
                 public void OnSuccess(final Notifications notifications) {
                     if (!notifications.isEmpty()) {
-                        final Notifications notificationsList = new Notifications();
 
                         index = 0;
                         for (final Notification notification : notifications) {
@@ -68,23 +67,22 @@ public class NotificationsRepository implements OnSuccessCallback<Notifications>
                                 @Override
                                 public void OnSuccess(Profile profile) {
                                     notification.setProfile(profile);
-                                    if(notificationsList.contains(notification)){
-                                        notificationsList.set(notificationsList.indexOf(notification), notification);
-                                    }else{
-                                        notificationsList.add(notification);
-                                    }
 
                                     Log.i(TAG, "OnSuccess: INNER old vs new " + notification.getType());
-                                    if(index == (notifications.size() - 1))
-                                        onSuccessCallbacks[0].OnSuccess(notificationsList);
+                                    if (index == (notifications.size() - 1)) {
+                                        Log.i(TAG, "OnSuccess: something happened");
+                                        onSuccessCallbacks[0].OnSuccess(notifications);
+                                    }
 
                                     index++;
                                 }
                             };
-
                             Firestore<Profile> firestore = new Firestore<>(documentReference);
                             firestore.retrieve(callback, Profile.class);
+
                         }
+
+
                     } else {
                         onSuccessCallbacks[0].OnSuccess(notifications);
                     }

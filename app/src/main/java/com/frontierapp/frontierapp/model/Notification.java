@@ -1,9 +1,11 @@
 package com.frontierapp.frontierapp.model;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Notification {
    private boolean read;
@@ -34,6 +36,7 @@ public class Notification {
         this.notification_ref = notification_ref;
     }
 
+    @Exclude
     public DocumentReference getNotification_ref() {
         return notification_ref;
     }
@@ -49,6 +52,7 @@ public class Notification {
     public void setRead(boolean read) {
         this.read = read;
     }
+
 
     public DocumentReference getSender() {
         return sender;
@@ -100,6 +104,7 @@ public class Notification {
         this.updated = updated;
     }
 
+    @Exclude
     public Profile getProfile() {
         return profile;
     }
@@ -109,30 +114,29 @@ public class Notification {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(obj == this)
-            return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Notification notification = (Notification) o;
 
-        if(!(obj instanceof Notification))
-            return false;
+        String this_path = this.notification_ref.getPath();
+        String that_path = notification.notification_ref.getPath();
 
-        Notification notification = (Notification) obj;
-        String this_sender_path = this.sender.getPath();
-        String that_sender_path = notification.getSender().getPath();
+        return Objects.equals(this_path, that_path);
+    }
 
-        String this_misc_path = "";
-        if(this.miscellaneous_ref != null)
-            this_misc_path = this.miscellaneous_ref.getPath();
+    public boolean sameContent(Notification notification){
 
-        String that_misc_path = "";
-        if(notification.getMiscellaneous_ref() != null)
-            that_misc_path = notification.getMiscellaneous_ref().getPath();
+        boolean bool = this.ignore == notification.ignore &&
+                this.type.equals(notification.ignore);
 
-        Boolean b = this_sender_path.equals(that_sender_path) &&
-        this_misc_path.equals(that_misc_path) &&
-        this.created.getTime() == notification.getCreated().getTime() &&
-        this.type.equals(notification.getType());
+        return bool;
+    }
 
-        return b;
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(notification_ref);
     }
 }

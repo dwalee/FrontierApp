@@ -98,7 +98,7 @@ public class NotificationFragment extends Fragment {
             Log.i(TAG, "areContentsTheSame: old vs new " + oldType + " " + newType);
 
             return oldItem.isRead() == newItem.isRead() && old_time == new_time &&
-                    oldProfile.equals(newProfile) && oldType.equals(newType);
+                    oldItem.sameContent(newItem);
         }
     };
 
@@ -150,6 +150,7 @@ public class NotificationFragment extends Fragment {
         @Override
         public void onClick(View view) {
             NotificationType type;
+            Notification notification = binding.getNotification();
             if (view.getId() == binding.notificationPositiveButton.getId()) {
                 Toast.makeText(binding.getRoot().getContext(), "Positive button pressed!", Toast.LENGTH_SHORT).show();
 
@@ -172,9 +173,16 @@ public class NotificationFragment extends Fragment {
                                 .document(Firestore.currentUserId)
                                 .set(newConnection);
 
+
                         binding.notificationPositiveButton.setVisibility(View.GONE);
                         binding.notificationNegativeButton.setVisibility(View.GONE);
-                        binding.getNotification().getNotification_ref().update("type", NotificationType.PARTNERSHIP_ACCEPTED_BY_YOU.getValue());
+                        notification.getNotification_ref().update("ignore", true);
+
+                        notification.setType(NotificationType.PARTNERSHIP_ACCEPTED_BY_YOU.getValue());
+                        FirestoreDBReference.userCollection.document(Firestore.currentUserId)
+                                .collection(FirestoreConstants.NOTIFICATIONS)
+                                .document()
+                                .set(binding.getNotification());
                         break;
                     case SPACE_INVITE:
                         binding.notificationPositiveButton.setVisibility(View.GONE);

@@ -151,8 +151,8 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
 
                         switch (documentChange.getType()) {
                             case MODIFIED:
-                                Log.i(TAG, "DocumentModified = " + documentChange.getDocument().getString("message"));
-                                Log.i(TAG, "contains new item = " + s.contains(o));
+                                Log.i(TAG, "DocumentModified = " + documentChange.getDocument().getString("type"));
+                                Log.i(TAG, "Contains new item = " + s.contains(o));
                                 if(s.contains(o))
                                     s.set(s.indexOf(o), o);
                                 break;
