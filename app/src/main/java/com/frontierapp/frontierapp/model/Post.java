@@ -3,6 +3,7 @@ package com.frontierapp.frontierapp.model;
 import android.util.Log;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
@@ -125,6 +126,7 @@ public class Post {
         this.comment_count = comment_count;
     }
 
+    @Exclude
     public DocumentReference getPost_ref() {
         return post_ref;
     }
@@ -149,6 +151,7 @@ public class Post {
         this.downvote = downvote;
     }
 
+    @Exclude
     public Profile getProfile() {
         return profile;
     }
@@ -192,7 +195,7 @@ public class Post {
                 this.negative_count == post.negative_count &&
                 this.comment_count == post.comment_count &&
                 this.post_ref.getPath().equals(post.post_ref.getPath())&&
-                this.profile.equals(post.profile) && post.isUpvote() && post.isDownvote();
+                this.profile.equals(post.profile);
 
         Log.i(TAG, "sameContent: bool = " + bool);
         return bool;

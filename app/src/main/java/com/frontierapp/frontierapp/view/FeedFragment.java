@@ -31,10 +31,8 @@ import com.frontierapp.frontierapp.model.Voter;
 import com.frontierapp.frontierapp.viewmodel.FeedViewModel;
 import com.frontierapp.frontierapp.viewmodel.PostViewModel;
 import com.frontierapp.frontierapp.viewmodel.SpaceViewModel;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class FeedFragment extends Fragment {
     private static final String TAG = "FeedFragment";
@@ -88,6 +86,9 @@ public class FeedFragment extends Fragment {
     }
 
     DiffUtil.ItemCallback<Post> DIFF_CALLBACK = new DiffUtil.ItemCallback<Post>() {
+        Integer positive_count;
+        Integer negative_count;
+
         @Override
         public boolean areItemsTheSame(@NonNull Post oldItem, @NonNull Post newItem) {
             Log.i(TAG, "areItemsTheSame: ");
@@ -96,8 +97,23 @@ public class FeedFragment extends Fragment {
 
         @Override
         public boolean areContentsTheSame(@NonNull Post oldItem, @NonNull Post newItem) {
+            boolean isTrue;
+            if(positive_count == null || negative_count == null) {
+                positive_count = oldItem.getPositive_count();
+                negative_count = oldItem.getNegative_count();
+                isTrue = true;
+            }else{
+                Log.i(TAG, "positive old count & new count " + positive_count + " " + newItem.getPositive_count());
+                Log.i(TAG, "negative old count & new count " + negative_count + " " + newItem.getNegative_count());
+                isTrue = positive_count.intValue() == newItem.getPositive_count()
+                        && negative_count.intValue() == newItem.getNegative_count();
+
+            }
+
+
             Log.i(TAG, "areContentsTheSame: ");
-            return oldItem.sameContent(newItem);
+
+            return oldItem.sameContent(newItem) && isTrue;
         }
     };
 
@@ -120,6 +136,8 @@ public class FeedFragment extends Fragment {
         public void onBindViewHolder(@NonNull PostViewHolder postViewHolder, int i) {
             SpacePostItemLayoutBinding binding = DataBindingUtil.getBinding(postViewHolder.itemView);
             binding.setPost(getItem(i));
+            binding.setUpvote(getItem(i).isUpvote());
+            binding.setDownvote(getItem(i).isDownvote());
             binding.setProfile(getItem(i).getProfile());
             binding.mediaViewPager.setAdapter(new SlideShowAdapter(getContext(), getItem(i).getImage_urls()));
             binding.mediaCircleIndicator.setViewPager(binding.mediaViewPager);
@@ -152,36 +170,52 @@ public class FeedFragment extends Fragment {
                 getActivity().startActivity(intent);
                 return;
 
-            }else if(view.getId() == binding.upvoteIconImageView.getId()){
-                Map<String, Object> upvote = new HashMap<>();
+            } else if (view.getId() == binding.upvoteIconImageView.getId()) {
+                /*Map<String, Object> upvote = new HashMap<>();
                 upvote.put(Firestore.POSITIVE_COUNT, (binding.getPost().getPositive_count() + 1));
-                postViewModel.update(binding.getPost().getPost_ref(), upvote);
+                postViewModel.update(binding.getPost().getPost_ref(), upvote);*/
 
-                if(!binding.getPost().isUpvote()) {
+                if (!binding.getPost().isUpvote()) {
                     DocumentReference voterReference = binding.getPost().getPost_ref().collection("Voters").document(Firestore.currentUserId);
                     Voter voter = new Voter();
                     voter.setDown_vote(false);
                     voter.setUp_vote(true);
-                    voterReference.update("down_vote", voter.isDown_vote(), "up_vote", voter.isUp_vote());
+                    voterReference
+                            .update("down_vote", voter.isDown_vote(), "up_vote", voter.isUp_vote())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    binding.setDownvote(false);
+                                    binding.setUpvote(true);
+                                }
+                            });
                 }
 
-            }else if(view.getId() == binding.downvoteIconImageView.getId()){
-                Map<String, Object> upvote = new HashMap<>();
+            } else if (view.getId() == binding.downvoteIconImageView.getId()) {
+               /* Map<String, Object> upvote = new HashMap<>();
                 upvote.put(Firestore.NEGATIVE_COUNT, (binding.getPost().getNegative_count() - 1));
-                postViewModel.update(binding.getPost().getPost_ref(), upvote);
+                postViewModel.update(binding.getPost().getPost_ref(), upvote);*/
 
-                if(!binding.getPost().isDownvote()) {
+                if (!binding.getPost().isDownvote()) {
                     DocumentReference voterReference = binding.getPost().getPost_ref().collection("Voters").document(Firestore.currentUserId);
                     Voter voter = new Voter();
                     voter.setDown_vote(true);
                     voter.setUp_vote(false);
-                    voterReference.update("down_vote", voter.isDown_vote(), "up_vote", voter.isUp_vote());
+                    voterReference
+                            .update("down_vote", voter.isDown_vote(), "up_vote", voter.isUp_vote())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    binding.setDownvote(true);
+                                    binding.setUpvote(false);
+                                }
+                            });
                 }
-            }else if(view.getId() == binding.commentLinearLayout.getId()){
+            } else if (view.getId() == binding.commentLinearLayout.getId()) {
                 Toast.makeText(getActivity(), "Comment pressed!", Toast.LENGTH_SHORT).show();
-            }else if(view.getId() == binding.shareLinearLayout.getId()){
+            } else if (view.getId() == binding.shareLinearLayout.getId()) {
                 Toast.makeText(getActivity(), "Share pressed!", Toast.LENGTH_SHORT).show();
-            }else if(view.getId() == binding.postItemLinearLayout.getId()){
+            } else if (view.getId() == binding.postItemLinearLayout.getId()) {
                 Toast.makeText(getActivity(), "Post pressed!", Toast.LENGTH_SHORT).show();
             }
 
