@@ -6,7 +6,7 @@
             type="com.frontierapp.frontierapp.listeners.NotificationClickListener"/>
         <variable
             name="buttonListener"
-            type="com.frontierapp.frontierapp.view.NotificationFragment.ButtonClickListener"/>
+            type="com.frontierapp.frontierapp.listeners.NotificationButtonClickListener"/>
         <variable
             name="notification"
             type="com.frontierapp.frontierapp.model.Notification"/>

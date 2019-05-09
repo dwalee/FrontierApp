@@ -80,8 +80,6 @@ public class FeedRepository  implements OnSuccessCallback<Feed> {
                                                 post.setUpvote(voter.isUp_vote());
                                             }
 
-
-
                                             OnSuccessCallback<Voters> upVoteCountCallback = new OnSuccessCallback<Voters>() {
                                                 @Override
                                                 public void OnSuccess(Voters upVoters) {

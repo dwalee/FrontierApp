@@ -33,6 +33,10 @@ import com.frontierapp.frontierapp.viewmodel.PostViewModel;
 import com.frontierapp.frontierapp.viewmodel.SpaceViewModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FeedFragment extends Fragment {
     private static final String TAG = "FeedFragment";
@@ -97,23 +101,9 @@ public class FeedFragment extends Fragment {
 
         @Override
         public boolean areContentsTheSame(@NonNull Post oldItem, @NonNull Post newItem) {
-            boolean isTrue;
-            if(positive_count == null || negative_count == null) {
-                positive_count = oldItem.getPositive_count();
-                negative_count = oldItem.getNegative_count();
-                isTrue = true;
-            }else{
-                Log.i(TAG, "positive old count & new count " + positive_count + " " + newItem.getPositive_count());
-                Log.i(TAG, "negative old count & new count " + negative_count + " " + newItem.getNegative_count());
-                isTrue = positive_count.intValue() == newItem.getPositive_count()
-                        && negative_count.intValue() == newItem.getNegative_count();
-
-            }
-
-
             Log.i(TAG, "areContentsTheSame: ");
 
-            return oldItem.sameContent(newItem) && isTrue;
+            return oldItem.sameContent(newItem);
         }
     };
 
@@ -171,9 +161,9 @@ public class FeedFragment extends Fragment {
                 return;
 
             } else if (view.getId() == binding.upvoteIconImageView.getId()) {
-                /*Map<String, Object> upvote = new HashMap<>();
-                upvote.put(Firestore.POSITIVE_COUNT, (binding.getPost().getPositive_count() + 1));
-                postViewModel.update(binding.getPost().getPost_ref(), upvote);*/
+                Map<String, Object> upvote = new HashMap<>();
+                upvote.put("updated", FieldValue.serverTimestamp());
+                postViewModel.update(binding.getPost().getPost_ref(), upvote);
 
                 if (!binding.getPost().isUpvote()) {
                     DocumentReference voterReference = binding.getPost().getPost_ref().collection("Voters").document(Firestore.currentUserId);
@@ -192,9 +182,9 @@ public class FeedFragment extends Fragment {
                 }
 
             } else if (view.getId() == binding.downvoteIconImageView.getId()) {
-               /* Map<String, Object> upvote = new HashMap<>();
-                upvote.put(Firestore.NEGATIVE_COUNT, (binding.getPost().getNegative_count() - 1));
-                postViewModel.update(binding.getPost().getPost_ref(), upvote);*/
+               Map<String, Object> upvote = new HashMap<>();
+                upvote.put("updated", FieldValue.serverTimestamp());
+                postViewModel.update(binding.getPost().getPost_ref(), upvote);
 
                 if (!binding.getPost().isDownvote()) {
                     DocumentReference voterReference = binding.getPost().getPost_ref().collection("Voters").document(Firestore.currentUserId);

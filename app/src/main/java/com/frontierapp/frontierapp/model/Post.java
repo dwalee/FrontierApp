@@ -69,7 +69,6 @@ public class Post {
         this.created = created;
     }
 
-    @ServerTimestamp
     public Date getUpdated() {
         return updated;
     }

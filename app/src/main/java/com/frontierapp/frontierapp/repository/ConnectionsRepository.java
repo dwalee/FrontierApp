@@ -69,7 +69,6 @@ public class ConnectionsRepository implements OnSuccessCallback<Connections> {
                                         connectionList.add(connection);
                                     }
 
-
                                     if(index == (connections.size() - 1) || connections.size() == 1)
                                         onSuccessCallbacks[0].OnSuccess(connectionList);
 

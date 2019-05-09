@@ -116,7 +116,7 @@ public class Firestore<T> implements FirestoreDAO<T>, FirestoreDBReference {
     @Override
     public <S extends ArrayList<T>> void retrieveList(final OnSuccessCallback<S> callback, final Class<T> tClass, final S s) {
 
-        ListenerRegistration listenerRegistration = query.addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
+        query.addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
 
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
